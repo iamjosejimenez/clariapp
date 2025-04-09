@@ -1,0 +1,6 @@
+es-CL:
+  date:
+    formats:
+      default: "%d-%m-%Y"
+      short: "%d de %b"
+      long: "%-d de %B de %Y"

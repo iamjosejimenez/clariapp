@@ -1,0 +1,16 @@
+<div class="max-w-md mx-auto mt-10">
+  <h1 class="text-2xl font-semibold mb-6">Iniciar sesión</h1>
+  <%= form_with url: "/login", method: :post, local: true do %>
+    <div class="mb-4">
+      <%= label_tag :email, "Correo electrónico" %>
+      <%= text_field_tag :email, nil, class: "w-full p-2 border rounded" %>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag :password, "Contraseña" %>
+      <%= password_field_tag :password, nil, class: "w-full p-2 border rounded" %>
+    </div>
+
+    <%= submit_tag "Ingresar", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  <% end %>
+</div>
