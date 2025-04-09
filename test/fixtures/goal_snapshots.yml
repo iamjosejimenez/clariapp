@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  goal: one
+  created_at: 2025-04-08 23:20:57
+  nav: 1.5
+  profit: 1.5
+  not_net_deposited: 1.5
+  deposited: 1.5
+  withdrawn: 1.5
+
+two:
+  goal: two
+  created_at: 2025-04-08 23:20:57
+  nav: 1.5
+  profit: 1.5
+  not_net_deposited: 1.5
+  deposited: 1.5
+  withdrawn: 1.5

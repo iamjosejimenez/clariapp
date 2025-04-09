@@ -3,17 +3,25 @@ class SessionsController < ApplicationController
   end
 
   def create
+    email = params[:email]
+    password = params[:password]
+
     response = HTTP.post("https://fintual.cl/api/access_tokens", json: {
-      user: {
-        email: params[:email],
-        password: params[:password]
-      }
+      user: { email:, password: }
     })
 
     if response.code == 201
       body = JSON.parse(response.body.to_s)
-      session[:email] = params[:email]
-      session[:token] = body["data"]["attributes"]["token"] # Cambiar si el token está anidado
+      token = body["data"]["attributes"]["token"]
+
+      user = User.find_or_initialize_by(email:)
+      debugger
+      user.password = password
+      user.token = token
+      user.save!
+
+      session[:email] = email
+      session[:token] = token
 
       redirect_to dashboard_path
     else
