@@ -1,4 +1,4 @@
-<%= link_to goal_path(@id), class: "block hover:shadow-lg transition" do %>
+<%= link_to goal_path(@goal.id), data: { turbo: false }, class: "block hover:shadow-lg transition"  do %>
   <div class="flex flex-col items-start gap-1 border rounded p-4 shadow hover:shadow-md transition">
     <h2 class="text-xl font-semibold block"><%= @name %></h2>
     <p class="text-gray-600">Total: <%= clp(@nav) %></p>

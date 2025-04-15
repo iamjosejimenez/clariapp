@@ -3,9 +3,9 @@
 class GoalComponent < ViewComponent::Base
   include ApplicationHelper
 
-  def initialize(id:, name:, nav:)
-    @id = id
-    @name = name
-    @nav = nav
+  def initialize(goal:)
+    @goal = goal
+    @name = goal.name
+    @nav = goal.goal_snapshots.order(created_at: :desc).first.nav
   end
 end

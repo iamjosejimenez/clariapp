@@ -1,38 +1,46 @@
 <div class="max-w-3xl mx-auto mt-10 px-4">
-  <h1 class="text-2xl font-bold mb-6 block"><%= @goal.dig("attributes", "name") %></h1>
+  <h1 class="text-2xl font-bold mb-6 block"><%= @goal.name %></h1>
 
   <div class="bg-white shadow rounded p-6 space-y-4">
     <p class="text-lg">
       <strong>Total:</strong>
-      <span><%= clp(@goal.dig("attributes", "nav")) %></span>
+      <span><%= clp(@snapshot.nav) %></span>
     </p>
 
     <p>
       <strong>Monto depositado:</strong>
-      <%= clp(@goal.dig("attributes", "deposited")) %>
+      <%= clp(@snapshot.deposited) %>
     </p>
 
     <p>
       <strong>Ganancia:</strong>
-      <%= clp(@goal.dig("attributes", "profit")) %>
+      <%= clp(@snapshot.profit) %>
     </p>
 
     <p>
       <strong>Aportes no netos:</strong>
-      <%= clp(@goal.dig("attributes", "not_net_deposited")) %>
+      <%= clp(@snapshot.not_net_deposited) %>
     </p>
 
     <p>
       <strong>Retirado:</strong>
-      <%= clp(@goal.dig("attributes", "withdrawn")) %>
+      <%= clp(@snapshot.withdrawn) %>
     </p>
 
     <p>
       <strong>Fecha de creación:</strong>
-      <%= l(Date.parse(@goal.dig("attributes", "created_at"))) %>
+      <%= l(@goal.created_at) %>
     </p>
   </div>
-
+  <div
+    id="snapshots-table"
+    hx-get="<%= snapshots_goal_path(@goal) %>"
+    hx-trigger="load"
+    hx-target="#snapshots-table"
+    hx-swap="innerHTML",
+  >
+    <p class="text-gray-500">Cargando historial...</p>
+  </div>
   <div class="mt-8">
     <%= link_to "Volver al dashboard", dashboard_path, class: "text-blue-600 hover:underline" %>
   </div>

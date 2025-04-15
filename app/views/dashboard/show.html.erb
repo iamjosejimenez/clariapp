@@ -4,11 +4,7 @@
   <% if @goals.any? %>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @goals.each do |goal| %>
-        <%= render GoalComponent.new(
-          id: goal["id"],
-          name: goal.dig("attributes", "name"),
-          nav: goal.dig("attributes", "nav")
-        ) %>
+        <%= render GoalComponent.new(goal: goal) %>
       <% end %>
     </div>
   <% else %>

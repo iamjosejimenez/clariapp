@@ -1,21 +1,17 @@
 class GoalsController < ApplicationController
+  include Pagy::Backend
+
   before_action :require_login
 
   def show
-    email = session[:email]
-    token = session[:token]
+    @goal = Goal.find(params[:id])
+    @snapshot = @goal.goal_snapshots.order(created_at: :desc).first
+  end
 
-    response = HTTP.get("https://fintual.cl/api/goals/#{params[:id]}", params: {
-      user_email: email,
-      user_token: token
-    })
-
-    if response.code == 200
-      body = JSON.parse(response.body.to_s)
-      @goal = body["data"]
-    else
-      redirect_to dashboard_path, alert: "No se pudo cargar el goal"
-    end
+  def snapshots
+    @goal = Goal.find(params[:id])
+    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc))
+    render(GoalSnapshotsTableComponent.new(snapshots: @snapshots, pagy: @pagy), layout: false)
   end
 
   private

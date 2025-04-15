@@ -56,6 +56,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "annotate"
 end
 
 group :test do
@@ -66,3 +67,5 @@ end
 
 gem "http"
 gem "view_component"
+gem "httparty"
+gem "pagy"

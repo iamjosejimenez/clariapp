@@ -15,13 +15,14 @@ class SessionsController < ApplicationController
       token = body["data"]["attributes"]["token"]
 
       user = User.find_or_initialize_by(email:)
-      debugger
       user.password = password
       user.token = token
       user.save!
 
       session[:email] = email
       session[:token] = token
+
+      SyncGoalsService.new(user).call
 
       redirect_to dashboard_path
     else

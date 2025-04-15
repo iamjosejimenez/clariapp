@@ -11,8 +11,11 @@ Rails.application.routes.draw do
 
   get "/dashboard", to: "dashboard#show"
 
-  get "/dashboard", to: "dashboard#show"
-  get "/goals/:id", to: "goals#show", as: :goal
-  get "/goals/:id/movements", to: "goals#movements", as: :goal_movements
+  resources :goals, only: [ :index, :show ] do
+    member do
+      get :snapshots
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 end
