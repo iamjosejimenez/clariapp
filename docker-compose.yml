@@ -7,6 +7,15 @@ services:
       - storage:/rails/storage
     env_file:
       - .env.production
+  jobs:
+    build: .
+    command: bin/jobs
+    volumes:
+      - storage:/rails/storage
+    env_file:
+      - .env.production
+    depends_on:
+      - app
 
 volumes:
   storage:
