@@ -6,12 +6,7 @@ class GoalsController < ApplicationController
   def show
     @goal = Goal.find(params[:id])
     @snapshot = @goal.goal_snapshots.order(created_at: :desc).first
-  end
-
-  def snapshots
-    @goal = Goal.find(params[:id])
-    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc))
-    render(GoalSnapshotsTableComponent.new(snapshots: @snapshots, pagy: @pagy), layout: false)
+    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc), limit: 10)
   end
 
   private
