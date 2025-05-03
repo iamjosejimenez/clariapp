@@ -12,13 +12,14 @@ class SyncGoalsService
         g.name = goal_data[:name]
         g.user = user
       end
-
+      debugger
       goal.assign_attributes(
         nav: goal_data[:nav],
         profit: goal_data[:profit],
         not_net_deposited: goal_data[:not_net_deposited],
         deposited: goal_data[:deposited],
-        withdrawn: goal_data[:withdrawn]
+        withdrawn: goal_data[:withdrawn],
+        external_created_at: goal_data[:created_at],
       )
       goal.save!
 
