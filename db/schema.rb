@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_14_232328) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_03_173841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "goal_snapshots", force: :cascade do |t|
     t.integer "goal_id", null: false
-    t.float "nav"
-    t.float "profit"
-    t.float "not_net_deposited"
-    t.float "deposited"
-    t.float "withdrawn"
+    t.decimal "nav", precision: 15, scale: 2
+    t.decimal "profit", precision: 15, scale: 2
+    t.decimal "not_net_deposited", precision: 15, scale: 2
+    t.decimal "deposited", precision: 15, scale: 2
+    t.decimal "withdrawn", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["goal_id"], name: "index_goal_snapshots_on_goal_id"

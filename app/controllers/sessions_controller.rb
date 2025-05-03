@@ -22,8 +22,6 @@ class SessionsController < ApplicationController
       session[:email] = email
       session[:token] = token
 
-      SyncGoalsService.new(user).call
-
       redirect_to dashboard_path
     else
       flash.now[:alert] = "Email o contraseña incorrectos"
