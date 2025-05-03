@@ -6,6 +6,5 @@ class GoalComponent < ViewComponent::Base
   def initialize(goal:)
     @goal = goal
     @name = goal.name
-    @nav = goal.goal_snapshots.order(created_at: :desc).first.nav
   end
 end

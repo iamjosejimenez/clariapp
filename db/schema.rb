@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_03_173841) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_03_174951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_173841) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.decimal "nav", precision: 15, scale: 2
+    t.decimal "deposited", precision: 15, scale: 2
+    t.decimal "withdrawn", precision: 15, scale: 2
+    t.decimal "profit", precision: 15, scale: 2
+    t.decimal "not_net_deposited", precision: 15, scale: 2
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
