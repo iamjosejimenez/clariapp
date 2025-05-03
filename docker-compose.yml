@@ -1,21 +1,13 @@
 services:
-  app:
-    build: .
+  db:
+    image: postgres:16
     ports:
-      - "4100:3000"
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: claria
+      POSTGRES_PASSWORD: claria
+      POSTGRES_DB: claria_development
     volumes:
-      - storage:/rails/storage
-    env_file:
-      - .env.production
-  jobs:
-    build: .
-    command: bin/jobs
-    volumes:
-      - storage:/rails/storage
-    env_file:
-      - .env.production
-    depends_on:
-      - app
-
+      - postgresql_data:/var/lib/postgresql/data
 volumes:
-  storage:
+  postgresql_data:
