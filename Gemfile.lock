@@ -77,6 +77,9 @@ GEM
     annotate (2.6.5)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
+    appsignal (4.5.9)
+      logger
+      rack (>= 2.0.0)
     ast (2.4.3)
     base64 (0.2.0)
     bcrypt_pbkdf (1.1.1)
@@ -405,6 +408,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  appsignal
   bootsnap
   brakeman
   capybara
