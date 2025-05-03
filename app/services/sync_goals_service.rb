@@ -12,7 +12,7 @@ class SyncGoalsService
         g.name = goal_data[:name]
         g.user = user
       end
-      debugger
+
       goal.assign_attributes(
         nav: goal_data[:nav],
         profit: goal_data[:profit],
