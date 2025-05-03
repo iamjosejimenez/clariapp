@@ -29,7 +29,7 @@
 
     <p>
       <strong>Fecha de creación:</strong>
-      <%= l(@goal.external_created_at) %>
+      <%= l(Time.iso8601(@goal.external_created_at)) %>
     </p>
   </div>
   <div id="snapshots-table">
