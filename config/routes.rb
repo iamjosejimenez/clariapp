@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   get "dashboard/show"
   root "sessions#new"
 
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
+  post "/login", to: "sessions#create", as: :login
+  delete "/logout", to: "sessions#destroy", as: :logout
 
   get "/dashboard", to: "dashboard#show"
 

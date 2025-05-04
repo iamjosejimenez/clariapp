@@ -12,6 +12,6 @@ class GoalsController < ApplicationController
   private
 
   def require_login
-    redirect_to root_path, alert: "Tenés que iniciar sesión" unless session[:token].present?
+    redirect_to root_path, alert: "Tenés que iniciar sesión" unless session[:email].present?
   end
 end

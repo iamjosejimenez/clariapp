@@ -1,0 +1,11 @@
+<nav class="bg-gray-800 p-4 text-white flex justify-between items-center">
+  <div class="text-lg font-semibold">
+    <%= link_to "Claria", dashboard_path, class: "hover:underline" %>
+  </div>
+  <div>
+    <% if current_user %>
+      <%= button_to "Cerrar sesión", logout_path, method: :delete,
+          class: "bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded" %>
+    <% end %>
+  </div>
+</nav>
