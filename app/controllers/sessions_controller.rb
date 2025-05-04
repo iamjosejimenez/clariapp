@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    redirect_to dashboard_path if current_user
   end
 
   def create
@@ -15,12 +16,10 @@ class SessionsController < ApplicationController
       token = body["data"]["attributes"]["token"]
 
       user = User.find_or_initialize_by(email:)
-      user.password = password
       user.token = token
       user.save!
 
       session[:email] = email
-      session[:token] = token
 
       redirect_to dashboard_path
     else
