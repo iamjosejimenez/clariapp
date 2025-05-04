@@ -8,10 +8,4 @@ class GoalsController < ApplicationController
     @snapshot = @goal.goal_snapshots.order(created_at: :desc).first
     @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc), limit: 10)
   end
-
-  private
-
-  def require_login
-    redirect_to root_path, alert: "Tenés que iniciar sesión" unless session[:email].present?
-  end
 end
