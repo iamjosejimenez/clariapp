@@ -10,24 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_06_181048) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_191940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "goal_snapshots", force: :cascade do |t|
     t.integer "goal_id", null: false
-    t.decimal "nav", precision: 15, scale: 2
-    t.decimal "profit", precision: 15, scale: 2
-    t.decimal "not_net_deposited", precision: 15, scale: 2
-    t.decimal "deposited", precision: 15, scale: 2
-    t.decimal "withdrawn", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "nav_encrypted"
-    t.text "profit_encrypted"
-    t.text "not_net_deposited_encrypted"
-    t.text "deposited_encrypted"
-    t.text "withdrawn_encrypted"
+    t.string "nav"
+    t.string "profit"
+    t.string "not_net_deposited"
+    t.string "deposited"
+    t.string "withdrawn"
     t.index ["goal_id"], name: "index_goal_snapshots_on_goal_id"
   end
 
@@ -43,6 +38,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_181048) do
     t.decimal "profit", precision: 15, scale: 2
     t.decimal "not_net_deposited", precision: 15, scale: 2
     t.string "external_created_at"
+    t.text "nav_encrypted"
+    t.text "profit_encrypted"
+    t.text "not_net_deposited_encrypted"
+    t.text "deposited_encrypted"
+    t.text "withdrawn_encrypted"
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
