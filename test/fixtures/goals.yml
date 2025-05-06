@@ -9,11 +9,11 @@
 #  user_id             :integer          not null
 #  created_at          :datetime         not null
 #  external_created_at :string
-#  nav                 :text
-#  profit              :text
-#  not_net_deposited   :text
-#  deposited           :text
-#  withdrawn           :text
+#  nav                 :text             not null
+#  profit              :text             not null
+#  not_net_deposited   :text             not null
+#  deposited           :text             not null
+#  withdrawn           :text             not null
 #
 # Indexes
 #
