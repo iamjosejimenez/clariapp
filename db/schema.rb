@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_06_201543) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_203932) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -18,11 +18,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_201543) do
     t.integer "goal_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "nav_encrypted"
-    t.text "profit_encrypted"
-    t.text "not_net_deposited_encrypted"
-    t.text "deposited_encrypted"
-    t.text "withdrawn_encrypted"
+    t.text "nav"
+    t.text "profit"
+    t.text "not_net_deposited"
+    t.text "deposited"
+    t.text "withdrawn"
     t.index ["goal_id"], name: "index_goal_snapshots_on_goal_id"
   end
 
@@ -33,11 +33,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_201543) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.string "external_created_at"
-    t.text "nav_encrypted"
-    t.text "profit_encrypted"
-    t.text "not_net_deposited_encrypted"
-    t.text "deposited_encrypted"
-    t.text "withdrawn_encrypted"
+    t.text "nav"
+    t.text "profit"
+    t.text "not_net_deposited"
+    t.text "deposited"
+    t.text "withdrawn"
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
