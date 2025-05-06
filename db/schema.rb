@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_04_013806) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_181048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_013806) do
     t.decimal "withdrawn", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "nav_encrypted"
+    t.text "profit_encrypted"
+    t.text "not_net_deposited_encrypted"
+    t.text "deposited_encrypted"
+    t.text "withdrawn_encrypted"
     t.index ["goal_id"], name: "index_goal_snapshots_on_goal_id"
   end
 

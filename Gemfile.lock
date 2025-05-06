@@ -130,6 +130,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    good_migrations (0.3.1)
+      activerecord (>= 3.1)
+      railties (>= 3.1)
     http (5.2.0)
       addressable (~> 2.8)
       base64 (~> 0.1)
@@ -413,6 +416,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  good_migrations
   http
   httparty
   importmap-rails
