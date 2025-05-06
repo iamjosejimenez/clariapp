@@ -8,11 +8,6 @@
 #  updated_at                  :datetime         not null
 #  user_id                     :integer          not null
 #  created_at                  :datetime         not null
-#  nav                         :decimal(15, 2)
-#  deposited                   :decimal(15, 2)
-#  withdrawn                   :decimal(15, 2)
-#  profit                      :decimal(15, 2)
-#  not_net_deposited           :decimal(15, 2)
 #  external_created_at         :string
 #  nav_encrypted               :text
 #  profit_encrypted            :text
@@ -30,4 +25,24 @@ class Goal < ApplicationRecord
   belongs_to :user
 
   encrypts :nav_encrypted, :profit_encrypted, :not_net_deposited_encrypted, :deposited_encrypted, :withdrawn_encrypted
+
+  def nav
+    BigDecimal(nav_encrypted || "0")
+  end
+
+  def profit
+    BigDecimal(profit_encrypted || "0")
+  end
+
+  def not_net_deposited
+    BigDecimal(not_net_deposited_encrypted || "0")
+  end
+
+  def deposited
+    BigDecimal(deposited_encrypted || "0")
+  end
+
+  def withdrawn
+    BigDecimal(withdrawn_encrypted || "0")
+  end
 end

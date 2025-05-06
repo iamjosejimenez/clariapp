@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_06_191940) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_201543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -18,11 +18,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_191940) do
     t.integer "goal_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "nav", precision: 15, scale: 2
-    t.decimal "profit", precision: 15, scale: 2
-    t.decimal "not_net_deposited", precision: 15, scale: 2
-    t.decimal "deposited", precision: 15, scale: 2
-    t.decimal "withdrawn", precision: 15, scale: 2
     t.text "nav_encrypted"
     t.text "profit_encrypted"
     t.text "not_net_deposited_encrypted"
@@ -37,11 +32,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_191940) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
-    t.decimal "nav", precision: 15, scale: 2
-    t.decimal "deposited", precision: 15, scale: 2
-    t.decimal "withdrawn", precision: 15, scale: 2
-    t.decimal "profit", precision: 15, scale: 2
-    t.decimal "not_net_deposited", precision: 15, scale: 2
     t.string "external_created_at"
     t.text "nav_encrypted"
     t.text "profit_encrypted"
