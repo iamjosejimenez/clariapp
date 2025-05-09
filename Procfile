@@ -1,2 +1,2 @@
-web: ./bin/thrust ./bin/rails server
+web: ./bin/rails server -b 0.0.0.0
 jobs: bin/jobs
