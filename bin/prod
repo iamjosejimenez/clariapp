@@ -18,4 +18,4 @@ fi
 
 echo "Starting Rails server in production on port $PORT..."
 
-exec foreman start "$@"
+exec foreman start -f Procfile "$@"

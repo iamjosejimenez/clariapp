@@ -1,2 +1,2 @@
-web: bin/rails server -b 0.0.0.0 -p $PORT
+web: bundle exec rails server --binding 0.0.0.0 --port $PORT
 jobs: bin/jobs
