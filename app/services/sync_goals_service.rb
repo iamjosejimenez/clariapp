@@ -7,7 +7,7 @@ class SyncGoalsService
     goals = FintualApi.new(user).fetch_goals
 
     goals.each do |goal_data|
-      goal = Goal.find_or_create_by(external_id: goal_data[:id]) do |g|
+      goal = Goal.find_or_initialize_by(external_id: goal_data[:id]) do |g|
         g.name = goal_data[:name]
         g.user = user
       end
