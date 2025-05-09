@@ -63,4 +63,4 @@ USER 1000:1000
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-CMD ["foreman", "start"]
+CMD ["./bin/prod"]

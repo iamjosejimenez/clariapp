@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+set -e
+
+if [ -z "$PORT" ]; then
+  echo "Missing \$PORT environment variable. Exiting."
+  exit 1
+fi
+
+echo "Starting Rails server in production on port $PORT..."
+
+exec foreman start "$@"
