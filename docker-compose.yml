@@ -1,4 +1,10 @@
 services:
+  app:
+    build: .
+    ports:
+      - "4100:3000"
+    env_file:
+      - .env.production
   db:
     image: postgres:16
     ports:
