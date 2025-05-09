@@ -1,2 +1,2 @@
-web: ./bin/rails server -b 0.0.0.0
+web: bin/rails server
 jobs: bin/jobs
