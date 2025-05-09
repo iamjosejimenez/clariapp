@@ -1,2 +1,2 @@
-web: bin/rails server --binding=0.0.0.0 --port=10000
+web: bin/rails server -b 0.0.0.0 -p $PORT
 jobs: bin/jobs
