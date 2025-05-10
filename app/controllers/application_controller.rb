@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    redirect_to root_path, alert: "Tenés que iniciar sesión" unless session[:email].present?
+    redirect_to root_path, alert: "Tienes que iniciar sesión" unless session[:email].present?
   end
 end

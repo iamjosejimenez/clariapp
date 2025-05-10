@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create", as: :login
   delete "/logout", to: "sessions#destroy", as: :logout
 
-  get "/dashboard", to: "dashboard#show"
+  resource :dashboard, only: [ :show ] do
+    post :update_goals
+  end
 
   resources :goals, only: [ :index, :show ] do
     member do

@@ -21,6 +21,16 @@
   </head>
 
   <body class="bg-gray-100 text-gray-800">
+    <% if notice %>
+      <div
+        id="flash-notice"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-500"
+        data-controller="flash"
+        data-action="animationend->flash#hide"
+      >
+        <%= notice %>
+      </div>
+    <% end %>
     <%= render "shared/navbar" %>
     <%= yield %>
   </body>
