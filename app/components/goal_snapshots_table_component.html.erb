@@ -1,13 +1,10 @@
 <div class="space-y-6">
-  <table class="min-w-full text-sm text-left text-gray-500">
+  <table class="min-w-full text-md text-left text-gray-500 mt-6">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
         <th class="px-6 py-3">Fecha</th>
         <th class="px-6 py-3">Total</th>
         <th class="px-6 py-3">Ganancia</th>
-        <th class="px-6 py-3">No depositado</th>
-        <th class="px-6 py-3">Depositado</th>
-        <th class="px-6 py-3">Retirado</th>
       </tr>
     </thead>
     <tbody>
@@ -16,9 +13,6 @@
           <td class="border p-2"><%= l(snapshot.created_at.to_datetime) %></td>
           <td class="border p-2"><%= clp(snapshot.nav) %></td>
           <td class="border p-2"><%= clp(snapshot.profit) %></td>
-          <td class="border p-2"><%= clp(snapshot.not_net_deposited) %></td>
-          <td class="border p-2"><%= clp(snapshot.deposited) %></td>
-          <td class="border p-2"><%= clp(snapshot.withdrawn) %></td>
         </tr>
       <% end %>
     </tbody>

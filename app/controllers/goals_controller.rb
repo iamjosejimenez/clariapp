@@ -6,6 +6,6 @@ class GoalsController < ApplicationController
   def show
     @goal = Goal.find(params[:id])
     @snapshot = @goal.goal_snapshots.order(created_at: :desc).first
-    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc), limit: 10)
+    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(created_at: :desc), limit: 5)
   end
 end
