@@ -10,9 +10,9 @@
     <tbody>
       <% @snapshots.each do |snapshot| %>
         <tr>
-          <td class="border p-2"><%= l(snapshot.created_at.to_datetime) %></td>
-          <td class="border p-2"><%= clp(snapshot.nav) %></td>
-          <td class="border p-2"><%= clp(snapshot.profit) %></td>
+          <td class="border p-2 text-center"><%= l(snapshot.extraction_date) %></td>
+          <td class="border p-2 text-right"><%= clp(snapshot.nav) %></td>
+          <td class="border p-2 text-right"><%= clp(snapshot.profit) %></td>
         </tr>
       <% end %>
     </tbody>

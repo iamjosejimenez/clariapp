@@ -11,6 +11,7 @@
 #  not_net_deposited :text             not null
 #  deposited         :text             not null
 #  withdrawn         :text             not null
+#  extraction_date   :date
 #
 # Indexes
 #

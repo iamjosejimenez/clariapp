@@ -5,6 +5,9 @@ class SyncGoalsService
 
   def call
     goals = FintualApi.new(user).fetch_goals
+    return if goals.blank?
+
+    extraction_date = Date.current
 
     goals.each do |goal_data|
       goal = Goal.find_or_initialize_by(external_id: goal_data[:id]) do |g|
@@ -20,7 +23,7 @@ class SyncGoalsService
       goal.external_created_at = goal_data[:created_at]
       goal.save!
 
-      goal.goal_snapshots.find_or_initialize_by(created_at: Time.zone.now).tap do |snapshot|
+      goal.goal_snapshots.find_or_initialize_by(extraction_date: extraction_date).tap do |snapshot|
         snapshot.nav = goal_data[:nav]
         snapshot.profit = goal_data[:profit]
         snapshot.not_net_deposited = goal_data[:not_net_deposited]
