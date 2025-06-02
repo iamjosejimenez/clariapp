@@ -93,6 +93,7 @@ builder:
 # Use a different ssh user than root
 ssh:
   user: ubuntu
+  keys: [ "claria-production.pem" ]
 
 deploy_timeout: 60
 

@@ -62,10 +62,8 @@ jobs:
       - name: Set up SSH
 
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H clariapp.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
+          chmod 600 claria-production.pem
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
