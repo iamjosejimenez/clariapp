@@ -52,7 +52,43 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+  deploy:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H clariapp.com >> ~/.ssh/known_hosts
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Install Kamal
+        run: gem install kamal
+
+      - name: Build and Deploy
+        env:
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+          ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY }}
+          ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT }}
+          ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY }}
+          CLARIA_DATABASE_HOST: ${{ secrets.CLARIA_DATABASE_HOST }}
+          CLARIA_DATABASE_PASSWORD: ${{ secrets.CLARIA_DATABASE_PASSWORD }}
+          CLARIA_DATABASE_USER: ${{ secrets.CLARIA_DATABASE_USER }}
+          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: |
+          kamal deploy
   # test:
   #   runs-on: ubuntu-latest
 
