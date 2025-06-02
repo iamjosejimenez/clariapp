@@ -65,7 +65,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.CLARIA_SERVER_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H clariapp.com >> ~/.ssh/known_hosts
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
