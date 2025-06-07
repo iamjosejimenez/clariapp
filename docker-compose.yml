@@ -6,7 +6,7 @@ services:
     env_file:
       - .env.production
   db:
-    image: postgres:16
+    image: postgres:17.5
     ports:
       - "5431:5432"
     environment:

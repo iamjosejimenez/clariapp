@@ -15,7 +15,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_171712) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "goal_snapshots", force: :cascade do |t|
-    t.integer "goal_id", null: false
+    t.bigint "goal_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "nav", null: false
@@ -30,9 +30,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_171712) do
   create_table "goals", force: :cascade do |t|
     t.string "external_id"
     t.string "name"
-    t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.string "external_created_at"
     t.text "nav", null: false
     t.text "profit", null: false
