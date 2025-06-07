@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: users
+# Table name: fintual_users
 #
 #  id         :integer          not null, primary key
 #  email      :string
@@ -10,10 +10,10 @@
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
+#  index_fintual_users_on_email  (email) UNIQUE
 #
 
-class User < ApplicationRecord
+class FintualUser < ApplicationRecord
   encrypts :password
   encrypts :token
 

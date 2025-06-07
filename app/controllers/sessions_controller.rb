@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
       body = JSON.parse(response.body.to_s)
       token = body["data"]["attributes"]["token"]
 
-      user = User.find_or_initialize_by(email:)
+      user = FintualUser.find_or_initialize_by(email:)
       user.token = token
       user.save!
 

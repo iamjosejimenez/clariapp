@@ -2,7 +2,7 @@ class DashboardsController < ApplicationController
   before_action :require_login
 
   def show
-    @goals = Goal.where(user_id: current_user.id)
+    @goals = Goal.where(fintual_user_id: current_user.id)
     @total_available = @goals.map(&:nav).map(&:to_f).sum
   end
 

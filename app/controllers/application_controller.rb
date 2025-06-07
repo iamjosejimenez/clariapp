@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :require_login
 
   def current_user
-    @current_user ||= User.find_by(email: session[:email])
+    @current_user ||= FintualUser.find_by(email: session[:email])
   end
 
   def require_login

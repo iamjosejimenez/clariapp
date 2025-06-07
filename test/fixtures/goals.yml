@@ -5,9 +5,9 @@
 #  id                  :integer          not null, primary key
 #  external_id         :string
 #  name                :string
-#  updated_at          :datetime         not null
-#  user_id             :integer          not null
 #  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  fintual_user_id     :integer          not null
 #  external_created_at :string
 #  nav                 :text             not null
 #  profit              :text             not null
@@ -17,7 +17,7 @@
 #
 # Indexes
 #
-#  index_goals_on_user_id  (user_id)
+#  index_goals_on_fintual_user_id  (fintual_user_id)
 #
 
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
