@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  root "fintual_sessions#new"
+  root "dashboards#show"
+
+  resource :session
+  resources :passwords, param: :token
 
   get "fintual_sessions/new"
   get "fintual_sessions/create"
@@ -7,8 +10,8 @@ Rails.application.routes.draw do
   get "goals/show"
   get "dashboard/show"
 
-  post "/login", to: "fintual_sessions#create", as: :login
-  delete "/logout", to: "fintual_sessions#destroy", as: :logout
+  post "/login", to: "sessions#create", as: :login
+  delete "/logout", to: "sessions#destroy", as: :logout
 
   resource :dashboard, only: [ :show ] do
     post :update_goals

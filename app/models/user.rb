@@ -13,10 +13,10 @@
 #  index_users_on_email_address  (email_address) UNIQUE
 #
 
-require "test_helper"
+class User < ApplicationRecord
+  has_secure_password
+  has_many :sessions, dependent: :destroy
+  has_one :fintual_user, dependent: :destroy
 
-class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
 end
