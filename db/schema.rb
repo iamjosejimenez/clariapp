@@ -19,7 +19,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_08_210313) do
     t.text "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.index ["email"], name: "index_fintual_users_on_email", unique: true
     t.index ["user_id"], name: "index_fintual_users_on_user_id"
   end

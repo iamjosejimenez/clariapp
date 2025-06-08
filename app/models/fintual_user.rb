@@ -7,7 +7,7 @@
 #  token      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  user_id    :integer          not null
+#  user_id    :integer
 #
 # Indexes
 #
@@ -22,5 +22,5 @@ class FintualUser < ApplicationRecord
   validates :email, presence: true, uniqueness: true
 
   has_many :goals, dependent: :destroy
-  belongs_to :user, optional: false
+  belongs_to :user, optional: true
 end
