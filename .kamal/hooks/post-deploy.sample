@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "Post-deploy hook executed on $KAMAL_HOSTS for version $KAMAL_VERSION"
