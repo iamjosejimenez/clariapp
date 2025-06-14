@@ -18,7 +18,7 @@ class BudgetsController < ApplicationController
   def create
     @budget = current_user.budgets.build(budget_params)
     if @budget.save
-      redirect_to @budget, notice: "Presupuesto creado exitosamente."
+      redirect_to budgets_path, notice: "Presupuesto creado exitosamente."
     else
       render :new, status: :unprocessable_entity
     end

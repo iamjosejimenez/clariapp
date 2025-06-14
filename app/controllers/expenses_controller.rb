@@ -13,7 +13,7 @@ class ExpensesController < ApplicationController
   def create
     @expense = @budget_period.expenses.build(expense_params)
     if @expense.save
-      redirect_to budgets_path, notice: "Gasto agregado exitosamente."
+      redirect_to budget_budget_period_expenses_path(@budget, @budget_period), notice: "Gasto creado exitosamente."
     else
       render :new, status: :unprocessable_entity
     end

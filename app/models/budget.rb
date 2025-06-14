@@ -38,7 +38,10 @@ class Budget < ApplicationRecord
     when "mensual"
       today.month
     when "quincenal"
-      ((today.yday - 1) / 14) + 1
+      month = today.month
+      is_first_half = today.day <= 15
+      period = (month - 1) * 2 + (is_first_half ? 1 : 2)
+      period
     when "semanal"
       today.cweek
     else
