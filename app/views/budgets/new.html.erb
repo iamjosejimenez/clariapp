@@ -1,0 +1,40 @@
+<div class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow space-y-6">
+  <h1 class="text-2xl font-semibold text-gray-800">Crear nuevo presupuesto</h1>
+
+  <%= simple_form_for(@budget, html: { class: "space-y-4" }) do |f| %>
+    <div class="flex flex-col">
+      <%= f.label :name, "Nombre del presupuesto", class: "text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.input_field :name, class: "border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300", placeholder: "Ej: Café en la calle" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= f.label :category, "Frecuencia", class: "text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :category,
+            Budget::CATEGORIES.map { |c| [c.titleize, c] },
+            { prompt: "Selecciona la frecuencia" },
+            class: "appearance-none border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div class="flex flex-col" >
+      <%= f.label :amount, "Monto total por periodo", class: "text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.input_field :amount,
+            type: "text",
+            class: "border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300",
+            placeholder: "$10.000",
+            data: {
+              controller: "currency",
+            }
+            %>
+    </div>
+
+
+    <div class="flex flex-col">
+      <%= f.label :description, "Descripción (opcional)", class: "text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_area :description, rows: 3, class: "border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.button :submit, "Crear presupuesto", class: "px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700" %>
+    </div>
+  <% end %>
+</div>

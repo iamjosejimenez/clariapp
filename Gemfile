@@ -70,3 +70,5 @@ gem "pagy"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 gem "good_migrations"
+
+gem "simple_form", "~> 5.3"

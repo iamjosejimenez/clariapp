@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: budget_periods
+#
+#  id         :integer          not null, primary key
+#  budget_id  :integer          not null
+#  year       :integer
+#  period     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_budget_periods_on_budget_id                      (budget_id)
+#  index_budget_periods_on_budget_id_and_year_and_period  (budget_id,year,period) UNIQUE
+#
+
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  budget: one
+  year: 1
+  period: 1
+
+two:
+  budget: two
+  year: 1
+  period: 1

@@ -23,5 +23,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :budgets do
+    resources :budget_periods, only: [] do
+      resources :expenses, only: [ :new, :create, :index ]
+    end
+  end
+
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

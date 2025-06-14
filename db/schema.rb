@@ -10,9 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_08_210313) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_14_005144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "budget_periods", force: :cascade do |t|
+    t.bigint "budget_id", null: false
+    t.integer "year"
+    t.integer "period"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_id", "year", "period"], name: "index_budget_periods_on_budget_id_and_year_and_period", unique: true
+    t.index ["budget_id"], name: "index_budget_periods_on_budget_id"
+  end
+
+  create_table "budgets", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.text "description"
+    t.decimal "amount", precision: 10, scale: 2
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_budgets_on_user_id"
+    t.check_constraint "category::text = ANY (ARRAY['mensual'::character varying, 'quincenal'::character varying, 'semanal'::character varying]::text[])", name: "budget_category_check"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.string "description"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "budget_period_id", null: false
+    t.index ["budget_period_id"], name: "index_expenses_on_budget_period_id"
+  end
 
   create_table "fintual_users", force: :cascade do |t|
     t.string "email"
@@ -69,6 +100,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_08_210313) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "budget_periods", "budgets"
+  add_foreign_key "budgets", "users"
+  add_foreign_key "expenses", "budget_periods"
   add_foreign_key "fintual_users", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "fintual_users"
