@@ -67,8 +67,6 @@ USER 1000:1000
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 80
-CMD ["./bin/rails", "server"]
+CMD ["./bin/thrust", "./bin/rails", "server"]
