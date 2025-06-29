@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_14_005144) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_28_235755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_14_005144) do
     t.integer "period"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "total", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["budget_id", "year", "period"], name: "index_budget_periods_on_budget_id_and_year_and_period", unique: true
     t.index ["budget_id"], name: "index_budget_periods_on_budget_id"
   end

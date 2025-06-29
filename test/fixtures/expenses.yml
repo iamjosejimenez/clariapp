@@ -2,16 +2,20 @@
 #
 # Table name: expenses
 #
-#  id               :integer          not null, primary key
-#  description      :string
+#  id               :bigint           not null, primary key
 #  amount           :decimal(, )
+#  description      :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  budget_period_id :integer          not null
+#  budget_period_id :bigint           not null
 #
 # Indexes
 #
 #  index_expenses_on_budget_period_id  (budget_period_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (budget_period_id => budget_periods.id)
 #
 
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

@@ -2,20 +2,24 @@
 #
 # Table name: goal_snapshots
 #
-#  id                :integer          not null, primary key
-#  goal_id           :integer          not null
+#  id                :bigint           not null, primary key
+#  deposited         :text             not null
+#  extraction_date   :date
+#  nav               :text             not null
+#  not_net_deposited :text             not null
+#  profit            :text             not null
+#  withdrawn         :text             not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  nav               :text             not null
-#  profit            :text             not null
-#  not_net_deposited :text             not null
-#  deposited         :text             not null
-#  withdrawn         :text             not null
-#  extraction_date   :date
+#  goal_id           :bigint           not null
 #
 # Indexes
 #
 #  index_goal_snapshots_on_goal_id  (goal_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (goal_id => goals.id)
 #
 
 class GoalSnapshot < ApplicationRecord

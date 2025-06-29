@@ -2,17 +2,21 @@
 #
 # Table name: fintual_users
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  email      :string
 #  token      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  user_id    :integer
+#  user_id    :bigint
 #
 # Indexes
 #
 #  index_fintual_users_on_email    (email) UNIQUE
 #  index_fintual_users_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 
 class FintualUser < ApplicationRecord
