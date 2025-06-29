@@ -72,7 +72,7 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           kamal deploy
-          kamal prune all
+          ssh -i "claria-production.pem" ubuntu@clariapp.com 'docker system prune -a -f'
   # test:
   #   runs-on: ubuntu-latest
 
