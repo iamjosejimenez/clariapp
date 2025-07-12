@@ -72,6 +72,7 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           kamal deploy
+          kamal prune all -v
 
   # test:
   #   runs-on: ubuntu-latest
