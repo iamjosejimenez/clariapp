@@ -20,7 +20,7 @@
           <tr class="hover:bg-gray-50">
             <td class="px-4 py-3 font-medium text-gray-900"><%= period.budget.name %></td>
             <td class="px-4 py-3"><%= period.human_label %></td>
-            <td class="px-4 py-3 text-red-600">$<%= number_with_delimiter(period.total.to_i, delimiter: ".") %></td>
+            <td class="px-4 py-3 text-green-600">$<%= number_with_delimiter(period.total.to_i, delimiter: ".") %></td>
             <td class="px-4 py-3 text-red-600">$<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %></td>
             <td class="px-4 py-3 text-gray-700">$<%= number_with_delimiter(period.remaining.to_i, delimiter: ".") %></td>
             <td class="px-4 py-3">
