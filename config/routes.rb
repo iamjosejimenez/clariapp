@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "budget_period/index"
   root "budgets#index"
 
   resource :session
@@ -24,11 +25,10 @@ Rails.application.routes.draw do
   end
 
   resources :budgets do
-    resources :budget_periods, only: [] do
+    resources :budget_periods, only: [ :index ] do
       resources :expenses, only: [ :new, :create, :index ]
     end
   end
-
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

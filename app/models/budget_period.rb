@@ -31,8 +31,21 @@ class BudgetPeriod < ApplicationRecord
     expenses.sum(:amount)
   end
 
+  def previous_period
+    previous_year = year
+    previous_period = period - 1
+
+    if previous_period < 1
+      previous_year -= 1
+      previous_period = budget.budget_periods.find_by(year: previous_year).order_by(period: :desc).first
+      return previous_period
+    end
+
+    budget.budget_periods.find_by(year: previous_year, period: previous_period)
+  end
+
   def remaining
-    budget.amount - total_spent
+    total - total_spent
   end
 
   def start_and_end_dates

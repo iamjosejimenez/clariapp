@@ -18,7 +18,7 @@
   </div>
 
   <div class="mb-4 text-gray-700">
-    <p><strong>Monto asignado:</strong> $<%= number_with_delimiter(@budget.amount.to_i, delimiter: ".") %></p>
+    <p><strong>Monto asignado:</strong> $<%= number_with_delimiter(@budget_period.total.to_i, delimiter: ".") %></p>
     <p><strong>Total gastado:</strong> <span class="text-red-600">$<%= number_with_delimiter(@budget_period.total_spent.to_i, delimiter: ".") %></span></p>
     <p><strong>Restante:</strong> $<%= number_with_delimiter(@budget_period.remaining.to_i, delimiter: ".") %></p>
   </div>

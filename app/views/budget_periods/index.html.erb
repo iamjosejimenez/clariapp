@@ -1,0 +1,46 @@
+<div class="max-w-6xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-xl font-semibold text-gray-800">Historial de presupuestos</h1>
+  </div>
+
+  <% if @periods.any? %>
+    <table class="min-w-full bg-white border rounded-xl overflow-hidden shadow">
+      <thead class="bg-gray-100 text-left text-gray-600 uppercase text-sm">
+        <tr>
+          <th class="px-4 py-3">Presupuesto</th>
+          <th class="px-4 py-3">Periodo</th>
+          <th class="px-4 py-3">Total</th>
+          <th class="px-4 py-3">Gasto total</th>
+          <th class="px-4 py-3">Restante</th>
+          <th class="px-4 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @periods.each do |period| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-medium text-gray-900"><%= period.budget.name %></td>
+            <td class="px-4 py-3"><%= period.human_label %></td>
+            <td class="px-4 py-3 text-red-600">$<%= number_with_delimiter(period.total.to_i, delimiter: ".") %></td>
+            <td class="px-4 py-3 text-red-600">$<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %></td>
+            <td class="px-4 py-3 text-gray-700">$<%= number_with_delimiter(period.remaining.to_i, delimiter: ".") %></td>
+            <td class="px-4 py-3">
+              <%= link_to budget_budget_period_expenses_path(budget_id: period.budget.id, budget_period_id: period.id), title: "Ver gastos", class: "text-gray-600 hover:text-gray-800" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 16h8M8 12h8m-6 8h6m-2-18H6a2 2 0 00-2 2v16l4-4h10a2 2 0 002-2V6a2 2 0 00-2-2z" />
+                </svg>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="mt-6">
+      <%= pagy_nav(@pagy).html_safe %>
+    </div>
+  <% else %>
+    <p class="text-gray-600 italic">No se encontraron periodos.</p>
+  <% end %>
+</div>

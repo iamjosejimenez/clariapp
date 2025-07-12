@@ -33,7 +33,11 @@ class Budget < ApplicationRecord
   def current_period
     year = Date.today.year
     period = current_period_number
-    budget_periods.find_or_create_by(year: year, period: period)
+    budget_period = budget_periods.find_or_create_by(year: year, period: period)
+    surplus = budget_period.previous_period&.remaining || 0
+    budget_period.total = amount + surplus
+    budget_period.save
+    budget_period
   end
 
   def current_period_number
