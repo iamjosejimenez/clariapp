@@ -30,7 +30,7 @@
           <td class="px-4 py-3 font-medium text-gray-900"><%= budget.name %></td>
           <td class="px-4 py-3 text-gray-700"><%= budget.category.titleize %></td>
           <td class="px-4 py-3 text-green-700">$<%= number_with_delimiter(period.total.to_i, delimiter: ".") %></td>
-          <td class="px-4 py-3 text-red-700 text-red-600">$<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %></td>
+          <td class="px-4 py-3 text-red-700">$<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %></td>
           <td class="px-4 py-3 text-gray-700">$<%= number_with_delimiter(period.remaining.to_i, delimiter: ".") %></td>
           <td class="px-4 py-3 text-center flex space-x-4">
             <!-- Agregar gasto (icono: plus) -->
