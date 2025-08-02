@@ -24,6 +24,15 @@ class BudgetsController < ApplicationController
     end
   end
 
+  def destroy
+    @budget = current_user.budgets.find(params[:id])
+    if @budget.destroy
+      redirect_to budgets_path, notice: "Presupuesto eliminado exitosamente."
+    else
+      redirect_to budgets_path, alert: "Error al eliminar el presupuesto."
+    end
+  end
+
   private
 
   def set_budget
