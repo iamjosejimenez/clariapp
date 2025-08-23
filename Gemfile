@@ -12,8 +12,6 @@ gem "puma", ">= 5.0"
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-# Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
@@ -73,4 +71,5 @@ gem "good_migrations"
 
 gem "simple_form", "~> 5.3"
 
-gem "jsbundling-rails", "~> 1.3"
+gem "jsbundling-rails"
+gem "cssbundling-rails"

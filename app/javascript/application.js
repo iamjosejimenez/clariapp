@@ -2,7 +2,6 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
 
 document.addEventListener("turbo:load", () => {
   tippy('[data-tippy-content]');
