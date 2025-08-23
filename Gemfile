@@ -72,4 +72,3 @@ gem "good_migrations"
 gem "simple_form", "~> 5.3"
 
 gem "jsbundling-rails"
-gem "cssbundling-rails"

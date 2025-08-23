@@ -2,18 +2,27 @@
   "name": "app",
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.4",
+    "style-loader": "^4.0.0",
     "webpack": "^5.101.3",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "@tailwindcss/cli": "^4.1.12",
+    "@tailwindcss/postcss": "^4.1.12",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "postcss-preset-env": "^10.3.0",
+    "tailwindcss": "^4.1.12"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
+    "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.16",
-    "tailwindcss": "^4.1.12",
-    "@tailwindcss/cli": "^4.1.12",
     "tippy.js": "^6.3.7"
   }
 }
