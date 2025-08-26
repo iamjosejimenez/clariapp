@@ -154,8 +154,6 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    jsbundling-rails (1.3.1)
-      railties (>= 6.0.0)
     json (2.10.2)
     kamal (2.7.0)
       activesupport (>= 7.0)
@@ -413,7 +411,6 @@ DEPENDENCIES
   http
   httparty
   jbuilder
-  jsbundling-rails
   kamal
   pagy
   pg (~> 1.6)

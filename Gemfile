@@ -70,5 +70,3 @@ gem "pg", "~> 1.6"
 gem "good_migrations"
 
 gem "simple_form", "~> 5.3"
-
-gem "jsbundling-rails"
