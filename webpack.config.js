@@ -37,7 +37,7 @@ module.exports = {
         test: /\.css$/,
         include: path.resolve(__dirname, "app/stylesheets"),
         use: [
-          isProd ? MiniCssExtractPlugin.loader : "style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
