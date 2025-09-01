@@ -1,18 +1,17 @@
-<nav class="bg-gray-800 p-4 text-white flex justify-between items-center">
-  <div class="flex items-center space-x-4">
-    <%= link_to dashboard_path, class: "text-lg font-bold text-white hover:underline" do %>
-      Inversiones
-    <% end %>
+<% if authenticated? %>
+  <nav class="bg-gray-800 p-4 text-white flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <%= link_to dashboard_path, class: "text-lg font-bold text-white hover:underline" do %>
+        Inversiones
+      <% end %>
 
-    <%= link_to budgets_path, class: "text-lg font-bold text-white hover:underline" do %>
-      Presupuestos
-    <% end %>
-  </div>
-
-  <div>
-    <% if current_user %>
-      <%= button_to "Cerrar sesión", logout_path, method: :delete,
-          class: "bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded cursor-pointer" %>
-    <% end %>
-  </div>
-</nav>
+      <%= link_to budgets_path, class: "text-lg font-bold text-white hover:underline" do %>
+        Presupuestos
+      <% end %>
+    </div>
+    <div>
+        <%= button_to "Cerrar sesión", logout_path, method: :delete,
+            class: "bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded cursor-pointer" %>
+    </div>
+  </nav>
+<% end %>
