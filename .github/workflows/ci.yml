@@ -46,22 +46,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      - name: Set up SSH
-
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
-          chmod 600 claria-production.pem
-
+      - name: Set up Docker Buildx for cache
+        uses: docker/setup-buildx-action@v3
+      - name: Expose GitHub Runtime for cache
+        uses: crazy-max/ghaction-github-runtime@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
       - name: Install Kamal
         run: gem install kamal
-
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
+          chmod 600 claria-production.pem
       - name: Build and Deploy
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
