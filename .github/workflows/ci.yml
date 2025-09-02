@@ -35,6 +35,7 @@ jobs:
 
       - name: Lint code for consistent style
         run: |
+          bundle install
           bundle exec rubocop
           bundle exec erb_lint --lint-all .
 
