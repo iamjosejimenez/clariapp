@@ -38,7 +38,7 @@
     </table>
 
     <div class="mt-6">
-      <%= pagy_nav(@pagy).html_safe %>
+      <%= pagy_nav(@pagy).html_safe %> <%# erb_lint:disable ErbSafety %>
     </div>
   <% else %>
     <p class="text-gray-600 italic">No se encontraron periodos.</p>
