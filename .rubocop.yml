@@ -11,8 +11,8 @@ AllCops:
   TargetRubyVersion: 3.3.9
   TargetRailsVersion: 8.0
   Exclude:
-    - '**/node_modules/**/*'
-    - '**/vendor/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
 # Overwrite or add rules to create your own house style
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
