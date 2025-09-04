@@ -3,6 +3,8 @@ class SessionsController < ApplicationController
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
   def new
+    @email_address = ""
+    @error = nil
   end
 
   def create
@@ -13,7 +15,9 @@ class SessionsController < ApplicationController
       start_new_session_for user
       redirect_to after_authentication_url
     else
-      redirect_to new_session_path(email_address: email_address), alert: "Los datos ingresados no son correctos. Revisa tu correo y contraseña, o restablece tu contraseña"
+      @error = "Correo o contraseña incorrecta"
+      @email_address = email_address
+      render :new
     end
   end
 
