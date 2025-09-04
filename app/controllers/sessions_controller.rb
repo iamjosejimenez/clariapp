@@ -6,11 +6,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
+    form_params = params.permit(:email_address, :password)
+    email_address = form_params[:email_address]
+    password = form_params[:password]
+    if user = User.authenticate_by(email_address:, password: password)
       start_new_session_for user
       redirect_to after_authentication_url
     else
-      redirect_to new_session_path, alert: "Try another email address or password."
+      redirect_to new_session_path(email_address: email_address), alert: "Los datos ingresados no son correctos. Revisa tu correo y contraseña, o restablece tu contraseña"
     end
   end
 

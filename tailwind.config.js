@@ -7,8 +7,6 @@ module.exports = {
     "!./node_modules/**",
     "!./tmp/**"
   ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  theme: {},
+  plugins: []
 }
