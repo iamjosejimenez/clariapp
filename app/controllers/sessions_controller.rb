@@ -13,11 +13,11 @@ class SessionsController < ApplicationController
     password = form_params[:password]
     if user = User.authenticate_by(email_address:, password: password)
       start_new_session_for user
-      redirect_to after_authentication_url
+      redirect_to after_authentication_url, turbo: false
     else
       @error = "Correo o contraseña incorrecta"
       @email_address = email_address
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
