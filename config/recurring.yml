@@ -1,5 +1,5 @@
 production:
   fetch_goal_snapshots_job:
     class: FetchGoalSnapshotsJob
-    schedule: every day at 11pm
+    schedule: every day at 10pm
 
