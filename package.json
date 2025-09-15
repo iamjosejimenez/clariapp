@@ -26,7 +26,7 @@
     "analyze": "cross-env NODE_ENV=production webpack --config webpack.config.js --profile --json > build-stats.json"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.2.6",
+    "@fontsource/inter": "^5.2.7",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.16",
     "tippy.js": "^6.3.7"
