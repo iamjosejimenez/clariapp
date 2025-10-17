@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
-  before_action :set_budget_and_period
+  before_action :set_budget_and_period, only: [ :index, :new, :create ]
+  before_action :set_expense, only: [ :edit, :update ]
 
   def index
     @expenses = @budget_period.expenses.order(created_at: :desc)
@@ -19,11 +20,28 @@ class ExpensesController < ApplicationController
     end
   end
 
+  def edit
+    @budget = @expense.budget_period.budget
+    @budget_period = @expense.budget_period
+  end
+
+  def update
+    if @expense.update(expense_params)
+      redirect_to budget_budget_period_expenses_path(@expense.budget_period.budget, @expense.budget_period), notice: "Gasto actualizado exitosamente."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_budget_and_period
     @budget = current_user.budgets.find(params[:budget_id])
     @budget_period = @budget.budget_periods.find(params[:budget_period_id])
+  end
+
+  def set_expense
+    @expense = Expense.find(params[:id])
   end
 
   def expense_params
