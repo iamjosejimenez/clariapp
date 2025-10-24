@@ -2,7 +2,7 @@
   "name": "app",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.28.4",
+    "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.3",
     "@tailwindcss/cli": "^4.1.15",
     "@tailwindcss/postcss": "^4.1.15",
