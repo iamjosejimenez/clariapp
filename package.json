@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-env": "^7.28.5",
     "@tailwindcss/cli": "^4.1.16",
     "@tailwindcss/postcss": "^4.1.15",
     "babel-loader": "^10.0.0",
