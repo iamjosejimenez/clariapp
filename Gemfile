@@ -69,7 +69,7 @@ gem "pagy"
 gem "pg", "~> 1.6"
 gem "good_migrations"
 
-gem "simple_form", "~> 5.3"
+gem "simple_form", "~> 5.4"
 
 gem "erb_lint", require: false
 gem "rubocop", require: false
