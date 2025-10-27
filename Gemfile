@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.3"
+gem "rails", "~> 8.1.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -69,7 +69,7 @@ gem "pagy"
 gem "pg", "~> 1.6"
 gem "good_migrations"
 
-gem "simple_form", "~> 5.3"
+gem "simple_form", "~> 5.4"
 
 gem "erb_lint", require: false
 gem "rubocop", require: false

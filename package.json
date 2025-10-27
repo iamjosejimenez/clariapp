@@ -2,7 +2,7 @@
   "name": "app",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.28.4",
+    "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.3",
     "@tailwindcss/cli": "^4.1.16",
     "@tailwindcss/postcss": "^4.1.15",
@@ -15,7 +15,7 @@
     "postcss-preset-env": "^10.4.0",
     "rimraf": "^6.0.1",
     "style-loader": "^4.0.0",
-    "tailwindcss": "^4.1.15",
+    "tailwindcss": "^4.1.16",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1"
   },
