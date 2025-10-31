@@ -10,46 +10,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_28_235755) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "budget_periods", force: :cascade do |t|
     t.bigint "budget_id", null: false
-    t.integer "year"
-    t.integer "period"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "period"
     t.decimal "total", precision: 10, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.integer "year"
     t.index ["budget_id", "year", "period"], name: "index_budget_periods_on_budget_id_and_year_and_period", unique: true
     t.index ["budget_id"], name: "index_budget_periods_on_budget_id"
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.string "name"
-    t.string "category"
-    t.text "description"
     t.decimal "amount", precision: 10, scale: 2
-    t.bigint "user_id", null: false
+    t.string "category"
     t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_budgets_on_user_id"
     t.check_constraint "category::text = ANY (ARRAY['mensual'::character varying, 'quincenal'::character varying, 'semanal'::character varying]::text[])", name: "budget_category_check"
   end
 
   create_table "expenses", force: :cascade do |t|
-    t.string "description"
     t.decimal "amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "budget_period_id", null: false
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.datetime "updated_at", null: false
     t.index ["budget_period_id"], name: "index_expenses_on_budget_period_id"
   end
 
+  create_table "external_accounts", force: :cascade do |t|
+    t.string "access_token"
+    t.datetime "created_at", null: false
+    t.string "provider"
+    t.string "status"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_external_accounts_on_user_id"
+  end
+
   create_table "fintual_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "email"
     t.text "token"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["email"], name: "index_fintual_users_on_email", unique: true
@@ -57,46 +67,46 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_235755) do
   end
 
   create_table "goal_snapshots", force: :cascade do |t|
-    t.bigint "goal_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "nav", null: false
-    t.text "profit", null: false
-    t.text "not_net_deposited", null: false
     t.text "deposited", null: false
-    t.text "withdrawn", null: false
     t.date "extraction_date"
+    t.bigint "goal_id", null: false
+    t.text "nav", null: false
+    t.text "not_net_deposited", null: false
+    t.text "profit", null: false
+    t.datetime "updated_at", null: false
+    t.text "withdrawn", null: false
     t.index ["goal_id"], name: "index_goal_snapshots_on_goal_id"
   end
 
   create_table "goals", force: :cascade do |t|
-    t.string "external_id"
-    t.string "name"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "fintual_user_id", null: false
-    t.string "external_created_at"
-    t.text "nav", null: false
-    t.text "profit", null: false
-    t.text "not_net_deposited", null: false
     t.text "deposited", null: false
+    t.string "external_created_at"
+    t.string "external_id"
+    t.bigint "fintual_user_id", null: false
+    t.string "name"
+    t.text "nav", null: false
+    t.text "not_net_deposited", null: false
+    t.text "profit", null: false
+    t.datetime "updated_at", null: false
     t.text "withdrawn", null: false
     t.index ["fintual_user_id"], name: "index_goals_on_fintual_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "ip_address"
-    t.string "user_agent"
     t.datetime "created_at", null: false
+    t.string "ip_address"
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "email_address", null: false
     t.string "password_digest", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
@@ -104,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_235755) do
   add_foreign_key "budget_periods", "budgets"
   add_foreign_key "budgets", "users"
   add_foreign_key "expenses", "budget_periods"
+  add_foreign_key "external_accounts", "users"
   add_foreign_key "fintual_users", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "fintual_users"

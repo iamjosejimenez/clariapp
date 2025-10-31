@@ -20,7 +20,6 @@
 #
 
 class FintualUser < ApplicationRecord
-  encrypts :password
   encrypts :token
 
   validates :email, presence: true, uniqueness: true
