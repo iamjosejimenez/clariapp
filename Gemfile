@@ -49,9 +49,10 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Data generation
-  gem "factory_bot_rails"
-  gem "faker"
 end
+
+gem "factory_bot_rails"
+gem "faker"
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
