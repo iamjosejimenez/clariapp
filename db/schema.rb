@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_01_011151) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_01_020000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,16 +56,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_01_011151) do
     t.string "username"
     t.index ["user_id"], name: "index_external_accounts_on_user_id"
     t.index ["username", "provider"], name: "index_external_accounts_on_username_and_provider", unique: true
-  end
-
-  create_table "fintual_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "email"
-    t.text "token"
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["email"], name: "index_fintual_users_on_email", unique: true
-    t.index ["user_id"], name: "index_fintual_users_on_user_id"
   end
 
   create_table "goal_snapshots", force: :cascade do |t|
@@ -117,7 +107,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_01_011151) do
   add_foreign_key "budgets", "users"
   add_foreign_key "expenses", "budget_periods"
   add_foreign_key "external_accounts", "users"
-  add_foreign_key "fintual_users", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "external_accounts"
   add_foreign_key "sessions", "users"
