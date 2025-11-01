@@ -4,7 +4,7 @@ class BudgetsController < ApplicationController
   before_action :set_budget, only: [ :show ]
 
   def index
-    @budgets = current_user.budgets.includes(:budget_periods)
+    @budgets = current_user.budgets.includes(:budget_periods).order(created_at: :desc)
     @pagy, @budgets = pagy(@budgets)
   end
 
