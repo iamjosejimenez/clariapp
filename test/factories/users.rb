@@ -16,5 +16,11 @@ FactoryBot.define do
   factory :user do
     email_address { Faker::Internet.unique.email }
     password { "password1234*" }
+
+    trait :with_external_accounts do
+      after(:create) do |user|
+        create_list(:external_account, 2, :with_goals, user: user)
+      end
+    end
   end
 end

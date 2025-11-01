@@ -26,4 +26,8 @@ class User < ApplicationRecord
   def fintual_user
     external_accounts.find_by(provider: "fintual")
   end
+
+  def tests_user
+    external_accounts.find_by(provider: "tests")
+  end
 end

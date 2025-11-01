@@ -1,25 +1,42 @@
 <div class="max-w-5xl mx-auto mt-10 px-4">
-  <% if @fintual_user.present? %>
+  <% if @test_user.blank? %>
+    <% if @fintual_user.present? %>
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold block">Total disponible</h1>
+      </div>
+      <div class="text-xl font-semibold text-green-600">
+        <%= number_to_currency(@total_available) %>
+      </div>
+      <h1 class="text-2xl font-bold mb-6 block mt-8">Tus Metas en Fintual</h1>
+      <% if @goals.any? %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @goals.each do |goal| %>
+            <%= render GoalComponent.new(goal: goal) %>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500">No hay metas para mostrar.</p>
+      <% end %>
+    <% else %>
+      <div>
+        <%= link_to "Contectar con Fintual", fintual_sessions_new_path, class: "w-full bg-violet-700 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg shadow" %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @test_user.present? %>
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold block">Total disponible</h1>
     </div>
     <div class="text-xl font-semibold text-green-600">
-      <%= number_to_currency(@total_available) %>
+      <%= number_to_currency(@test_total_available) %>
     </div>
-    <h1 class="text-2xl font-bold mb-6 block mt-8">Tus Metas en Fintual</h1>
-    <% if @goals.any? %>
+    <h1 class="text-2xl font-bold mb-6 block mt-8">Tus Metas</h1>
+    <% if @test_goals.any? %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% @goals.each do |goal| %>
+        <% @test_goals.each do |goal| %>
           <%= render GoalComponent.new(goal: goal) %>
         <% end %>
       </div>
-    <% else %>
-      <p class="text-gray-500">No hay metas para mostrar.</p>
     <% end %>
-  <% else %>
-    <div>
-      <p class="text-gray-500 my-6">No estás conectado a ningún proveedor de objetivos.</p>
-      <%= link_to "Contectar con Fintual", fintual_sessions_new_path, class: "w-full bg-violet-700 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg shadow" %>
-    </div>
   <% end %>
 </div>

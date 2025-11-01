@@ -22,9 +22,17 @@
 #
 FactoryBot.define do
   factory :external_account do
-    user { association :user }
     provider { "tests" }
     access_token { Faker::Alphanumeric.alphanumeric(number: 20) }
     status { "active" }
+    username { Faker::Internet.unique.username }
+
+    association :user
+
+    trait :with_goals do
+      after(:create) do |external_account|
+        create_list(:goal, 3, :with_snapshots, external_account: external_account)
+      end
+    end
   end
 end
