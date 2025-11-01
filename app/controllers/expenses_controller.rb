@@ -41,7 +41,7 @@ class ExpensesController < ApplicationController
   end
 
   def set_expense
-    @expense = Expense.find(params[:id])
+    @expense = current_user.expenses.find(params[:id])
   end
 
   def expense_params

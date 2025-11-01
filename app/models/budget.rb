@@ -23,6 +23,7 @@
 class Budget < ApplicationRecord
   belongs_to :user
   has_many :budget_periods, dependent: :destroy
+  has_many :expenses, through: :budget_periods
 
   CATEGORIES = %w[mensual quincenal semanal].freeze
 
