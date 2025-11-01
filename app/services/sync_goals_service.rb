@@ -1,10 +1,10 @@
 class SyncGoalsService
-  def initialize(user)
-    @user = user
+  def initialize(external_account)
+    @external_account = external_account
   end
 
   def call
-    goals = FintualApi.new(user).fetch_goals
+    goals = FintualApi.new(external_account).fetch_goals
     return if goals.blank?
 
     extraction_date = Date.current
@@ -12,7 +12,7 @@ class SyncGoalsService
     goals.each do |goal_data|
       goal = Goal.find_or_initialize_by(external_id: goal_data[:id]) do |g|
         g.name = goal_data[:name]
-        g.user = user
+        g.external_account = external_account
       end
 
       goal.nav = goal_data[:nav]
@@ -36,5 +36,5 @@ class SyncGoalsService
 
   private
 
-  attr_reader :user
+  attr_reader :external_account
 end

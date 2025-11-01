@@ -32,16 +32,7 @@ class BudgetPeriod < ApplicationRecord
   end
 
   def previous_period
-    previous_year = year
-    previous_period = period - 1
-
-    if previous_period < 1
-      previous_year -= 1
-      previous_period = budget.budget_periods.find_by(year: previous_year).order_by(period: :desc).first
-      return previous_period
-    end
-
-    budget.budget_periods.find_by(year: previous_year, period: previous_period)
+    PreviousBudgetPeriodService.new(self).call
   end
 
   def remaining
