@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_31_233745) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_01_011151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,7 +87,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_233745) do
     t.bigint "external_account_id"
     t.string "external_created_at"
     t.string "external_id"
-    t.bigint "fintual_user_id", null: false
     t.string "name"
     t.text "nav", null: false
     t.text "not_net_deposited", null: false
@@ -95,7 +94,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_233745) do
     t.datetime "updated_at", null: false
     t.text "withdrawn", null: false
     t.index ["external_account_id"], name: "index_goals_on_external_account_id"
-    t.index ["fintual_user_id"], name: "index_goals_on_fintual_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -122,6 +120,5 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_233745) do
   add_foreign_key "fintual_users", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "external_accounts"
-  add_foreign_key "goals", "fintual_users"
   add_foreign_key "sessions", "users"
 end
