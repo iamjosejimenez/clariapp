@@ -6,8 +6,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   get "fintual_sessions/new"
-  get "fintual_sessions/create"
-  get "fintual_sessions/destroy"
+  post "fintual_sessions/create"
   get "goals/show"
   get "dashboard/show"
 
