@@ -29,7 +29,7 @@ class BudgetsController < ApplicationController
     if @budget.destroy
       redirect_to budgets_path, notice: "Presupuesto eliminado exitosamente."
     else
-      redirect_to budgets_path, alert: "Error al eliminar el presupuesto."
+      redirect_to budgets_path, notice: "Error al eliminar el presupuesto."
     end
   end
 

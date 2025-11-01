@@ -12,21 +12,24 @@
 #  withdrawn           :text             not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  external_account_id :bigint
 #  external_id         :string
 #  fintual_user_id     :bigint           not null
 #
 # Indexes
 #
-#  index_goals_on_fintual_user_id  (fintual_user_id)
+#  index_goals_on_external_account_id  (external_account_id)
+#  index_goals_on_fintual_user_id      (fintual_user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (external_account_id => external_accounts.id)
 #  fk_rails_...  (fintual_user_id => fintual_users.id)
 #
 
 class Goal < ApplicationRecord
   has_many :goal_snapshots, dependent: :destroy
-  belongs_to :fintual_user
+  belongs_to :external_account
 
   encrypts :nav, :profit, :not_net_deposited, :deposited, :withdrawn
 end

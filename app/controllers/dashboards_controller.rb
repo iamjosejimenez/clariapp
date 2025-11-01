@@ -1,6 +1,7 @@
 class DashboardsController < ApplicationController
   def show
-    @goals = current_user.fintual_user&.goals || []
+    @fintual_user = current_user.fintual_user
+    @goals = @fintual_user&.goals || []
     @total_available = @goals.map(&:nav).map(&:to_f).sum
   end
 

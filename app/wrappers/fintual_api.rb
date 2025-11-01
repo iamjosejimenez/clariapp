@@ -1,7 +1,7 @@
 class FintualApi
   def initialize(user)
-    @email = user.email
-    @token = user.token
+    @email = user.username
+    @token = user.access_token
   end
 
   def fetch_goals

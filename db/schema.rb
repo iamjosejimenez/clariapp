@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_31_233745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,7 +53,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
     t.string "status"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.string "username"
     t.index ["user_id"], name: "index_external_accounts_on_user_id"
+    t.index ["username", "provider"], name: "index_external_accounts_on_username_and_provider", unique: true
   end
 
   create_table "fintual_users", force: :cascade do |t|
@@ -82,6 +84,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
   create_table "goals", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "deposited", null: false
+    t.bigint "external_account_id"
     t.string "external_created_at"
     t.string "external_id"
     t.bigint "fintual_user_id", null: false
@@ -91,6 +94,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
     t.text "profit", null: false
     t.datetime "updated_at", null: false
     t.text "withdrawn", null: false
+    t.index ["external_account_id"], name: "index_goals_on_external_account_id"
     t.index ["fintual_user_id"], name: "index_goals_on_fintual_user_id"
   end
 
@@ -117,6 +121,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_205042) do
   add_foreign_key "external_accounts", "users"
   add_foreign_key "fintual_users", "users"
   add_foreign_key "goal_snapshots", "goals"
+  add_foreign_key "goals", "external_accounts"
   add_foreign_key "goals", "fintual_users"
   add_foreign_key "sessions", "users"
 end

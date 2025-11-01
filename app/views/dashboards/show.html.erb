@@ -5,14 +5,19 @@
   <div class="text-xl font-semibold text-green-600">
     <%= number_to_currency(@total_available) %>
   </div>
-  <h1 class="text-2xl font-bold mb-6 block mt-8">Tus Metas en Fintual</h1>
-  <% if @goals.any? %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @goals.each do |goal| %>
-        <%= render GoalComponent.new(goal: goal) %>
-      <% end %>
-    </div>
+  <% if @fintual_user.present? %>
+    <h1 class="text-2xl font-bold mb-6 block mt-8">Tus Metas en Fintual</h1>
+    <% if @goals.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @goals.each do |goal| %>
+          <%= render GoalComponent.new(goal: goal) %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-500">No hay metas para mostrar.</p>
+    <% end %>
   <% else %>
-    <p class="text-gray-500">No hay metas para mostrar.</p>
+    <p class="text-gray-500 mt-6">No estás conectado a Fintual.</p>
+    <%= link_to "Contectar con Fintual", fintual_sessions_new_path, class: "w-full bg-violet-700 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg shadow" %>
   <% end %>
 </div>

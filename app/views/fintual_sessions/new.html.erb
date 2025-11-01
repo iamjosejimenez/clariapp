@@ -1,13 +1,13 @@
 <div class="max-w-md mx-auto mt-10">
-  <h1 class="text-2xl font-semibold mb-6">Iniciar sesión</h1>
-  <%= form_with url: "/login", method: :post, local: true do %>
+  <h1 class="text-2xl font-semibold mb-6">Iniciar sesión en Fintual</h1>
+  <%= form_with url: fintual_sessions_create_path, method: :get, local: true do %>
     <div class="mb-4">
-      <%= label_tag :email, "Correo electrónico" %>
+      <%= label_tag :email, "Correo electrónico de Fintual" %>
       <%= text_field_tag :email, nil, class: "w-full p-2 border rounded", autocomplete: "email" %>
     </div>
 
     <div class="mb-6">
-      <%= label_tag :password, "Contraseña" %>
+      <%= label_tag :password, "Contraseña de Fintual" %>
       <%= password_field_tag :password, nil, class: "w-full p-2 border rounded", autocomplete: "password" %>
     </div>
 

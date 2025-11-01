@@ -22,4 +22,8 @@ class User < ApplicationRecord
   has_many :external_accounts, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def fintual_user
+    external_accounts.find_by(provider: "fintual")
+  end
 end
