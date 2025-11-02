@@ -9,3 +9,6 @@ application.register("currency", CurrencyController)
 
 import FlashController from "./flash_controller"
 application.register("flash", FlashController)
+
+import InvoicePreviewController from "./invoice_preview_controller"
+application.register("invoice-preview", InvoicePreviewController)

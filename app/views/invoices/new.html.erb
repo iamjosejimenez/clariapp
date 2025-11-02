@@ -1,0 +1,94 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-8">
+    <header class="text-center">
+      <h1 class="text-3xl font-semibold text-gray-800">Procesar factura</h1>
+      <p class="mt-3 text-base text-gray-500">
+        Sube una imagen de la factura y extraeremos automáticamente cada item identificado.
+      </p>
+    </header>
+
+    <section class="rounded-2xl bg-white p-8 shadow-xl">
+      <h2 class="text-xl font-semibold text-gray-800">Sube tu factura</h2>
+      <p class="mt-1 text-sm text-gray-500">
+        Aceptamos formatos JPG, PNG y HEIC. Tamaño máximo recomendado: 10 MB.
+      </p>
+
+      <div class="mt-6">
+        <%= form_with url: invoices_path,
+                      html: { multipart: true },
+                      data: { controller: "invoice-preview", action: "reset->invoice-preview#clear", turbo: false },
+                      local: true,
+                      class: "space-y-6" do |form| %>
+          <div>
+            <%= form.label :image, "Imagen de factura", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-2 rounded-2xl border border-dashed border-violet-200 bg-violet-50 px-6 py-8 text-center">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-600" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 5a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H6a1 1 0 1 1 0-2h5V6a1 1 0 0 1 1-1Z" />
+                </svg>
+              </div>
+              <p class="mt-4 text-sm text-gray-600">
+                Arrastra la imagen aquí o
+                <span class="font-semibold text-violet-700">haz clic para seleccionarla</span>.
+              </p>
+              <div class="mt-4 flex justify-center">
+                <%= form.file_field :image,
+                                    accept: "image/*",
+                                    data: { "invoice-preview-target": "input", action: "change->invoice-preview#update" },
+                                    class: "text-sm text-gray-500 file:mr-4 file:rounded-xl file:border-0 file:bg-violet-700 file:px-5 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-violet-800" %>
+              </div>
+              <div class="mt-6">
+                <img data-invoice-preview-target="image"
+                     alt=""
+                     class="mx-auto hidden h-56 w-full max-w-md rounded-2xl border border-gray-200 bg-white object-contain shadow-inner" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-500">Los items detectados aparecerán debajo del formulario.</p>
+            <%= form.submit "Analizar factura",
+                            class: "inline-flex items-center gap-2 rounded-xl bg-violet-700 px-6 py-2 text-white font-semibold shadow hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2" %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <% if @items.present? %>
+      <section class="rounded-2xl bg-white p-8 shadow-xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-semibold text-gray-800">Items extraídos</h2>
+            <p class="mt-1 text-sm text-gray-500">Revisa la lista y ajusta los datos según sea necesario.</p>
+          </div>
+          <span class="inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700">
+            <%= pluralize(@items.count, "item") %>
+          </span>
+        </div>
+
+        <div class="mt-6 overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Producto</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Cantidad</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Precio unitario</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Total</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <% @items.each do |item| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-4 py-3 text-sm font-medium text-gray-700"><%= item[:name] %></td>
+                  <td class="px-4 py-3 text-sm text-gray-600 text-right"><%= item[:quantity] %></td>
+                  <td class="px-4 py-3 text-sm text-gray-600 text-right"><%= item[:unit_price] %></td>
+                  <td class="px-4 py-3 text-sm font-semibold text-gray-800 text-right"><%= item[:total] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    <% end %>
+  </div>
+</div>
