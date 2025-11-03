@@ -1,5 +1,5 @@
 class BudgetPeriodsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :set_budget
 

@@ -86,6 +86,6 @@
   </table>
 
   <div class="mt-6">
-    <%= pagy_nav(@pagy).html_safe %> <%# erb_lint:disable ErbSafety %>
+    <%= @pagy.series_nav.html_safe %> <%# erb_lint:disable ErbSafety %>
   </div>
 </div>

@@ -1,5 +1,5 @@
 class GoalsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   def show
     @goal = current_user.goals.find(params[:id])
