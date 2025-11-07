@@ -4,7 +4,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
-    "@tailwindcss/cli": "^4.1.16",
+    "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/postcss": "^4.1.16",
     "tailwindcss": "^4.1.17",
     "babel-loader": "^10.0.0",
