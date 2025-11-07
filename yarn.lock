@@ -1409,18 +1409,18 @@
   resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.0.200.tgz"
   integrity sha512-EDqWyxck22BHmv1e+mD8Kl6GmtNkhEPdRfGFT7kvsv1yoXd9iYrqHDVAaR8bKmU/syC5eEZ2I5aWWxtB73ukMw==
 
-"@tailwindcss/cli@^4.1.16":
-  version "4.1.16"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/cli/-/cli-4.1.16.tgz#14e12304d2b871fa0727a461b130b1271c1adba2"
-  integrity sha512-dsnANPrh2ZooHyZ/8uJhc9ecpcYtufToc21NY09NS9vF16rxPCjJ8dP7TUAtPqlUJTHSmRkN2hCdoYQIlgh4fw==
+"@tailwindcss/cli@^4.1.17":
+  version "4.1.17"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/cli/-/cli-4.1.17.tgz#50667756225788ba0083a7875400c7b90e2be3cb"
+  integrity sha512-jUIxcyUNlCC2aNPnyPEWU/L2/ik3pB4fF3auKGXr8AvN3T3OFESVctFKOBoPZQaZJIeUpPn1uCLp0MRxuek8gg==
   dependencies:
     "@parcel/watcher" "^2.5.1"
-    "@tailwindcss/node" "4.1.16"
-    "@tailwindcss/oxide" "4.1.16"
+    "@tailwindcss/node" "4.1.17"
+    "@tailwindcss/oxide" "4.1.17"
     enhanced-resolve "^5.18.3"
     mri "^1.2.0"
     picocolors "^1.1.1"
-    tailwindcss "4.1.16"
+    tailwindcss "4.1.17"
 
 "@tailwindcss/node@4.1.16":
   version "4.1.16"
@@ -3298,7 +3298,7 @@ tailwindcss@4.1.16:
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.1.16.tgz#c32179f98725eb551e5c1189813a3db437ad5a7f"
   integrity sha512-pONL5awpaQX4LN5eiv7moSiSPd/DLDzKVRJz8Q9PgzmAdd1R4307GQS2ZpfiN7ZmekdQrfhZZiSE5jkLR4WNaA==
 
-tailwindcss@4.1.17, tailwindcss@^4.1.16:
+tailwindcss@^4.1.17:
   version "4.1.17"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.1.17.tgz#e6dcb7a9c60cef7522169b5f207ffec2fd652286"
   integrity sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==
