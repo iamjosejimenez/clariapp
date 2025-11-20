@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Mis presupuestos</h1>
 
-    <%= link_to new_budget_path, class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl shadow hover:bg-blue-700" do %>
+    <%= link_to new_budget_path, class: "inline-flex items-center px-4 py-2 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800" do %>
       <!-- Icono plus -->
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 -ml-1" fill="none"
           viewBox="0 0 24 24" stroke="currentColor">
@@ -12,80 +12,69 @@
       Nuevo presupuesto
     <% end %>
   </div>
-  <table class="min-w-full bg-white border rounded-xl overflow-hidden shadow">
-    <thead class="bg-gray-100 text-left text-gray-600 uppercase text-sm">
-      <tr>
-        <th class="px-4 py-3">Nombre</th>
-        <th class="px-4 py-3">Frecuencia</th>
-        <th class="px-4 py-3">Monto asignado</th>
-        <th class="px-4 py-3">Gastado</th>
-        <th class="px-4 py-3">Restante</th>
-        <th class="px-4 py-3 text-center">Acciones</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-      <% @budgets.each do |budget| %>
-        <% period = budget.current_period %>
-        <tr class="hover:bg-gray-50">
-          <td class="px-4 py-3 font-medium text-gray-900"><%= budget.name %></td>
-          <td class="px-4 py-3 text-gray-700"><%= budget.category.titleize %></td>
-          <td class="px-4 py-3 text-green-700">$<%= number_with_delimiter(period.total.to_i, delimiter: ".") %></td>
-          <td class="px-4 py-3 text-red-700">$<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %></td>
-          <td class="px-4 py-3 text-gray-700">$<%= number_with_delimiter(period.remaining.to_i, delimiter: ".") %></td>
-          <td class="px-1 py-3 flex items-center justify-center space-x-2">
-            <!-- Agregar gasto (icono: plus) -->
-            <%= link_to new_budget_budget_period_expense_path(budget_id: budget.id, budget_period_id: period.id),
-                title: "Agregar gasto",
-                class: "text-green-600 hover:text-green-800",
-                data: {
-                  'tippy-content': "Agregar gasto al periodo actual"
-                } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            <% end %>
-            <!-- Ver gastos (icono: document-text) -->
-            <%= link_to budget_budget_period_expenses_path(budget_id: budget.id, budget_period_id: period.id),
-                title: "Ver gastos",
-                class: "text-gray-600 hover:text-gray-800",
-                data: {
-                  'tippy-content': "Ver gastos del periodo actual"
-                } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-              </svg>
-            <% end %>
-            <!-- Ver historial -->
-            <%= link_to budget_budget_periods_path(budget_id: budget.id),
-                title: "Historial de periodos",
-                class: "text-blue-500 hover:text-blue-800",
-                data: {
-                  'tippy-content': "Ver historial de periodos"
-                } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-              </svg>
-            <% end %>
-            <!-- Eliminar presupuesto -->
-            <%= link_to budget_path(budget),
-                title: "Eliminar presupuesto",
-                class: "text-red-500 hover:text-red-800",
-                data: {
-                  'tippy-content': "Eliminar presupuesto",
-                  turbo_method: :delete,
-                  turbo_confirm: "¿Estás seguro que deseas eliminar esto?"
-                } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%= render TableComponent.new(rows: @budgets, pagy: @pagy) do |table| %>
+    <% table.with_column(name: "Nombre", classes: "text-left font-medium text-gray-900") do |budget| %>
+      <%= budget.name %>
+    <% end %>
 
-  <div class="mt-6">
-    <%= @pagy.series_nav.html_safe %> <%# erb_lint:disable ErbSafety %>
-  </div>
+    <% table.with_column(name: "Frecuencia", classes: "text-left text-gray-700") do |budget| %>
+      <%= budget.category.titleize %>
+    <% end %>
+
+    <% table.with_column(name: "Monto asignado", classes: "text-left text-green-700") do |budget| %>
+      $<%= number_with_delimiter(budget.current_period.total.to_i, delimiter: ".") %>
+    <% end %>
+
+    <% table.with_column(name: "Gastado", classes: "text-left text-red-700") do |budget| %>
+      $<%= number_with_delimiter(budget.current_period.total_spent.to_i, delimiter: ".") %>
+    <% end %>
+
+    <% table.with_column(name: "Restante", classes: "text-left text-gray-700") do |budget| %>
+      $<%= number_with_delimiter(budget.current_period.remaining.to_i, delimiter: ".") %>
+    <% end %>
+
+    <% table.with_column(name: "Acciones", classes: "text-center text-gray-700") do |budget| %>
+      <div class="flex items-center justify-center space-x-2">
+        <%= link_to new_budget_budget_period_expense_path(budget_id: budget.id, budget_period_id: budget.current_period.id),
+            title: "Agregar gasto",
+            class: "text-green-600 hover:text-green-800",
+            data: { 'tippy-content': "Agregar gasto al periodo actual" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        <% end %>
+
+        <%= link_to budget_budget_period_expenses_path(budget_id: budget.id, budget_period_id: budget.current_period.id),
+            title: "Ver gastos",
+            class: "text-gray-600 hover:text-gray-800",
+            data: { 'tippy-content': "Ver gastos del periodo actual" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+          </svg>
+        <% end %>
+
+        <%= link_to budget_budget_periods_path(budget_id: budget.id),
+            title: "Historial de periodos",
+            class: "text-blue-500 hover:text-blue-800",
+            data: { 'tippy-content': "Ver historial de periodos" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+          </svg>
+        <% end %>
+
+        <%= link_to budget_path(budget),
+            title: "Eliminar presupuesto",
+            class: "text-red-500 hover:text-red-800",
+            data: {
+              'tippy-content': "Eliminar presupuesto",
+              turbo_method: :delete,
+              turbo_confirm: "¿Estás seguro que deseas eliminar esto?"
+            } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

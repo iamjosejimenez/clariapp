@@ -67,26 +67,23 @@
         </div>
 
         <div class="mt-6 overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Producto</th>
-                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Cantidad</th>
-                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Precio unitario</th>
-                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Total</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <% @items.each do |item| %>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-3 text-sm font-medium text-gray-700"><%= item[:name] %></td>
-                  <td class="px-4 py-3 text-sm text-gray-600 text-right"><%= item[:quantity] %></td>
-                  <td class="px-4 py-3 text-sm text-gray-600 text-right"><%= item[:unit_price] %></td>
-                  <td class="px-4 py-3 text-sm font-semibold text-gray-800 text-right"><%= item[:total] %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <%= render TableComponent.new(rows: @items) do |table| %>
+            <% table.with_column(name: "Producto", classes: "font-medium text-gray-700") do |item| %>
+              <%= item[:name] %>
+            <% end %>
+
+            <% table.with_column(name: "Cantidad", classes: "text-gray-600 text-right") do |item| %>
+              <%= item[:quantity] %>
+            <% end %>
+
+            <% table.with_column(name: "Precio unitario", classes: "text-gray-600 text-right") do |item| %>
+              <%= item[:unit_price] %>
+            <% end %>
+
+            <% table.with_column(name: "Total", classes: "font-semibold text-gray-800 text-right") do |item| %>
+              <%= item[:total] %>
+            <% end %>
+          <% end %>
         </div>
       </section>
     <% end %>

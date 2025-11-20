@@ -1,2 +1,2 @@
-web: env PORT=4000 RUBY_DEBUG_OPEN=true bin/rails server
+web: env PORT=4000 bin/rails server
 js: yarn run dev

@@ -3,7 +3,7 @@ class GoalsController < ApplicationController
 
   def show
     @goal = current_user.goals.find(params[:id])
-    @pagy, @snapshots = pagy(:countless, @goal.goal_snapshots.order(extraction_date: :desc), limit: 10)
+    @pagy, @snapshots = pagy(@goal.goal_snapshots.order(extraction_date: :desc))
     @snapshot = @goal.goal_snapshots.order(created_at: :desc).limit(1).first
   end
 end
