@@ -1,24 +1,15 @@
 <div class="space-y-6">
-  <table class="min-w-full text-md text-left text-gray-500 mt-6">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-      <tr>
-        <th class="px-6 py-3 text-center">Fecha</th>
-        <th class="px-6 py-3 text-center">Total</th>
-        <th class="px-6 py-3 text-center">Ganancia</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @snapshots.each do |snapshot| %>
-        <tr>
-          <td class="border p-2 text-center"><%= l(snapshot.extraction_date) %></td>
-          <td class="border p-2 text-right"><%= clp(snapshot.nav) %></td>
-          <td class="border p-2 text-right"><%= clp(snapshot.profit) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%= render TableComponent.new(rows: @snapshots, pagy: @pagy) do |table| %>
+    <% table.with_column(name: "Fecha", classes: "text-left font-medium text-gray-900") do |snapshot| %>
+      <%= snapshot.extraction_date %>
+    <% end %>
 
-  <div class="mt-6 flex justify-center">
-    <%= @pagy.series_nav.html_safe %> <%# erb_lint:disable ErbSafety %>
-  </div>
+    <% table.with_column(name: "Total", classes: "text-left text-gray-700") do |snapshot| %>
+      <%= clp(snapshot.nav) %>
+    <% end %>
+
+    <% table.with_column(name: "Ganancia", classes: "text-left text-green-600") do |snapshot| %>
+      <%= clp(snapshot.profit) %>
+    <% end %>
+  <% end %>
 </div>
