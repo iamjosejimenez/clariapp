@@ -6,7 +6,7 @@ class BudgetPeriodsController < ApplicationController
 
   def index
     @budget_periods = @budget.budget_periods.order(year: :desc, period: :desc)
-    @pagy, @periods = pagy(@budget_periods)
+    @pagy, @periods = pagy(:countish, @budget_periods)
   end
 
   private

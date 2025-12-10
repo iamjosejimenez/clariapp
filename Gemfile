@@ -71,7 +71,7 @@ end
 gem "http"
 gem "view_component"
 gem "httparty"
-gem "pagy"
+gem "pagy", "~> 43.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.6"
 gem "good_migrations"

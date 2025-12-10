@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :edit, :update ]
 
   def index
-    @pagy, @expenses = pagy(@budget_period.expenses.order(created_at: :desc))
+    @pagy, @expenses = pagy(:countish, @budget_period.expenses.order(created_at: :desc))
   end
 
 

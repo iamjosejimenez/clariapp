@@ -452,7 +452,7 @@ DEPENDENCIES
   httparty
   jbuilder
   kamal
-  pagy
+  pagy (~> 43.2)
   pg (~> 1.6)
   propshaft
   puma (>= 5.0)

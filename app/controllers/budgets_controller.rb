@@ -5,7 +5,7 @@ class BudgetsController < ApplicationController
 
   def index
     @budgets = current_user.budgets.includes(:budget_periods).order(created_at: :desc)
-    @pagy, @budgets = pagy(@budgets)
+    @pagy, @budgets = pagy(:countish, @budgets)
   end
 
   def show
