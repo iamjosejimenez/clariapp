@@ -1,14 +1,21 @@
 class TableComponent < ViewComponent::Base
+  include Pagy::Method
+
   renders_many :columns, ->(name:, classes:, &block) do
     ColumnComponent.new(name: name, classes: classes, &block)
   end
 
-  attr_reader :pagy
-  attr_reader :rows
+  attr_reader :pager
+  attr_reader :records
 
-  def initialize(rows:, pagy: nil)
+  def initialize(rows:)
     @rows = rows
-    @pagy = pagy
+  end
+
+  def before_render
+    pager, records = pagy(:countish, @rows, limit: 5)
+    @pager = pager
+    @records = records
   end
 
   class ColumnComponent < ViewComponent::Base

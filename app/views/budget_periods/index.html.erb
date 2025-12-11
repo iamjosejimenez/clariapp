@@ -4,7 +4,7 @@
   </div>
 
   <% if @periods.any? %>
-    <%= render TableComponent.new(rows: @periods, pagy: @pagy) do |table| %>
+    <%= render TableComponent.new(rows: @periods) do |table| %>
       <% table.with_column(name: "Presupuesto", classes: "text-left font-medium text-gray-900") do |period| %>
         <%= period.budget.name %>
       <% end %>

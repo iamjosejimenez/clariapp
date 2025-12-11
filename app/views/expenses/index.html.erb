@@ -23,7 +23,7 @@
   </div>
 
   <% if @expenses.any? %>
-    <%= render TableComponent.new(rows: @expenses, pagy: @pagy) do |table| %>
+    <%= render TableComponent.new(rows: @expenses) do |table| %>
       <% table.with_column(name: "Descripción", classes: "text-left font-medium text-gray-900") do |expense| %>
         <%= expense.description %>
       <% end %>

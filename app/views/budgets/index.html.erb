@@ -12,7 +12,7 @@
       Nuevo presupuesto
     <% end %>
   </div>
-  <%= render TableComponent.new(rows: @budgets, pagy: @pagy) do |table| %>
+  <%= render TableComponent.new(rows: @budgets) do |table| %>
     <% table.with_column(name: "Nombre", classes: "text-left font-medium text-gray-900") do |budget| %>
       <%= budget.name %>
     <% end %>

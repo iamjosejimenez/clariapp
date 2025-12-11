@@ -13,7 +13,7 @@
     </p>
   </div>
   <div id="snapshots-table" class="mt-6">
-    <%= render TableComponent.new(rows: @snapshots, pagy: @pagy) do |table| %>
+    <%= render TableComponent.new(rows: @snapshots) do |table| %>
       <% table.with_column(name: "Fecha", classes: "text-left text-gray-700") do |snapshot| %>
         <%= snapshot.created_at.strftime("%d/%m/%Y") %>
       <% end %>
