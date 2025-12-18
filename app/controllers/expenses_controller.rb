@@ -1,6 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_budget_and_period, only: [ :index, :new, :create ]
-  before_action :set_expense, only: [ :edit, :update ]
+  before_action :set_expense, only: [ :edit, :update, :destroy ]
 
   def index
     @expenses = @budget_period.expenses.order(created_at: :desc)
@@ -31,6 +31,11 @@ class ExpensesController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @expense.destroy
+    redirect_to budget_budget_period_expenses_path(@expense.budget_period.budget, @expense.budget_period), notice: "Gasto eliminado exitosamente."
   end
 
   private
