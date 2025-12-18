@@ -13,7 +13,7 @@ class TableComponent < ViewComponent::Base
   end
 
   def before_render
-    pager, records = pagy(:countish, @rows, limit: 5)
+    pager, records = pagy(:countish, @rows, limit: 10)
     @pager = pager
     @records = records
   end
