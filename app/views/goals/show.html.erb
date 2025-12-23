@@ -23,7 +23,7 @@
       <% end %>
 
       <% table.with_column(name: "Ganancia", classes: "text-left") do |snapshot| %>
-        <span class="<%= snapshot.profit.to_i < 0 ? 'text-red-600' : 'text-green-600' %>">
+        <span class="<%= snapshot.profit.to_i < 0 ? "text-red-600" : "text-green-600" %>">
           $<%= number_with_delimiter(snapshot.profit.to_i, delimiter: ".") %>
         </span>
       <% end %>
