@@ -3,7 +3,7 @@ class BudgetPeriodsController < ApplicationController
 
 
   def index
-    @budget_periods = @budget.budget_periods.order(year: :desc, period: :desc)
+    @periods = @budget.budget_periods.order(year: :desc, period: :desc)
   end
 
   private
