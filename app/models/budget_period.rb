@@ -70,4 +70,8 @@ class BudgetPeriod < ApplicationRecord
     return "Periodo #{period}/#{year}" unless start_date && end_date
     "Del #{I18n.l(start_date, format: :short)} al #{I18n.l(end_date, format: :short)}"
   end
+
+  def current?
+    year == Date.today.year && period == budget.current_period_number
+  end
 end

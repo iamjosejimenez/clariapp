@@ -34,8 +34,12 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
-    @expense.destroy
-    redirect_to budget_budget_period_expenses_path(@expense.budget_period.budget, @expense.budget_period), notice: "Gasto eliminado exitosamente."
+    if @expense.budget_period.current?
+      @expense.destroy
+      redirect_to budget_budget_period_expenses_path(@expense.budget_period.budget, @expense.budget_period), notice: "Gasto eliminado exitosamente."
+    else
+      redirect_to budget_budget_period_expenses_path(@expense.budget_period.budget, @expense.budget_period), alert: "Solo se pueden eliminar gastos del periodo actual."
+    end
   end
 
   private
