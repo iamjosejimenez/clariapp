@@ -2584,7 +2584,7 @@ compressible@~2.0.18:
   dependencies:
     mime-db ">= 1.43.0 < 2"
 
-"compression-webpack-plugin@^9.0.0 || ^10.0.0|| ^11.0.0":
+compression-webpack-plugin@^11.0.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/compression-webpack-plugin/-/compression-webpack-plugin-11.1.0.tgz#ee340d2029cf99ccecdea9ad1410b377d15b48b3"
   integrity sha512-zDOQYp10+upzLxW+VRSjEpRRwBXJdsb5lBMlRxx1g8hckIFBpe3DTI0en2w7h+beuq89576RVzfiXrkdPGrHhA==
@@ -2697,7 +2697,7 @@ css-has-pseudo@^8.0.0:
     postcss-selector-parser "^7.1.1"
     postcss-value-parser "^4.2.0"
 
-"css-loader@^6.0.0 || ^7.0.0":
+css-loader@^7.0.0:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-7.1.2.tgz#64671541c6efe06b0e22e750503106bdd86880f8"
   integrity sha512-6WvYYn7l/XEGN8Xu2vWFt9nVzrCn39vKyTEFf/ExEyoksJjjSZV/0/35XPlMbpnr6VGhZIUg5yJrL8tGfes/FA==
@@ -4859,7 +4859,7 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-"sass-loader@^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0":
+sass-loader@^16.0.0:
   version "16.0.6"
   resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-16.0.6.tgz#913b05607d06c386bc37870494e1e3a3e091fd3b"
   integrity sha512-sglGzId5gmlfxNs4gK2U3h7HlVRfx278YK6Ono5lwzuvi1jxig80YiuHkaDBVsYIKFhx8wN7XSCI0M2IDS/3qA==
@@ -5132,7 +5132,7 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
-"style-loader@^3.0.0 || ^4.0.0":
+style-loader@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-4.0.0.tgz#0ea96e468f43c69600011e0589cb05c44f3b17a5"
   integrity sha512-1V4WqhhZZgjVAVJyt7TdDPZoPBPNHbekX4fWnCJL1yQukhCeZhJySUL+gL9y6sNdN95uEOS83Y55SqHcP7MzLA==
@@ -5360,7 +5360,7 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-"webpack-assets-manifest@^5.0.6 || ^6.0.0":
+webpack-assets-manifest@^6.0.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/webpack-assets-manifest/-/webpack-assets-manifest-6.5.0.tgz#d49d98e226bb10518a3423cd8830511cb179a306"
   integrity sha512-kLTeboMb91KRDr2MH5I3hnGi5Sei8lmhtupLARygX2sjGB7Jzc5J81HNRIquYN9SkRvos8YGoJeBcBWDBp27JA==
@@ -5370,7 +5370,7 @@ wbuf@^1.1.0, wbuf@^1.7.3:
     schema-utils "^4.3.3"
     tapable "^2.3.0"
 
-"webpack-cli@^4.9.2 || ^5.0.0 || ^6.0.0":
+webpack-cli@^6.0.0:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-6.0.1.tgz#a1ce25da5ba077151afd73adfa12e208e5089207"
   integrity sha512-MfwFQ6SfwinsUVi0rNJm7rHZ31GyTcpVE5pgVA3hwFRb7COD4TzjUUwhGWKfO50+xdc2MQPuEBBJoqIMGt3JDw==
@@ -5401,7 +5401,7 @@ webpack-dev-middleware@^7.4.2:
     range-parser "^1.2.1"
     schema-utils "^4.0.0"
 
-"webpack-dev-server@^4.15.2 || ^5.2.2":
+webpack-dev-server@^5.2.2:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-5.2.3.tgz#7f36a78be7ac88833fd87757edee31469a9e47d3"
   integrity sha512-9Gyu2F7+bg4Vv+pjbovuYDhHX+mqdqITykfzdM9UyKqKHlsE5aAjRhR+oOEfXW5vBeu8tarzlJFIZva4ZjAdrQ==
@@ -5444,9 +5444,9 @@ webpack-merge@^5.8.0:
     flat "^5.0.2"
     wildcard "^2.0.0"
 
-"webpack-merge@^5.8.0 || ^6.0.0", webpack-merge@^6.0.1:
+webpack-merge@^6.0.0, webpack-merge@^6.0.1:
   version "6.0.1"
-  resolved "https://registry.npmjs.org/webpack-merge/-/webpack-merge-6.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-6.0.1.tgz#50c776868e080574725abc5869bd6e4ef0a16c6a"
   integrity sha512-hXXvrjtx2PLYx4qruKl+kyRSLc52V+cCvMxRjmKwoA+CBbbF5GfIBtR6kCvl0fYGqTUPKB+1ktVmTHqMOzgCBg==
   dependencies:
     clone-deep "^4.0.1"
