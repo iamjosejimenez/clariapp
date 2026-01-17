@@ -17,7 +17,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch("DB_POOL") { 5 } %>
   host: <%= ENV.fetch("CLARIA_DATABASE_HOST") { 'localhost' } %>
   username: <%= ENV.fetch("CLARIA_DATABASE_USER") { 'claria' } %>
   password: <%= ENV.fetch("CLARIA_DATABASE_PASSWORD") { 'claria' } %>
