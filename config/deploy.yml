@@ -102,7 +102,7 @@ ssh:
   user: ec2-user
   keys: [ "claria-production.pem" ]
 
-deploy_timeout: 60
+# deploy_timeout: 60
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
