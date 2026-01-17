@@ -43,6 +43,7 @@ env:
     - PORT
     - OPENAI_API_KEY
   clear:
+    PORT: 80
     SOLID_QUEUE_IN_PUMA: true
     JOB_CONCURRENCY: 1
     WEB_CONCURRENCY: 0
