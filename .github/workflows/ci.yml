@@ -41,7 +41,7 @@ jobs:
           bundle exec erb_lint --lint-all .
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout code
