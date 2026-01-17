@@ -16,8 +16,8 @@
     <%= favicon_link_tag "favicon.png" %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload", as: "style" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= stylesheet_pack_tag "application", "data-turbo-track": "reload", as: "style" %>
+    <%= javascript_pack_tag "application" %>
   </head>
 
   <body class="min-h-screen bg-gray-50 text-gray-900 font-sans antialiased">

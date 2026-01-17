@@ -149,6 +149,3 @@ window.Pagy = (() => {
     }
   };
 })();
-
-//# debugId=F3282E394DA790A164756E2164756E21
-//# sourceMappingURL=pagy.js.map
