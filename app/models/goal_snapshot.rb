@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: goal_snapshots
+# Database name: primary
 #
 #  id                :bigint           not null, primary key
 #  deposited         :text             not null

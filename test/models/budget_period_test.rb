@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: budget_periods
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  period     :integer

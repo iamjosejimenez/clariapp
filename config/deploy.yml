@@ -11,6 +11,14 @@ servers:
     options:
       memory: "600m"
       memory-swap: "900m"
+  jobs:
+    hosts:
+      - clariapp.com
+    options:
+      memory: "300m"
+      memory-swap: "450m"
+    cmd: bin/jobs
+    proxy: false
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
@@ -44,7 +52,7 @@ env:
     - OPENAI_API_KEY
   clear:
     PORT: 80
-    SOLID_QUEUE_IN_PUMA: true
+    SOLID_QUEUE_IN_PUMA: false
     JOB_CONCURRENCY: 1
     WEB_CONCURRENCY: 0
     RAILS_MAX_THREADS: 3

@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: goals
+# Database name: primary
+#
+#  id                  :bigint           not null, primary key
+#  deposited           :text             not null
+#  external_created_at :string
+#  name                :string
+#  nav                 :text             not null
+#  not_net_deposited   :text             not null
+#  profit              :text             not null
+#  withdrawn           :text             not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  external_account_id :bigint
+#  external_id         :string
+#
+# Indexes
+#
+#  index_goals_on_external_account_id  (external_account_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (external_account_id => external_accounts.id)
+#

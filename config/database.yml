@@ -21,11 +21,24 @@ default: &default
   host: <%= ENV.fetch("CLARIA_DATABASE_HOST") { 'localhost' } %>
   username: <%= ENV.fetch("CLARIA_DATABASE_USER") { 'claria' } %>
   password: <%= ENV.fetch("CLARIA_DATABASE_PASSWORD") { 'claria' } %>
+  port: <%= ENV.fetch("DB_PORT") { '5432' } %>
 
 development:
-  <<: *default
-  database: claria_development
-  port: 5431
+  primary:
+    <<: *default
+    database: claria_development
+  cache:
+    <<: *default
+    database: claria_development_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: claria_development_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: claria_development_cable
+    migrations_paths: db/cable_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -60,7 +73,6 @@ development:
 test:
   <<: *default
   database: claria_test
-  port: 5431
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

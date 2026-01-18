@@ -10,5 +10,6 @@
   // },
   // "rubyLsp.rubyVersionManager": {
   //   "identifier": "rbenv",
-  // }   
+  // }
+  // "terminal.integrated.scrollback": 1000000000000,
 }

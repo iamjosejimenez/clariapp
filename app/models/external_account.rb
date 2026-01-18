@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: external_accounts
+# Database name: primary
 #
 #  id           :bigint           not null, primary key
 #  access_token :string

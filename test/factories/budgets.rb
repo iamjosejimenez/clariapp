@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: budgets
+# Database name: primary
 #
 #  id          :bigint           not null, primary key
 #  amount      :decimal(10, 2)
@@ -18,7 +19,6 @@
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
-#
 #
 FactoryBot.define do
   factory :budget do
