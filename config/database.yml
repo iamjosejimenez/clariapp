@@ -12,32 +12,61 @@
 # Configure Using Gemfile
 # gem "pg"
 #
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("DB_POOL") { 5 } %>
-  host: <%= ENV.fetch("CLARIA_DATABASE_HOST") { 'localhost' } %>
-  username: <%= ENV.fetch("CLARIA_DATABASE_USER") { 'claria' } %>
-  password: <%= ENV.fetch("CLARIA_DATABASE_PASSWORD") { 'claria' } %>
-  port: <%= ENV.fetch("DB_PORT") { '5432' } %>
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   # For details on connection pooling, see Rails configuration guide
+#   # https://guides.rubyonrails.org/configuring.html#database-pooling
+#   pool: <%= ENV.fetch("DB_POOL") { 5 } %>
+#   host: <%= ENV.fetch("CLARIA_DATABASE_HOST") { 'localhost' } %>
+#   username: <%= ENV.fetch("CLARIA_DATABASE_USER") { 'claria' } %>
+#   password: <%= ENV.fetch("CLARIA_DATABASE_PASSWORD") { 'claria' } %>
+#   port: <%= ENV.fetch("DB_PORT") { '5432' } %>
 
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+# development:
+#   primary:
+#     <<: *default
+#     database: claria_development
+#   cache:
+#     <<: *default
+#     database: claria_development_cache
+#     migrations_paths: db/cache_migrate
+#   queue:
+#     <<: *default
+#     database: claria_development_queue
+#     migrations_paths: db/queue_migrate
+#   cable:
+#     <<: *default
+#     database: claria_development_cable
+#     migrations_paths: db/cable_migrate
+
+
+# development:
+#   database: storage/development.sqlite3
+#   adapter: sqlite3
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   timeout: 5000
+  
 development:
   primary:
     <<: *default
-    database: claria_development
+    database: storage/development.sqlite3
   cache:
     <<: *default
-    database: claria_development_cache
+    database: storage/development_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: claria_development_queue
+    database: storage/development_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: claria_development_cable
+    database: storage/development_cable.sqlite3
     migrations_paths: db/cable_migrate
 
   # The specified database role being used to connect to PostgreSQL.
@@ -72,7 +101,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: claria_test
+  database: storage/test.sqlite3
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -95,18 +124,18 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
+  primary:
     <<: *default
-    database: claria_production
+    database: storage/production.sqlite3
   cache:
-    <<: *primary_production
-    database: claria_production_cache
+    <<: *default
+    database: storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
-    <<: *primary_production
-    database: claria_production_queue
+    <<: *default
+    database: storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
-    <<: *primary_production
-    database: claria_production_cable
+    <<: *default
+    database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate

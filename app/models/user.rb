@@ -3,7 +3,7 @@
 # Table name: users
 # Database name: primary
 #
-#  id              :bigint           not null, primary key
+#  id              :integer          not null, primary key
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  created_at      :datetime         not null

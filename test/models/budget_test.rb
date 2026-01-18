@@ -3,14 +3,14 @@
 # Table name: budgets
 # Database name: primary
 #
-#  id          :bigint           not null, primary key
+#  id          :integer          not null, primary key
 #  amount      :decimal(10, 2)
 #  category    :string
 #  description :text
 #  name        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  user_id     :bigint           not null
+#  user_id     :integer          not null
 #
 # Indexes
 #
@@ -18,7 +18,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => users.id)
+#  user_id  (user_id => users.id)
 #
 
 require "test_helper"

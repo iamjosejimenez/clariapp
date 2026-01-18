@@ -3,7 +3,7 @@
 # Table name: goal_snapshots
 # Database name: primary
 #
-#  id                :bigint           not null, primary key
+#  id                :integer          not null, primary key
 #  deposited         :text             not null
 #  extraction_date   :date
 #  nav               :text             not null
@@ -12,7 +12,7 @@
 #  withdrawn         :text             not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  goal_id           :bigint           not null
+#  goal_id           :integer          not null
 #
 # Indexes
 #
@@ -20,7 +20,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (goal_id => goals.id)
+#  goal_id  (goal_id => goals.id)
 #
 
 require "test_helper"

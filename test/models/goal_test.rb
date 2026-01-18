@@ -3,7 +3,7 @@
 # Table name: goals
 # Database name: primary
 #
-#  id                  :bigint           not null, primary key
+#  id                  :integer          not null, primary key
 #  deposited           :text             not null
 #  external_created_at :string
 #  name                :string
@@ -13,7 +13,7 @@
 #  withdrawn           :text             not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  external_account_id :bigint
+#  external_account_id :integer
 #  external_id         :string
 #
 # Indexes
@@ -22,7 +22,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (external_account_id => external_accounts.id)
+#  external_account_id  (external_account_id => external_accounts.id)
 #
 
 require "test_helper"

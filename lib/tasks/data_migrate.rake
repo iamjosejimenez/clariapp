@@ -8,7 +8,7 @@ namespace :data_migrate do
   ].freeze
 
   def export_dir
-    ENV.fetch("EXPORT_DIR", "tmp/pg_export")
+    ENV.fetch("EXPORT_DIR", "storage/pg_export")
   end
 
   def tables

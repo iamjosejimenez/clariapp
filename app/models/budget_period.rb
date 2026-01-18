@@ -3,13 +3,13 @@
 # Table name: budget_periods
 # Database name: primary
 #
-#  id         :bigint           not null, primary key
+#  id         :integer          not null, primary key
 #  period     :integer
 #  total      :decimal(10, 2)   default(0.0), not null
 #  year       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  budget_id  :bigint           not null
+#  budget_id  :integer          not null
 #
 # Indexes
 #
@@ -18,7 +18,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (budget_id => budgets.id)
+#  budget_id  (budget_id => budgets.id)
 #
 
 class BudgetPeriod < ApplicationRecord

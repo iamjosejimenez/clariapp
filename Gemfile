@@ -85,3 +85,4 @@ gem "rubocop-performance", require: false
 
 gem "shakapacker", "= 9.5"
 gem "image_processing", "~> 1.2"
+gem "sqlite3"
