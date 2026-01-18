@@ -68,7 +68,7 @@ namespace :data_migrate do
         File.foreach(file) do |line|
           rows << JSON.parse(line)
           if rows.size >= 1000
-            ActiveRecord::Base.connection.insert_fixtures_set({ table => rows }, table)
+            ActiveRecord::Base.connection.insert_fixtures_set({ table => rows }, [ table ])
             rows.clear
           end
         end
