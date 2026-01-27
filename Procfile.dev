@@ -1,3 +1,2 @@
 web: env PORT=4000 bin/rails server
 js: ./bin/shakapacker-dev-server
-jobs: bin/jobs

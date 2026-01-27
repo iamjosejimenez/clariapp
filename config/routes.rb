@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :goals, only: [ :index, :show ] do
     member do
       get :snapshots
+      get "snapshot_detail/:snapshot_id", to: "goals#snapshot_detail", as: :snapshot_detail
     end
   end
 

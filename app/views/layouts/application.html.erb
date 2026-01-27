@@ -20,7 +20,7 @@
     <%= javascript_pack_tag "application" %>
   </head>
 
-  <body class="min-h-screen bg-gray-50 text-gray-900 font-sans antialiased">
+  <body class="min-h-screen bg-gray-50 text-gray-900 font-sans antialiased" data-controller="modal">
     <% if notice %>
       <div
         id="flash-notice"
@@ -41,5 +41,6 @@
     <% end %>
     <%= render "shared/navbar" %>
     <%= yield %>
+    <%= render "shared/modal" %>
   </body>
 </html>

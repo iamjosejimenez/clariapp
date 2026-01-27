@@ -12,3 +12,6 @@ application.register("flash", FlashController)
 
 import InvoicePreviewController from "./invoice_preview_controller"
 application.register("invoice-preview", InvoicePreviewController)
+
+import ModalController from "./modal_controller"
+application.register("modal", ModalController)
