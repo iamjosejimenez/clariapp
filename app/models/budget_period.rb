@@ -73,6 +73,7 @@ class BudgetPeriod < ApplicationRecord
   end
 
   def current?
-    year == Date.today.year && period == budget.current_period_number
+    today = Date.today
+    year == budget.current_year(today) && period == budget.current_period_number(today)
   end
 end
