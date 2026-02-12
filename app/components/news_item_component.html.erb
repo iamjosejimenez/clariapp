@@ -1,0 +1,28 @@
+<div class="bg-white shadow rounded p-4">
+  <div class="flex justify-between items-start">
+    <div class="flex-1">
+      <h4 class="font-semibold text-gray-900">
+        <% if @item.source_url.present? %>
+          <%= link_to @item.title, @item.source_url, target: "_blank", rel: "noopener noreferrer", class: "hover:text-blue-600" %>
+        <% else %>
+          <%= @item.title %>
+        <% end %>
+      </h4>
+      <% if @item.snippet.present? %>
+        <p class="text-sm text-gray-600 mt-2"><%= @item.snippet %></p>
+      <% end %>
+      <div class="flex gap-4 mt-2">
+        <% if @item.category.present? %>
+          <span class="text-xs text-gray-500">
+            <%= @item.category %>
+          </span>
+        <% end %>
+        <% if @item.published_at.present? %>
+          <span class="text-xs text-gray-500">
+            <%= @item.published_at.strftime("%d/%m/%Y") %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

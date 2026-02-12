@@ -1,0 +1,23 @@
+<div class="max-w-3xl mx-auto mt-10 px-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Chilean Economic News</h1>
+  </div>
+
+  <% if @summary %>
+    <div class="bg-white shadow rounded p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">
+        <%= @summary.generation_date.strftime("%d/%m/%Y") %>
+      </h2>
+      <div class="prose max-w-none">
+        <%= simple_format(@summary.summary) %>
+      </div>
+      <p class="text-sm text-gray-600 mt-4">
+        <%= @summary.sources_count %> sources consulted
+      </p>
+    </div>
+  <% else %>
+    <div class="bg-white shadow rounded p-6">
+      <p>No news available. Click Refresh to generate today's summary.</p>
+    </div>
+  <% end %>
+</div>

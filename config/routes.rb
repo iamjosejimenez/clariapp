@@ -24,6 +24,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :news, only: [ :index, :show ] do
+    collection do
+      post :refresh
+    end
+    member do
+      get "summary_detail/:summary_id", to: "news#summary_detail", as: :summary_detail
+    end
+  end
+
   resources :budgets do
     resources :budget_periods, only: [ :index ] do
       resources :expenses, only: [ :new, :create, :index, :edit, :update, :destroy ]

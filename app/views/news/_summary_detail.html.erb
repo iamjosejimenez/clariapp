@@ -1,0 +1,16 @@
+<div class="space-y-3">
+  <div class="border-b pb-2">
+    <p class="text-sm text-gray-600">Date</p>
+    <p class="text-lg font-semibold"><%= summary.generation_date.strftime("%d/%m/%Y") %></p>
+  </div>
+
+  <div class="border-b pb-2">
+    <p class="text-sm text-gray-600">Summary</p>
+    <div class="prose max-w-none"><%= simple_format(summary.summary) %></div>
+  </div>
+
+  <div>
+    <p class="text-sm text-gray-600">Sources</p>
+    <p class="text-lg font-semibold"><%= summary.sources_count %></p>
+  </div>
+</div>
