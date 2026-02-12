@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_01_020000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_12_144800) do
   create_table "budget_periods", force: :cascade do |t|
     t.integer "budget_id", null: false
     t.datetime "created_at", null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_01_020000) do
   create_table "goal_snapshots", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "deposited", null: false
-    t.date "extraction_date"
+    t.date "extraction_date", null: false
     t.integer "goal_id", null: false
     t.text "nav", null: false
     t.text "not_net_deposited", null: false
