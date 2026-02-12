@@ -5,7 +5,7 @@
 #
 #  id                :integer          not null, primary key
 #  deposited         :text             not null
-#  extraction_date   :date
+#  extraction_date   :date             not null
 #  nav               :text             not null
 #  not_net_deposited :text             not null
 #  profit            :text             not null
@@ -25,6 +25,8 @@
 
 class GoalSnapshot < ApplicationRecord
   belongs_to :goal
+
+  validates :extraction_date, presence: true
 
   encrypts :nav, :profit, :not_net_deposited, :deposited, :withdrawn
 end
