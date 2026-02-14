@@ -1,16 +1,16 @@
 class WebSearchService
   class Error < StandardError; end
 
-  SERPER_ENDPOINT = "https://google.serper.dev/search"
   CACHE_EXPIRY = 1.hour
   COUNTRY_CODE = "cl"
   LANGUAGE = "es-419"
   NEWS_VERTICAL = "nws"
   FRESHNESS_FILTER = "qdr:d" # últimas 24 horas
 
-  def initialize(query:, num_results: 5)
+  def initialize(query:, num_results: 5, serper_client: SerperClient.new)
     @query = query
     @num_results = num_results
+    @serper_client = serper_client
   end
 
   def call
@@ -24,15 +24,7 @@ class WebSearchService
   private
 
   def perform_search
-    api_key = ENV["SERPER_API_KEY"]
-    raise Error, "Missing SERPER_API_KEY environment variable" if api_key.blank?
-
-    response = HTTParty.post(
-      SERPER_ENDPOINT,
-      headers: {
-        "X-API-KEY" => api_key,
-        "Content-Type" => "application/json"
-      },
+    response = @serper_client.post_search!(
       body: {
         q: @query,
         num: @num_results,
@@ -40,17 +32,12 @@ class WebSearchService
         gl: COUNTRY_CODE,
         hl: LANGUAGE,
         tbs: FRESHNESS_FILTER
-      }.to_json,
-      timeout: 10
+      }
     )
 
-    unless response.success?
-      raise Error, "Serper API request failed: #{response.code} - #{response.message}"
-    end
-
     parse_response(response)
-  rescue HTTParty::Error, Timeout::Error => e
-    raise Error, "Network error calling Serper API: #{e.message}"
+  rescue SerperClient::Error => e
+    raise Error, e.message
   end
 
   def parse_response(response)

@@ -3,13 +3,19 @@ class NewsAggregationService
   MAX_RESULTS_FOR_SUMMARY = 12
   MAX_ARTICLES_WITH_CONTENT = 8
 
-  def initialize
-    @client = OpenAI::Client.new # Usa ENV["OPENAI_API_KEY"] automáticamente
+  def initialize(
+    openai_client: OpenaiChatClient.new,
+    web_search_service_class: WebSearchService,
+    article_content_service_class: ArticleContentService
+  )
+    @openai_client = openai_client
+    @web_search_service_class = web_search_service_class
+    @article_content_service_class = article_content_service_class
   end
 
   def call
     # 1. Primera solicitud con tools
-    response = @client.chat.completions.create({
+    response = @openai_client.chat_completion!({
       model: "gpt-4o-mini",
       temperature: 0.3,
       messages: initial_messages,
@@ -42,7 +48,7 @@ class NewsAggregationService
       end
 
       args = JSON.parse(tool_call.function.arguments)
-      search_results = WebSearchService.new(
+      search_results = @web_search_service_class.new(
         query: args["query"],
         num_results: args["num_results"] || 5
       ).call
@@ -61,7 +67,7 @@ class NewsAggregationService
     enriched_results = enrich_results_with_article_content(curated_results)
 
     # 4. Segunda solicitud con resultados de búsqueda
-    final_response = @client.chat.completions.create({
+    final_response = @openai_client.chat_completion!({
       model: "gpt-4o-mini",
       temperature: 0.2,
       messages: [
@@ -240,7 +246,7 @@ class NewsAggregationService
       next result if index >= MAX_ARTICLES_WITH_CONTENT
       next result if result[:url].blank?
 
-      content = ArticleContentService.new(url: result[:url]).call
+      content = @article_content_service_class.new(url: result[:url]).call
       content.present? ? result.merge(content: content) : result
     end
   end

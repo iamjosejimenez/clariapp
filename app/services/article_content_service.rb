@@ -1,37 +1,25 @@
 class ArticleContentService
   class Error < StandardError; end
 
-  REQUEST_TIMEOUT_SECONDS = 8
-  OPEN_TIMEOUT_SECONDS = 5
-  READ_TIMEOUT_SECONDS = 8
   MAX_PARAGRAPHS = 25
   MAX_CONTENT_CHARS = 7000
   MIN_CONTENT_CHARS = 250
-  USER_AGENT = "Mozilla/5.0 (compatible; ClariNewsBot/1.0; +https://clariapp.local)"
 
-  def initialize(url:)
+  def initialize(url:, http_client: HttpFetchClient.new)
     @url = url
+    @http_client = http_client
   end
 
   def call
     return nil if @url.blank?
 
-    response = HTTParty.get(
-      @url,
-      headers: {
-        "User-Agent" => USER_AGENT,
-        "Accept" => "text/html,application/xhtml+xml"
-      },
-      timeout: REQUEST_TIMEOUT_SECONDS,
-      open_timeout: OPEN_TIMEOUT_SECONDS,
-      read_timeout: READ_TIMEOUT_SECONDS
-    )
+    response = @http_client.get(@url)
 
     return nil unless response.success?
     return nil unless html_response?(response)
 
     extract_content(response.body)
-  rescue HTTParty::Error, Timeout::Error, SocketError, URI::InvalidURIError
+  rescue HttpFetchClient::Error
     nil
   end
 
