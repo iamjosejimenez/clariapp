@@ -9,25 +9,4 @@ class NewsController < ApplicationController
     @summary = NewsSummary.find(params[:id])
     @news_items = @summary.news_items.order(published_at: :desc, relevance_score: :asc)
   end
-
-  def summary_detail
-    @summary = NewsSummary.find(params[:id])
-
-    render turbo_stream: turbo_stream.update(
-      "modal-content",
-      partial: "news/summary_detail",
-      locals: { summary: @summary }
-    )
-  end
-
-  def refresh
-    # Avoid duplicates - only if no summary exists for today
-    if NewsSummary.exists?(generation_date: Date.current)
-      redirect_to news_index_path, alert: "Ya existe un resumen para hoy"
-      return
-    end
-
-    FetchDailyNewsJob.perform_later
-    redirect_to news_index_path, notice: "Generando resumen de noticias..."
-  end
 end
