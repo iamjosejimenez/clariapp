@@ -26,10 +26,10 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   def fintual_user
-    external_accounts.find_by(provider: "fintual")
+    @fintual_user ||= external_accounts.find_by(provider: "fintual")
   end
 
   def tests_user
-    external_accounts.find_by(provider: "tests")
+    @tests_user ||= external_accounts.find_by(provider: "tests")
   end
 end

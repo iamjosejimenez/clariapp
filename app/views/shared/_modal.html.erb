@@ -1,7 +1,7 @@
 <div
   data-modal-target="container"
   data-action="click->modal#closeOnBackdrop keydown@window->modal#closeOnEscape"
-  class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80">
   <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
     <div class="flex justify-between items-center mb-4">
       <h3 id="modal-title" class="text-xl font-bold text-gray-900">Detalle</h3>
@@ -30,7 +30,7 @@
     <div class="mt-6">
       <button
         data-action="click->modal#close"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+        class="w-full inline-flex items-center justify-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800">
         Cerrar
       </button>
     </div>

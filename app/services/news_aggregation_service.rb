@@ -194,7 +194,6 @@ class NewsAggregationService
       content: <<~PROMPT
         Con los resultados de búsqueda y contenido de artículos entregados, genera un resumen de alta calidad en español con este formato exacto:
 
-        Panorama del día:
         [2-3 párrafos, lenguaje claro, solo hechos confirmados por las fuentes]
 
         Puntos clave:
