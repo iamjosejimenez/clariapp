@@ -50,6 +50,7 @@ env:
     - WEB_CONCURRENCY
     - PORT
     - OPENAI_API_KEY
+    - SERPER_API_KEY
   clear:
     PORT: 80
     SOLID_QUEUE_IN_PUMA: false
