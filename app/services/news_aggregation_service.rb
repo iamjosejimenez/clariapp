@@ -1,6 +1,7 @@
 class NewsAggregationService
   class Error < StandardError; end
   MAX_RESULTS_FOR_SUMMARY = 12
+  MAX_ARTICLES_WITH_CONTENT = 8
 
   def initialize
     @client = OpenAI::Client.new # Usa ENV["OPENAI_API_KEY"] automáticamente
@@ -57,6 +58,7 @@ class NewsAggregationService
 
     curated_results = deduplicate_results(all_search_results).first(MAX_RESULTS_FOR_SUMMARY)
     raise Error, "No search results available after filtering" if curated_results.empty?
+    enriched_results = enrich_results_with_article_content(curated_results)
 
     # 4. Segunda solicitud con resultados de búsqueda
     final_response = @client.chat.completions.create({
@@ -70,7 +72,7 @@ class NewsAggregationService
           tool_calls: assistant_message.tool_calls
         },
         *tool_messages,
-        summary_request_message
+        summary_request_message(enriched_results)
       ]
     })
 
@@ -187,11 +189,11 @@ class NewsAggregationService
     published_at > 24.hours.ago
   end
 
-  def summary_request_message
+  def summary_request_message(results)
     {
       role: "user",
       content: <<~PROMPT
-        Con los resultados de búsqueda entregados, genera un resumen de alta calidad en español con este formato exacto:
+        Con los resultados de búsqueda y contenido de artículos entregados, genera un resumen de alta calidad en español con este formato exacto:
 
         Panorama del día:
         [2-3 párrafos, lenguaje claro, solo hechos confirmados por las fuentes]
@@ -209,9 +211,13 @@ class NewsAggregationService
         - [Señal 3]
 
         Reglas:
+        - Usa preferentemente el campo "content" cuando exista; usa "snippet" solo como respaldo.
         - Prioriza noticias de hoy y explica cuando un dato es de las últimas 24 horas.
         - Si falta información, escríbelo explícitamente como "No informado en las fuentes".
         - No agregues introducciones ni conclusiones fuera del formato solicitado.
+
+        Fuentes disponibles:
+        #{serialize_results_for_model(results).to_json}
       PROMPT
     }
   end
@@ -222,9 +228,20 @@ class NewsAggregationService
         title: result[:title],
         url: result[:url],
         snippet: result[:snippet],
+        content: result[:content],
         published_at: result[:date]&.iso8601,
         position: result[:position]
       }
+    end
+  end
+
+  def enrich_results_with_article_content(results)
+    results.map.with_index do |result, index|
+      next result if index >= MAX_ARTICLES_WITH_CONTENT
+      next result if result[:url].blank?
+
+      content = ArticleContentService.new(url: result[:url]).call
+      content.present? ? result.merge(content: content) : result
     end
   end
 

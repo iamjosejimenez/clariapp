@@ -23,11 +23,11 @@ class NewsController < ApplicationController
   def refresh
     # Avoid duplicates - only if no summary exists for today
     if NewsSummary.exists?(generation_date: Date.current)
-      redirect_to news_index_path, alert: "A summary already exists for today"
+      redirect_to news_index_path, alert: "Ya existe un resumen para hoy"
       return
     end
 
     FetchDailyNewsJob.perform_later
-    redirect_to news_index_path, notice: "Generating news summary..."
+    redirect_to news_index_path, notice: "Generando resumen de noticias..."
   end
 end
