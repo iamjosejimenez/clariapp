@@ -16,12 +16,14 @@
               <%= goal.name %>
             <% end %>
 
-            <% table.with_column(name: "Total", classes: "text-left text-gray-700") do |goal| %>
-              <%= clp(goal.nav.to_f) %>
+            <% table.with_column(name: "Total", classes: "text-left text-green-600") do |goal| %>
+              <%= clp(goal.nav.to_i) %>
             <% end %>
 
-            <% table.with_column(name: "Rentabilidad", classes: "text-left text-gray-700") do |goal| %>
-              <%= clp(goal.profit.to_f) %>
+            <% table.with_column(name: "Rentabilidad", classes: "text-left") do |goal| %>
+              <span class="<%= goal.profit.to_i < 0 ? "text-red-600" : "text-green-600" %>">
+                <%= clp(goal.profit.to_i) %>
+              </span>
             <% end %>
 
             <% table.with_column(name: "Acciones", classes: "text-left text-gray-700") do |goal| %>
