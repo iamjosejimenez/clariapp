@@ -1,7 +1,9 @@
-<div class="max-w-6xl mx-auto p-6">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Mis presupuestos</h1>
+<%= render ModuleHeaderComponent.new(
+    title: "Presupuestos",
+    description: "Administra tus presupuestos, controla lo gastado y revisa el saldo restante de cada periodo."
+  ) do %>
 
+  <div class="flex items-center justify-between mb-6">
     <%= link_to new_budget_path, class: "inline-flex items-center px-4 py-2 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800" do %>
       <!-- Icono plus -->
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 -ml-1" fill="none"
@@ -77,4 +79,4 @@
       </div>
     <% end %>
   <% end %>
-</div>
+<% end %>
