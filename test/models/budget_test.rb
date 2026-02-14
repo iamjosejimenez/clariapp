@@ -24,6 +24,8 @@
 require "test_helper"
 
 class BudgetTest < ActiveSupport::TestCase
+  include ActiveSupport::Testing::TimeHelpers
+
   setup do
     @user = create(:user)
   end
@@ -52,7 +54,7 @@ class BudgetTest < ActiveSupport::TestCase
   test "current_period creates weekly period using iso week-year and cweek on january boundary" do
     budget = create(:budget, user: @user, category: "semanal", amount: 1000)
 
-    Date.stub(:today, Date.new(2021, 1, 1)) do
+    travel_to Date.new(2021, 1, 1) do
       period = budget.current_period
 
       assert_equal 2020, period.year
@@ -66,7 +68,7 @@ class BudgetTest < ActiveSupport::TestCase
     create(:budget_period, budget: budget, year: 2020, period: 52, total: 800)
     create(:expense, budget_period: budget.budget_periods.find_by(year: 2020, period: 52), amount: 300)
 
-    Date.stub(:today, Date.new(2021, 1, 1)) do
+    travel_to Date.new(2021, 1, 1) do
       period = budget.current_period
 
       # previous remaining is 800 - 300 = 500, so carried total should be 1500
