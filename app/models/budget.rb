@@ -33,8 +33,9 @@ class Budget < ApplicationRecord
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
 
   def current_period
-    year = Date.today.year
-    period = current_period_number
+    today = Date.today
+    year = current_year(today)
+    period = current_period_number(today)
     budget_period = budget_periods.find_or_create_by(year: year, period: period)
     surplus = budget_period.previous_period&.remaining || 0
     budget_period.total = amount + surplus
@@ -42,8 +43,7 @@ class Budget < ApplicationRecord
     budget_period
   end
 
-  def current_period_number
-    today = Date.today
+  def current_period_number(today = Date.today)
     case category
     when "mensual"
       today.month
@@ -57,5 +57,9 @@ class Budget < ApplicationRecord
     else
       raise "Categoría desconocida: #{category}"
     end
+  end
+
+  def current_year(today = Date.today)
+    category == "semanal" ? today.cwyear : today.year
   end
 end
