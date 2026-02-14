@@ -3,6 +3,10 @@ class WebSearchService
 
   SERPER_ENDPOINT = "https://google.serper.dev/search"
   CACHE_EXPIRY = 1.hour
+  COUNTRY_CODE = "cl"
+  LANGUAGE = "es-419"
+  NEWS_VERTICAL = "nws"
+  FRESHNESS_FILTER = "qdr:d" # últimas 24 horas
 
   def initialize(query:, num_results: 5)
     @query = query
@@ -31,7 +35,11 @@ class WebSearchService
       },
       body: {
         q: @query,
-        num: @num_results
+        num: @num_results,
+        tbm: NEWS_VERTICAL,
+        gl: COUNTRY_CODE,
+        hl: LANGUAGE,
+        tbs: FRESHNESS_FILTER
       }.to_json,
       timeout: 10
     )
@@ -65,10 +73,47 @@ class WebSearchService
   def parse_date(date_string)
     return nil if date_string.blank?
 
-    # Serper puede devolver fechas en varios formatos
-    # Intentar parsear, si falla retornar nil
-    Date.parse(date_string)
+    parse_relative_date(date_string) || parse_absolute_date(date_string)
+  rescue ArgumentError, TypeError, NoMethodError
+    nil
+  end
+
+  def parse_relative_date(date_string)
+    text = normalize_date_text(date_string)
+    now = Time.zone.now
+
+    case text
+    when /\Ahace\s+(\d+)\s*(min|mins|minuto|minutos)\b/
+      now - Regexp.last_match(1).to_i.minutes
+    when /\Ahace\s+(\d+)\s*(hora|horas|hr|hrs)\b/
+      now - Regexp.last_match(1).to_i.hours
+    when /\Ahace\s+(\d+)\s*(dia|dias)\b/
+      now - Regexp.last_match(1).to_i.days
+    when /\A(\d+)\s*(min|mins|minute|minutes)\s+ago\z/
+      now - Regexp.last_match(1).to_i.minutes
+    when /\A(\d+)\s*(hour|hours|hr|hrs)\s+ago\z/
+      now - Regexp.last_match(1).to_i.hours
+    when /\A(\d+)\s*(day|days)\s+ago\z/
+      now - Regexp.last_match(1).to_i.days
+    when /\Aayer\z/
+      now - 1.day
+    else
+      nil
+    end
+  end
+
+  def parse_absolute_date(date_string)
+    Time.zone.parse(date_string) || Date.parse(date_string).in_time_zone
   rescue ArgumentError, TypeError
     nil
+  end
+
+  def normalize_date_text(value)
+    value
+      .to_s
+      .unicode_normalize(:nfkd)
+      .encode("ASCII", replace: "", undef: :replace, invalid: :replace)
+      .downcase
+      .strip
   end
 end

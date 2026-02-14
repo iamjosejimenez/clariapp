@@ -78,7 +78,7 @@ gem "pg", "~> 1.6"
 gem "good_migrations"
 
 gem "simple_form", "~> 5.4"
-gem "openai", "~> 0.43.0"
+gem "openai", "~> 0.49.0"
 
 gem "erb_lint", require: false
 gem "rubocop", require: false
