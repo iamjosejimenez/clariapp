@@ -72,6 +72,8 @@ jobs:
           CLARIA_DATABASE_USER: ${{ secrets.CLARIA_DATABASE_USER }}
           SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         run: |
           kamal deploy
           kamal prune all -v
