@@ -1,7 +1,7 @@
-<div class="max-w-5xl mx-auto mt-10 px-4 pb-10">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold tracking-tight text-slate-900">Noticias Económicas de Chile</h1>
-  </div>
+<%= render ModuleHeaderComponent.new(
+    title: "Noticias",
+    description: "Consulta un resumen diario con las noticias economicas mas relevantes y sus fuentes principales."
+  ) do %>
 
   <% if @summary %>
     <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200">
@@ -48,4 +48,4 @@
       <p>No hay noticias disponibles. Haz clic en Actualizar para generar el resumen de hoy.</p>
     </div>
   <% end %>
-</div>
+<% end %>
