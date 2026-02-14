@@ -1,29 +1,32 @@
-<div class="max-w-5xl mx-auto p-6">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="text-xl font-semibold text-gray-800">
-      Gastos de "<%= @budget.name %>" – <%= @budget_period.human_label %>
-    </h1>
+<%= render ModuleHeaderComponent.new(
+  title: "Resumen de gastos",
+  description: "Revisa y administra los gastos de \"#{@budget.name}\" para el periodo #{@budget_period.human_label}."
+) do %>
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[calc(100vh-16rem)]">
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+      <h2 class="text-2xl font-semibold text-slate-900">Gastos del periodo</h2>
+      <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+        Monto asignado: $<%= number_with_delimiter(@budget_period.total.to_i, delimiter: ".") %>
+      </p>
+      <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+        Total gastado: $<%= number_with_delimiter(@budget_period.total_spent.to_i, delimiter: ".") %>
+      </p>
+      <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+        Restante: $<%= number_with_delimiter(@budget_period.remaining.to_i, delimiter: ".") %>
+      </p>
+      <%= link_to new_budget_budget_period_expense_path(@budget, @budget_period),
+          class: "inline-flex items-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800 sm:ml-auto" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 -ml-1" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
+        </svg>
+        Nuevo gasto
+      <% end %>
+    </div>
 
-    <%= link_to new_budget_budget_period_expense_path(@budget, @budget_period),
-        class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl shadow hover:bg-blue-700" do %>
-      <!-- Heroicon: plus -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 -ml-1" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 4v16m8-8H4" />
-      </svg>
-      Nuevo gasto
-    <% end %>
-  </div>
-
-  <div class="mb-4 text-gray-700">
-    <p><strong>Monto asignado:</strong> $<%= number_with_delimiter(@budget_period.total.to_i, delimiter: ".") %></p>
-    <p><strong>Total gastado:</strong> <span class="text-red-600">$<%= number_with_delimiter(@budget_period.total_spent.to_i, delimiter: ".") %></span></p>
-    <p><strong>Restante:</strong> $<%= number_with_delimiter(@budget_period.remaining.to_i, delimiter: ".") %></p>
-  </div>
-
-  <% if @expenses.any? %>
-    <%= render TableComponent.new(rows: @expenses) do |table| %>
+    <% if @expenses.any? %>
+      <%= render TableComponent.new(rows: @expenses) do |table| %>
       <% table.with_column(name: "Descripción", classes: "text-left font-medium text-gray-900") do |expense| %>
         <%= expense.description %>
       <% end %>
@@ -39,32 +42,29 @@
       <% table.with_column(name: "Acciones", classes: "text-center") do |expense| %>
         <div class="flex items-center justify-center space-x-2">
           <%= link_to edit_expense_path(expense.id),
-              title: "Editar gasto",
-              class: "text-green-600 hover:text-green-800",
+              class: "text-violet-700 hover:text-violet-900",
               data: { 'tippy-content': "Editar gasto al periodo actual" } do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
             </svg>
           <% end %>
           <% if @budget_period.current? %>
             <%= link_to expense_path(expense.id),
-                title: "Eliminar gasto",
-                class: "text-red-600 hover:text-red-800",
+                class: "text-violet-700 hover:text-violet-900",
                 data: {
                   'tippy-content': "Eliminar gasto",
                   turbo_method: :delete,
                   turbo_confirm: "¿Estás seguro de que deseas eliminar este gasto?"
                 } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
               </svg>
             <% end %>
           <% else %>
             <div class="text-gray-300 cursor-not-allowed"
-                title="Solo se pueden eliminar gastos del periodo actual"
                 data-tippy-content="Solo se pueden eliminar gastos del periodo actual">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
               </svg>
@@ -72,12 +72,13 @@
           <% end %>
         </div>
       <% end %>
+      <% end %>
+    <% else %>
+      <p class="text-gray-600 italic mt-4">No se han registrado gastos en este periodo.</p>
     <% end %>
-  <% else %>
-    <p class="text-gray-600 italic mt-4">No se han registrado gastos en este periodo.</p>
-  <% end %>
 
-  <div class="mt-6">
-    <%= link_to "← Volver a presupuestos", budgets_path, class: "text-blue-600 hover:underline" %>
-  </div>
-</div>
+    <div class="mt-6">
+      <%= link_to "← Volver a presupuestos", budgets_path, class: "text-violet-700 hover:underline" %>
+    </div>
+  </section>
+<% end %>

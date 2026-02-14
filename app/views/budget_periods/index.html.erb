@@ -1,10 +1,10 @@
-<div class="max-w-6xl mx-auto p-6">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="text-xl font-semibold text-gray-800">Historial de presupuestos</h1>
-  </div>
-
-  <% if @periods.any? %>
-    <%= render TableComponent.new(rows: @periods) do |table| %>
+<%= render ModuleHeaderComponent.new(
+  title: "Historial de presupuestos",
+  description: "Consulta los periodos anteriores de tus presupuestos y revisa sus resultados."
+) do %>
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[calc(100vh-16rem)]">
+    <% if @periods.any? %>
+      <%= render TableComponent.new(rows: @periods) do |table| %>
       <% table.with_column(name: "Presupuesto", classes: "text-left font-medium text-gray-900") do |period| %>
         <%= period.budget.name %>
       <% end %>
@@ -27,8 +27,8 @@
 
       <% table.with_column(name: "Acciones", classes: "text-center") do |period| %>
         <div class="flex items-center justify-center space-x-2">
-          <%= link_to budget_budget_period_expenses_path(budget_id: period.budget.id, budget_period_id: period.id), title: "Ver gastos", class: "text-gray-600 hover:text-gray-800" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+          <%= link_to budget_budget_period_expenses_path(budget_id: period.budget.id, budget_period_id: period.id), class: "text-violet-700 hover:text-violet-900", data: { "tippy-content": "Ver gastos" } do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 16h8M8 12h8m-6 8h6m-2-18H6a2 2 0 00-2 2v16l4-4h10a2 2 0 002-2V6a2 2 0 00-2-2z" />
@@ -36,8 +36,9 @@
           <% end %>
         </div>
       <% end %>
+      <% end %>
+    <% else %>
+      <p class="text-gray-600 italic">No se encontraron periodos.</p>
     <% end %>
-  <% else %>
-    <p class="text-gray-600 italic">No se encontraron periodos.</p>
-  <% end %>
-</div>
+  </section>
+<% end %>

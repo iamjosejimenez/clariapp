@@ -4,32 +4,30 @@
   ) do %>
 
   <% if @summary %>
-    <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 sm:gap-3 mb-6">
         <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= @summary.generation_date.strftime("%d/%m/%Y") %></h2>
-        <p class="text-sm text-slate-500 whitespace-nowrap">
+        <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
           <%= @summary.sources_count %> fuentes consultadas
         </p>
       </div>
 
-      <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 sm:p-6">
-        <div class="space-y-5 leading-relaxed text-slate-700">
-          <% @summary.summary.to_s.split("\n").each do |line| %>
-            <% text = line.to_s.strip %>
-            <% next if text.blank? %>
+      <div class="space-y-5 leading-relaxed text-slate-700">
+        <% @summary.summary.to_s.split("\n").each do |line| %>
+          <% text = line.to_s.strip %>
+          <% next if text.blank? %>
 
-            <% if text.ends_with?(":") %>
-              <h3 class="text-lg font-semibold text-slate-900 pt-2 first:pt-0"><%= text %></h3>
-            <% elsif text.start_with?("- ") %>
-              <div class="flex items-start gap-3">
-                <span class="mt-2 h-1.5 w-1.5 rounded-full bg-slate-500 flex-shrink-0"></span>
-                <p class="text-base"><%= text.delete_prefix("- ").strip %></p>
-              </div>
-            <% else %>
-              <p class="text-base"><%= text %></p>
-            <% end %>
+          <% if text.ends_with?(":") %>
+            <h3 class="text-lg font-semibold text-slate-900 pt-2 first:pt-0"><%= text %></h3>
+          <% elsif text.start_with?("- ") %>
+            <div class="flex items-start gap-3">
+              <span class="mt-2 h-1.5 w-1.5 rounded-full bg-slate-500 flex-shrink-0"></span>
+              <p class="text-base"><%= text.delete_prefix("- ").strip %></p>
+            </div>
+          <% else %>
+            <p class="text-base"><%= text %></p>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </section>
 
@@ -44,7 +42,7 @@
       </section>
     <% end %>
   <% else %>
-    <div class="bg-white shadow rounded p-6">
+    <div class="bg-white shadow rounded p-6 min-h-[calc(100vh-16rem)]">
       <p>No hay noticias disponibles. Haz clic en Actualizar para generar el resumen de hoy.</p>
     </div>
   <% end %>
