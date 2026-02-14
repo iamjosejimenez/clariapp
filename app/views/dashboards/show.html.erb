@@ -27,9 +27,9 @@
             <% table.with_column(name: "Acciones", classes: "text-left text-gray-700") do |goal| %>
               <div class="flex items-center">
                 <%= link_to goal_path(goal),
-                    class: "text-violet-700 hover:text-violet-900",
+                    class: "inline-flex items-center justify-center rounded-full text-violet-700 hover:bg-violet-100 hover:text-violet-900 transition-colors duration-200 cursor-pointer",
                     data: { "tippy-content": "Ver detalle de la inversion" } do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 6.05 6.05a7.5 7.5 0 0 0 10.6 10.6Z" />
                   </svg>
                 <% end %>

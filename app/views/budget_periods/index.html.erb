@@ -27,7 +27,7 @@
 
       <% table.with_column(name: "Acciones", classes: "text-center") do |period| %>
         <div class="flex items-center justify-center space-x-2">
-          <%= link_to budget_budget_period_expenses_path(budget_id: period.budget.id, budget_period_id: period.id), class: "text-violet-700 hover:text-violet-900", data: { "tippy-content": "Ver gastos" } do %>
+          <%= link_to budget_budget_period_expenses_path(budget_id: period.budget.id, budget_period_id: period.id), class: "inline-flex items-center justify-center rounded-full text-violet-700 hover:bg-violet-100 hover:text-violet-900 transition-colors duration-200 cursor-pointer", data: { "tippy-content": "Ver gastos" } do %>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

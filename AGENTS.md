@@ -8,3 +8,4 @@ These rules apply to every question in this repository.
 4. Prefer safe, non-destructive commands and avoid operations that can lose data unless explicitly requested.
 5. All user-facing text in the solution must be written in Spanish.
 6. All atributes of a model should be mandatory unless business rules allow for optional values.
+7. All the buttons with text or icons of the application must have the cursor: pointer directive.
