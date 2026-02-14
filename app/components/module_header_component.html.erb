@@ -1,6 +1,20 @@
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <div class="mb-8">
-    <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900"><%= @title %></h1>
+    <div class="flex items-center gap-3" data-controller="history-back">
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full text-violet-700 hover:bg-violet-100 hover:text-violet-900 disabled:cursor-not-allowed disabled:text-violet-300 disabled:hover:bg-transparent disabled:hover:text-violet-300 transition-colors duration-200"
+        data-history-back-target="button"
+        data-action="history-back#goBack"
+        aria-label="Volver"
+        title="Volver"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.56l3.22 3.22a.75.75 0 0 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L5.56 9.25h10.69A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900"><%= @title %></h1>
+    </div>
     <p class="mt-2 text-base text-slate-600"><%= @description %></p>
   </div>
 
