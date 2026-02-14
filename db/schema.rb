@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_12_144800) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_14_183000) do
   create_table "budget_periods", force: :cascade do |t|
     t.integer "budget_id", null: false
     t.datetime "created_at", null: false
@@ -83,6 +83,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_144800) do
     t.index ["external_account_id"], name: "index_goals_on_external_account_id"
   end
 
+  create_table "news_items", force: :cascade do |t|
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.integer "news_summary_id", null: false
+    t.datetime "published_at", null: false
+    t.decimal "relevance_score", null: false
+    t.text "snippet", null: false
+    t.string "source_url", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["news_summary_id"], name: "index_news_items_on_news_summary_id"
+  end
+
+  create_table "news_summaries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "generation_date", null: false
+    t.integer "sources_count", default: 0, null: false
+    t.text "summary", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["generation_date"], name: "index_news_summaries_on_generation_date", unique: true
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -106,5 +129,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_144800) do
   add_foreign_key "external_accounts", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "external_accounts"
+  add_foreign_key "news_items", "news_summaries"
   add_foreign_key "sessions", "users"
 end
