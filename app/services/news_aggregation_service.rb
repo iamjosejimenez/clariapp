@@ -152,14 +152,7 @@ class NewsAggregationService
       )
 
       search_results.each do |result|
-        news_summary.news_items.create!(
-          title: result[:title],
-          source_url: result[:url],
-          snippet: result[:snippet],
-          category: "economía",
-          published_at: result[:date],
-          relevance_score: result[:position]
-        )
+        news_summary.news_items.create!(build_news_item_attributes(result))
       end
 
       news_summary
@@ -286,5 +279,16 @@ class NewsAggregationService
     return nil if title.blank?
 
     title.to_s.downcase.gsub(/\s+/, " ").strip
+  end
+
+  def build_news_item_attributes(result)
+    {
+      title: result[:title].presence || "Sin título",
+      source_url: result[:url].presence || "https://sin-fuente.local",
+      snippet: result[:snippet].presence || "No disponible",
+      category: "economía",
+      published_at: result[:date].presence || Time.zone.now,
+      relevance_score: result[:position].presence || 0
+    }
   end
 end

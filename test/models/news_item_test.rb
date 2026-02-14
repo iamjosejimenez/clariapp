@@ -22,12 +22,27 @@
 #
 #  news_summary_id  (news_summary_id => news_summaries.id)
 #
+require "test_helper"
 
-class NewsItem < ApplicationRecord
-  belongs_to :news_summary
+class NewsItemTest < ActiveSupport::TestCase
+  test "is invalid when required fields are missing" do
+    news_summary = NewsSummary.create!(
+      title: "Resumen Económico Chile - 14/02/2026",
+      summary: "Contenido de prueba",
+      generation_date: Date.current,
+      sources_count: 1
+    )
 
-  encrypts :snippet
+    item = NewsItem.new(
+      news_summary: news_summary,
+      title: "Noticia sin datos"
+    )
 
-  validates :title, :source_url, :snippet, :category, :published_at, :relevance_score, presence: true
-  validates :relevance_score, numericality: { greater_than_or_equal_to: 0 }
+    assert_not item.valid?
+    assert item.errors.added?(:source_url, :blank)
+    assert item.errors.added?(:snippet, :blank)
+    assert item.errors.added?(:category, :blank)
+    assert item.errors.added?(:published_at, :blank)
+    assert item.errors.added?(:relevance_score, :blank)
+  end
 end

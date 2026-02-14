@@ -15,13 +15,18 @@
 #
 #  index_news_summaries_on_generation_date  (generation_date) UNIQUE
 #
+require "test_helper"
 
-class NewsSummary < ApplicationRecord
-  has_many :news_items, dependent: :destroy
+class NewsSummaryTest < ActiveSupport::TestCase
+  test "is invalid without sources_count" do
+    summary = NewsSummary.new(
+      title: "Resumen Económico Chile - 14/02/2026",
+      summary: "Contenido de prueba",
+      generation_date: Date.current,
+      sources_count: nil
+    )
 
-  encrypts :summary
-
-  validates :generation_date, presence: true, uniqueness: true
-  validates :title, :summary, :sources_count, presence: true
-  validates :sources_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    assert_not summary.valid?
+    assert summary.errors.added?(:sources_count, :blank)
+  end
 end
