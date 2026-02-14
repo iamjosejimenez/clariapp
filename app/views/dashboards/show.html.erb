@@ -7,7 +7,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 sm:gap-3 mb-6">
         <h2 class="text-2xl font-semibold text-slate-900">Tus metas</h2>
         <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
-          Total: <%= number_to_currency(@total_available) %>
+          Total: <%= clp(@total_available) %>
         </p>
       </div>
       <% if @goals.any? %>
@@ -17,11 +17,11 @@
             <% end %>
 
             <% table.with_column(name: "Total", classes: "text-left text-gray-700") do |goal| %>
-              <%= number_to_currency(goal.nav.to_f) %>
+              <%= clp(goal.nav.to_f) %>
             <% end %>
 
             <% table.with_column(name: "Rentabilidad", classes: "text-left text-gray-700") do |goal| %>
-              <%= number_to_currency(goal.profit.to_f) %>
+              <%= clp(goal.profit.to_f) %>
             <% end %>
 
             <% table.with_column(name: "Acciones", classes: "text-left text-gray-700") do |goal| %>

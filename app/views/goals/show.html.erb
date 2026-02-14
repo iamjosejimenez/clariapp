@@ -20,12 +20,12 @@
         <% end %>
 
         <% table.with_column(name: "Total", classes: "text-left text-green-600") do |snapshot| %>
-          $<%= number_with_delimiter(snapshot.nav.to_i, delimiter: ".") %>
+          <%= clp(snapshot.nav.to_i) %>
         <% end %>
 
         <% table.with_column(name: "Ganancia", classes: "text-left") do |snapshot| %>
           <span class="<%= snapshot.profit.to_i < 0 ? "text-red-600" : "text-green-600" %>">
-            $<%= number_with_delimiter(snapshot.profit.to_i, delimiter: ".") %>
+            <%= clp(snapshot.profit.to_i) %>
           </span>
         <% end %>
 
