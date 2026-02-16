@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsAggregationService
   class Error < StandardError; end
   MAX_RESULTS_FOR_SUMMARY = 12

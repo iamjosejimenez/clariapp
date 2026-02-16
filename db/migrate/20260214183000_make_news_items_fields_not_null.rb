@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeNewsItemsFieldsNotNull < ActiveRecord::Migration[8.1]
   def change
     change_column_null :news_items, :category, false, "economia"

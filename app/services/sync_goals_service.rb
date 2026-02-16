@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SyncGoalsService
   def initialize(external_account)
     @external_account = external_account

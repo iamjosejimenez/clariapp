@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddEncryptedFieldsToGoal < ActiveRecord::Migration[8.0]
   def change
     add_column :goals, :nav_encrypted, :text

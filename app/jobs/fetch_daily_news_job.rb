@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FetchDailyNewsJob < ApplicationJob
   queue_as :default
 
