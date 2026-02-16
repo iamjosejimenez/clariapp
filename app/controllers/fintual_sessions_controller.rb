@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FintualSessionsController < ApplicationController
   def new
     redirect_to dashboard_path if current_user.fintual_user.present?

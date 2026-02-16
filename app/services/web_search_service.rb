@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebSearchService
   class Error < StandardError; end
 

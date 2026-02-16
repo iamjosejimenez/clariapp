@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ArticleContentService
   class Error < StandardError; end
 

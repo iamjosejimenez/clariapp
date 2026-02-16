@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExpensesController < ApplicationController
   before_action :set_budget_and_period, only: [ :index, :new, :create ]
   before_action :set_expense, only: [ :edit, :update, :destroy ]

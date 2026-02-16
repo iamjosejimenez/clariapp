@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DashboardsController < ApplicationController
   def show
     @external_account = current_user.fintual_user ? current_user.fintual_user : current_user.tests_user

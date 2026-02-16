@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsController < ApplicationController
   def index
     @summary = NewsSummary.order(generation_date: :desc).first
