@@ -20,10 +20,16 @@
           Día anterior
         <% end %>
 
-        <% next_button_classes = "inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer #{ @next_disabled ? 'bg-slate-200 text-slate-500 pointer-events-none' : 'bg-violet-700 text-white shadow hover:bg-violet-800' }" %>
-        <%= link_to news_index_path(date: @next_date), class: next_button_classes, aria: { disabled: @next_disabled } do %>
-          <span class="mr-2" aria-hidden="true">→</span>
-          Día siguiente
+        <% if @next_disabled %>
+          <span class="inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer bg-slate-200 text-slate-500" aria-disabled="true">
+            <span class="mr-2" aria-hidden="true">→</span>
+            Día siguiente
+          </span>
+        <% else %>
+          <%= link_to news_index_path(date: @next_date), class: "inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer bg-violet-700 text-white shadow hover:bg-violet-800" do %>
+            <span class="mr-2" aria-hidden="true">→</span>
+            Día siguiente
+          <% end %>
         <% end %>
       </div>
     </div>
