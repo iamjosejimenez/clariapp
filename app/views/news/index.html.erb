@@ -3,14 +3,32 @@
     description: "Consulta un resumen diario con las noticias economicas mas relevantes y sus fuentes principales."
   ) do %>
 
-  <% if @summary %>
-    <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 sm:gap-3 mb-6">
-        <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= @summary.generation_date.strftime("%d/%m/%Y") %></h2>
-        <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
-          <%= @summary.sources_count %> fuentes consultadas
-        </p>
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3">
+        <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= @selected_date.strftime("%d/%m/%Y") %></h2>
+        <% if @summary %>
+          <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+            <%= @summary.sources_count %> fuentes consultadas
+          </p>
+        <% end %>
       </div>
+
+      <div class="flex items-center gap-2">
+        <%= link_to news_index_path(date: @previous_date), class: "inline-flex w-36 justify-center items-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800 cursor-pointer" do %>
+          <span class="mr-2" aria-hidden="true">←</span>
+          Día anterior
+        <% end %>
+
+        <% next_button_classes = "inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer #{ @next_disabled ? 'bg-slate-200 text-slate-500 pointer-events-none' : 'bg-violet-700 text-white shadow hover:bg-violet-800' }" %>
+        <%= link_to news_index_path(date: @next_date), class: next_button_classes, aria: { disabled: @next_disabled } do %>
+          <span class="mr-2" aria-hidden="true">→</span>
+          Día siguiente
+        <% end %>
+      </div>
+    </div>
+
+    <% if @summary %>
 
       <div class="space-y-5 leading-relaxed text-slate-700">
         <% @summary.summary.to_s.split("\n").each do |line| %>
@@ -29,21 +47,21 @@
           <% end %>
         <% end %>
       </div>
-    </section>
-
-    <% if @news_items.any? %>
-      <section>
-        <h3 class="text-xl font-semibold text-slate-900 mb-4">Noticias</h3>
-        <div class="space-y-4">
-          <% @news_items.each do |item| %>
-            <%= render NewsItemComponent.new(item: item) %>
-          <% end %>
-        </div>
-      </section>
+    <% else %>
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-700">
+        No hay resumen disponible para el <%= @selected_date.strftime("%d/%m/%Y") %>. Puedes navegar a otra fecha o actualizar las noticias.
+      </div>
     <% end %>
-  <% else %>
-    <div class="bg-white shadow rounded p-6 min-h-[calc(100vh-16rem)]">
-      <p>No hay noticias disponibles. Haz clic en Actualizar para generar el resumen de hoy.</p>
-    </div>
+  </section>
+
+  <% if @news_items.any? %>
+    <section>
+      <h3 class="text-xl font-semibold text-slate-900 mb-4">Noticias</h3>
+      <div class="space-y-4">
+        <% @news_items.each do |item| %>
+          <%= render NewsItemComponent.new(item: item) %>
+        <% end %>
+      </div>
+    </section>
   <% end %>
 <% end %>
