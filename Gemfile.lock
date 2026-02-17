@@ -240,8 +240,9 @@ GEM
       connection_pool
     ostruct (0.6.3)
     package_json (0.2.0)
-    pagy (43.2.9)
+    pagy (43.2.10)
       json
+      uri
       yaml
     parallel (1.27.0)
     parser (3.3.10.1)
