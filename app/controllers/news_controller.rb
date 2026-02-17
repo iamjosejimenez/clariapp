@@ -21,9 +21,10 @@ class NewsController < ApplicationController
 
   def parse_date(value)
     return if value.blank?
+    return unless value.is_a?(String)
 
     Date.iso8601(value)
-  rescue ArgumentError
+  rescue ArgumentError, TypeError
     nil
   end
 end
