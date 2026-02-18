@@ -4,4 +4,4 @@ production:
     schedule: every hour
   fetch_daily_news_job:
     class: FetchDailyNewsJob
-    schedule: every day at 6am
+    schedule: every day at 8am
