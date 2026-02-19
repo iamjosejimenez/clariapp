@@ -5217,7 +5217,7 @@ swc-loader@^0.2.0:
   dependencies:
     "@swc/counter" "^0.1.3"
 
-tailwindcss@4.2.0, tailwindcss@^4.1.18:
+tailwindcss@4.2.0, tailwindcss@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.2.0.tgz#fe0a67ddebe0c383096f68d22c677ae8af428ded"
   integrity sha512-yYzTZ4++b7fNYxFfpnberEEKu43w44aqDMNM9MHMmcKuCH7lL8jJ4yJ7LGHv7rSwiqM0nkiobF9I6cLlpS2P7Q==
