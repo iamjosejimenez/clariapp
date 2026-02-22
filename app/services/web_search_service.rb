@@ -13,9 +13,7 @@ class WebSearchService
   end
 
   def call
-    Rails.cache.fetch("latest_news6", expires_in: 1.hour) do
-      perform_search
-    end
+    perform_search
   end
 
   private
