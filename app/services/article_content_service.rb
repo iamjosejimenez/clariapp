@@ -3,9 +3,26 @@
 class ArticleContentService
   class Error < StandardError; end
 
-  MAX_PARAGRAPHS = 25
-  MAX_CONTENT_CHARS = 7000
-  MIN_CONTENT_CHARS = 250
+  NON_CONTENT_SELECTORS = [
+    "script",
+    "style",
+    "noscript",
+    "template",
+    "nav",
+    "header",
+    "footer",
+    "aside",
+    "form",
+    "button",
+    "input",
+    "select",
+    "textarea",
+    "option",
+    "label",
+    "svg",
+    "canvas",
+    "iframe"
+  ].join(", ").freeze
 
   def initialize(url:, http_client: HttpFetchClient.new)
     @url = url
@@ -14,7 +31,6 @@ class ArticleContentService
 
   def call
     return nil if @url.blank?
-
     response = @http_client.get(@url)
 
     return nil unless response.success?
@@ -33,20 +49,15 @@ class ArticleContentService
 
   def extract_content(html)
     document = Nokogiri::HTML(html)
-    document.css("script, style, nav, header, footer, aside, form, noscript, svg").remove
+    body = document.at_css("body")
+    return nil if body.nil?
 
-    container = document.at_css("article") || document.at_css("main") || document.at_css("body")
-    return nil if container.nil?
+    body.css(NON_CONTENT_SELECTORS).remove
 
-    paragraphs = container.css("p").map { |node| normalize_text(node.text) }.reject(&:blank?)
-    paragraphs = paragraphs.select { |text| text.length >= 45 }.first(MAX_PARAGRAPHS)
-    return nil if paragraphs.empty?
+    text_nodes = body.xpath(".//text()[normalize-space()]")
+    content = text_nodes.map { |node| normalize_text(node.text) }.reject(&:blank?).join("\n")
 
-    content = paragraphs.join("\n\n")
-    content = normalize_text(content)
-    return nil if content.length < MIN_CONTENT_CHARS
-
-    content[0, MAX_CONTENT_CHARS]
+    content.presence
   rescue StandardError
     nil
   end
