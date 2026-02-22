@@ -104,9 +104,10 @@ class NewsAggregationService
         - Lenguaje claro.
         - Solo hechos confirmados por las fuentes.
         - Sin corchetes ni paréntesis de plantilla.
-        - Después de los 3 párrafos, agrega una sección llamada "Puntos de seguimiento:".
-        - En "Puntos de seguimiento:", incluye exactamente #{news_list.size} puntos numerados (uno por cada noticia incluida en las fuentes).
-        - Cada punto debe contener: hecho principal de la noticia, por qué afecta la economía chilena y por qué se incluye en el análisis.
+        - Después de los 3 párrafos, agrega una sección llamada "Puntos claves a seguir:".
+        - En "Puntos claves a seguir:", incluye exactamente #{news_list.size} puntos numerados (uno por cada noticia incluida en las fuentes).
+        - Cada punto debe integrar en redacción natural el hecho principal, su impacto en la economía chilena y el motivo de inclusión en el análisis.
+        - No uses etiquetas internas como "Hecho principal:", "por qué afecta:" o "por qué se incluye:".
 
         Reglas:
         - Todo el contenido debe estar 100% en español.
@@ -116,6 +117,7 @@ class NewsAggregationService
         - En los 3 párrafos prioriza interpretación económica y relaciones de causa-efecto; no hagas una lista de noticias.
         - Redacta con enfoque analítico: conecta hechos con implicancias en crecimiento, inversión, productividad, empleo, comercio exterior, cuentas fiscales o riesgo país, según corresponda.
         - Organiza el análisis en tres planos: macrofiscal, competitividad e infraestructura, y desempeño sectorial/exportador (solo si las fuentes disponibles lo permiten).
+        - Evita formular preguntas explícitas o estructuras de cuestionario; redacta todo en estilo declarativo y analítico.
         - No agregues introducciones ni conclusiones fuera del formato solicitado.
         - Si una noticia tiene información insuficiente o dudosa, no inventes datos; aclara esa limitación en su punto correspondiente.
 
