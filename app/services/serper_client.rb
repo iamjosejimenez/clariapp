@@ -5,7 +5,7 @@ require "ostruct"
 class SerperClient
   class Error < StandardError; end
 
-  ENDPOINT = "https://google.serper.dev/search"
+  ENDPOINT = "https://google.serper.dev/news"
   MOCK_ENV_KEY = "MOCK_SERPER_RESPONSE_JSON"
 
   def post_search!(body:)
