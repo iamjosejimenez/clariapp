@@ -241,7 +241,7 @@ GEM
       connection_pool
     ostruct (0.6.3)
     package_json (0.2.0)
-    pagy (43.2.10)
+    pagy (43.3.0)
       json
       uri
       yaml
@@ -449,7 +449,7 @@ DEPENDENCIES
   jbuilder
   kamal
   openai (~> 0.49.0)
-  pagy (~> 43.2)
+  pagy (~> 43.3)
   pg (~> 1.6)
   propshaft
   puma (>= 5.0)
