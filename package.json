@@ -36,7 +36,7 @@
     "postcss-preset-env": "^11.2.0",
     "style-loader": "^4.0.0",
     "tailwindcss": "^4.2.1",
-    "webpack": "^5.105.2",
+    "webpack": "^5.105.3",
     "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^5.2.2"
   },
