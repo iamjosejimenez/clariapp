@@ -7,13 +7,13 @@ image: ghcr.io/iamjosejimenez/claria
 servers:
   web:
     hosts:
-      - clariapp.com
+      - ssh.clariapp.com
     options:
       memory: "600m"
       memory-swap: "900m"
   jobs:
     hosts:
-      - clariapp.com
+      - ssh.clariapp.com
     options:
       memory: "300m"
       memory-swap: "450m"
