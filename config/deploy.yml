@@ -28,6 +28,7 @@ proxy:
   run:
     http_port: 8080
     https_port: 8443
+    log_max_size:
     bind_ips:
       - 127.0.0.1
 # Credentials for your image host.
