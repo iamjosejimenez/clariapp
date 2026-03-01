@@ -9,14 +9,14 @@ servers:
     hosts:
       - ssh.clariapp.com
     options:
-      memory: "600m"
-      memory-swap: "900m"
+      memory: "350m"
+      memory-swap: "600m"
   jobs:
     hosts:
       - ssh.clariapp.com
     options:
-      memory: "300m"
-      memory-swap: "450m"
+      memory: "400m"
+      memory-swap: "700m"
     cmd: bin/jobs
     proxy: false
 
