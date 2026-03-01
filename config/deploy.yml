@@ -32,6 +32,10 @@ proxy:
     version: v0.9.2
     bind_ips:
       - 127.0.0.1
+    options:
+      cpus: 0.1
+      memory: "64m"
+      memory-swap: "128m"
 # Credentials for your image host.
 registry:
   server: ghcr.io
