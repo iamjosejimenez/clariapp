@@ -3,7 +3,8 @@
 class DatepickerComponent < ViewComponent::Base
   DEFAULT_INPUT_CLASSES = "block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body cursor-pointer".freeze
   DEFAULT_CONTAINER_CLASSES = "relative max-w-sm".freeze
-  DEFAULT_FORMAT = "dd/mm/yyyy".freeze
+  DEFAULT_DATEPICKER_FORMAT = "dd/mm/yyyy".freeze
+  DEFAULT_STRFTIME_FORMAT = "%d/%m/%Y".freeze
 
   attr_reader :id
   attr_reader :label
@@ -28,7 +29,7 @@ class DatepickerComponent < ViewComponent::Base
     target_name:,
     input_classes: DEFAULT_INPUT_CLASSES,
     container_classes: DEFAULT_CONTAINER_CLASSES,
-    datepicker_format: DEFAULT_FORMAT)
+    datepicker_format: DEFAULT_DATEPICKER_FORMAT)
     @id = id
     @label = label
     @value = value
@@ -47,6 +48,6 @@ class DatepickerComponent < ViewComponent::Base
   end
 
   def max_date_for_picker
-    max_date.strftime(DEFAULT_FORMAT)
+    max_date.strftime(DEFAULT_STRFTIME_FORMAT)
   end
 end

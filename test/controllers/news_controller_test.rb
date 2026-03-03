@@ -66,6 +66,8 @@ class NewsControllerTest < ActionDispatch::IntegrationTest
     assert_select "div[data-news-datepicker-url-value='#{news_index_path}']", count: 1
     assert_select "div[data-news-datepicker-max-date-value='#{Date.current.iso8601}']", count: 1
     assert_select "input[data-news-datepicker-target='input']", count: 1
+    assert_select "input[data-news-datepicker-target='input'][datepicker-max-date='#{Date.current.strftime('%d/%m/%Y')}']", count: 1
+    assert_select "input[data-news-datepicker-target='input'][readonly]", count: 1
   end
 
   private
