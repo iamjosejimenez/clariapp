@@ -4,7 +4,7 @@
   ) do %>
 
   <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3">
         <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= @selected_date.strftime("%d/%m/%Y") %></h2>
         <% if @summary %>
@@ -13,25 +13,16 @@
           </p>
         <% end %>
       </div>
-
-      <div class="flex items-center gap-2">
-        <%= link_to news_index_path(date: @previous_date), class: "inline-flex w-36 justify-center items-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800 cursor-pointer" do %>
-          <span class="mr-2" aria-hidden="true">←</span>
-          Día anterior
-        <% end %>
-
-        <% if @next_disabled %>
-          <span class="inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer bg-slate-200 text-slate-500" aria-disabled="true">
-            <span class="mr-2" aria-hidden="true">→</span>
-            Día siguiente
-          </span>
-        <% else %>
-          <%= link_to news_index_path(date: @next_date), class: "inline-flex w-36 justify-center items-center px-3 py-1.5 text-sm font-medium rounded-xl cursor-pointer bg-violet-700 text-white shadow hover:bg-violet-800" do %>
-            <span class="mr-2" aria-hidden="true">→</span>
-            Día siguiente
-          <% end %>
-        <% end %>
-      </div>
+      <%= render DatepickerComponent.new(
+        id: "news-date-input",
+        label: "Selecciona una fecha",
+        value: @selected_date.strftime("%d/%m/%Y"),
+        placeholder: "Selecciona una fecha",
+        url: news_index_path,
+        max_date: @today,
+        controller_name: "news-datepicker",
+        target_name: "input"
+      ) %>
     </div>
 
     <% if @summary %>
