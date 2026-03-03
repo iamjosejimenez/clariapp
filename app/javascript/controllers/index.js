@@ -18,3 +18,6 @@ application.register("invoice-preview", InvoicePreviewController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
+
+import NewsDatepickerController from "./news_datepicker_controller"
+application.register("news-datepicker", NewsDatepickerController)
