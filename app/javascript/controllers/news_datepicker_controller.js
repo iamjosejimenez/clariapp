@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails"
-import { Datepicker } from "flowbite"
 
 export default class extends Controller {
   static targets = ["input"]
@@ -11,12 +10,6 @@ export default class extends Controller {
 
   connect() {
     this.lastNavigatedDate = null
-    this.datepicker = new Datepicker(this.inputTarget, {
-      autohide: true,
-      format: "dd/mm/yyyy",
-      maxDate: this.parseIsoDate(this.maxDateValue)
-    })
-
     this.handleDateChange = this.handleDateChange.bind(this)
     this.inputTarget.addEventListener("changeDate", this.handleDateChange)
     this.inputTarget.addEventListener("change", this.handleDateChange)
@@ -25,11 +18,6 @@ export default class extends Controller {
   disconnect() {
     this.inputTarget.removeEventListener("changeDate", this.handleDateChange)
     this.inputTarget.removeEventListener("change", this.handleDateChange)
-
-    if (this.datepicker) {
-      this.datepicker.destroy()
-      this.datepicker = null
-    }
   }
 
   handleDateChange(event) {
@@ -38,7 +26,10 @@ export default class extends Controller {
       return
     }
 
-    const formattedDate = this.formatIsoDate(selectedDate)
+    const maxDate = this.parseIsoDate(this.maxDateValue)
+    const safeDate = maxDate && selectedDate > maxDate ? maxDate : selectedDate
+
+    const formattedDate = this.formatIsoDate(safeDate)
     if (formattedDate === this.lastNavigatedDate) {
       return
     }
