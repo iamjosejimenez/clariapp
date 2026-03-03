@@ -32,7 +32,6 @@
     "style-loader": "^4.0.0",
     "swc-loader": "^0.2.0",
     "tailwindcss": "^4.2.1",
-    "terser-webpack-plugin": "^5.3.1",
     "tippy.js": "^6.3.7",
     "webpack": "^5.105.3",
     "webpack-assets-manifest": "^6.0.0",
