@@ -16,8 +16,8 @@ application.register("history-back", HistoryBackController)
 import InvoicePreviewController from "./invoice_preview_controller"
 application.register("invoice-preview", InvoicePreviewController)
 
-import ModalController from "./modal_controller"
-application.register("modal", ModalController)
-
 import NewsDatepickerController from "./news_datepicker_controller"
 application.register("news-datepicker", NewsDatepickerController)
+
+import SnapshotModalController from "./snapshot_modal_controller"
+application.register("snapshot-modal", SnapshotModalController)

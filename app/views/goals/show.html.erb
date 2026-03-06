@@ -32,7 +32,7 @@
         <% table.with_column(name: "Acciones", classes: "text-center w-8") do |snapshot| %>
           <div class="flex items-center justify-center">
             <button
-              data-action="click->modal#open"
+              data-action="click->snapshot-modal#open"
               data-url="<%= snapshot_detail_goal_path(@goal, snapshot_id: snapshot.id) %>"
               class="inline-flex items-center justify-center rounded-full text-violet-700 hover:bg-violet-100 hover:text-violet-900 transition-colors duration-200 cursor-pointer"
               data-tippy-content="Ver detalles del snapshot">
