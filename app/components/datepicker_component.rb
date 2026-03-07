@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DatepickerComponent < ViewComponent::Base
+class DatepickerComponent < ApplicationComponent
   DEFAULT_INPUT_CLASSES = "block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body cursor-pointer".freeze
   DEFAULT_CONTAINER_CLASSES = "relative max-w-sm".freeze
   DEFAULT_DATEPICKER_FORMAT = "dd/mm/yyyy".freeze

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NewsSummaryDetailComponent < ViewComponent::Base
+class NewsSummaryDetailComponent < ApplicationComponent
   def initialize(summary:)
     @summary = summary
   end

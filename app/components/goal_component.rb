@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GoalComponent < ViewComponent::Base
-  include ApplicationHelper
-
+class GoalComponent < ApplicationComponent
   def initialize(goal:)
     @goal = goal
     @name = goal.name

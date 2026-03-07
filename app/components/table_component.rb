@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TableComponent < ViewComponent::Base
+class TableComponent < ApplicationComponent
   include Pagy::Method
 
   renders_many :columns, ->(name:, classes:, &block) do
@@ -20,7 +20,7 @@ class TableComponent < ViewComponent::Base
     @records = records
   end
 
-  class ColumnComponent < ViewComponent::Base
+  class ColumnComponent < ApplicationComponent
     attr_reader :name
     attr_reader :classes
     attr_reader :block
