@@ -6,13 +6,13 @@
     <div class="flex flex-wrap items-center gap-3 mb-6">
       <h2 class="text-2xl font-semibold text-slate-900">Gastos del periodo</h2>
       <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
-        Monto asignado: $<%= number_with_delimiter(@budget_period.total.to_i, delimiter: ".") %>
+        Monto asignado: <%= clp(@budget_period.total) %>
       </p>
       <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
-        Total gastado: $<%= number_with_delimiter(@budget_period.total_spent.to_i, delimiter: ".") %>
+        Total gastado: <%= clp(@budget_period.total_spent) %>
       </p>
       <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
-        Restante: $<%= number_with_delimiter(@budget_period.remaining.to_i, delimiter: ".") %>
+        Restante: <%= clp(@budget_period.remaining) %>
       </p>
       <%= link_to new_budget_budget_period_expense_path(@budget, @budget_period),
           class: "inline-flex items-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800 sm:ml-auto" do %>
@@ -32,11 +32,11 @@
       <% end %>
 
       <% table.with_column(name: "Monto", classes: "text-left text-gray-700") do |expense| %>
-        $<%= number_with_delimiter(expense.amount.to_i, delimiter: ".") %>
+        <%= clp(expense.amount) %>
       <% end %>
 
       <% table.with_column(name: "Fecha", classes: "text-left text-gray-600") do |expense| %>
-        <%= expense.created_at.strftime("%d/%m/%Y") %>
+        <%= chile_date(expense.created_at) %>
       <% end %>
 
       <% table.with_column(name: "Acciones", classes: "text-center") do |expense| %>

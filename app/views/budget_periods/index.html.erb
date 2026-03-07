@@ -14,15 +14,15 @@
       <% end %>
 
       <% table.with_column(name: "Total", classes: "text-left text-green-600") do |period| %>
-        $<%= number_with_delimiter(period.total.to_i, delimiter: ".") %>
+        <%= clp(period.total) %>
       <% end %>
 
       <% table.with_column(name: "Gasto total", classes: "text-left text-red-600") do |period| %>
-        $<%= number_with_delimiter(period.total_spent.to_i, delimiter: ".") %>
+        <%= clp(period.total_spent) %>
       <% end %>
 
       <% table.with_column(name: "Restante", classes: "text-left text-gray-700") do |period| %>
-        $<%= number_with_delimiter(period.remaining.to_i, delimiter: ".") %>
+        <%= clp(period.remaining) %>
       <% end %>
 
       <% table.with_column(name: "Acciones", classes: "text-center") do |period| %>

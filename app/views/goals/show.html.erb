@@ -16,7 +16,7 @@
     <div id="snapshots-table">
       <%= render TableComponent.new(rows: @snapshots) do |table| %>
         <% table.with_column(name: "Fecha", classes: "text-left text-gray-700") do |snapshot| %>
-          <%= snapshot.created_at.strftime("%d/%m/%Y") %>
+          <%= chile_date(snapshot.created_at) %>
         <% end %>
 
         <% table.with_column(name: "Total", classes: "text-left text-green-600") do |snapshot| %>

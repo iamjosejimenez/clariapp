@@ -6,7 +6,7 @@
   <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3">
-        <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= @selected_date.strftime("%d/%m/%Y") %></h2>
+        <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= chile_date(@selected_date) %></h2>
         <% if @summary %>
           <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
             <%= @summary.sources_count %> fuentes consultadas
@@ -16,7 +16,7 @@
       <%= render DatepickerComponent.new(
         id: "news-date-input",
         label: "Selecciona una fecha",
-        value: @selected_date.strftime("%d/%m/%Y"),
+        value: chile_date(@selected_date),
         placeholder: "Selecciona una fecha",
         url: news_index_path,
         max_date: @today,
@@ -46,7 +46,7 @@
       </div>
     <% else %>
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-700">
-        No hay resumen disponible para el <%= @selected_date.strftime("%d/%m/%Y") %>. Puedes navegar a otra fecha o actualizar las noticias.
+        No hay resumen disponible para el <%= chile_date(@selected_date) %>. Puedes navegar a otra fecha o actualizar las noticias.
       </div>
     <% end %>
   </section>

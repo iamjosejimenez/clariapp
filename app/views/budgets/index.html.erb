@@ -27,15 +27,15 @@
         <% end %>
 
         <% table.with_column(name: "Monto asignado", classes: "text-left text-green-700") do |budget| %>
-          $<%= number_with_delimiter(budget.current_period.total.to_i, delimiter: ".") %>
+          <%= clp(budget.current_period.total) %>
         <% end %>
 
         <% table.with_column(name: "Gastado", classes: "text-left text-red-700") do |budget| %>
-          $<%= number_with_delimiter(budget.current_period.total_spent.to_i, delimiter: ".") %>
+          <%= clp(budget.current_period.total_spent) %>
         <% end %>
 
         <% table.with_column(name: "Restante", classes: "text-left text-gray-700") do |budget| %>
-          $<%= number_with_delimiter(budget.current_period.remaining.to_i, delimiter: ".") %>
+          <%= clp(budget.current_period.remaining) %>
         <% end %>
 
         <% table.with_column(name: "Acciones", classes: "text-center text-gray-700") do |budget| %>
