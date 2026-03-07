@@ -19,7 +19,7 @@
         <% end %>
         <% if @item.published_at.present? %>
           <span class="text-xs text-gray-500">
-            <%= @item.published_at.strftime("%d/%m/%Y %H:%M") %>
+            <%= chile_datetime(@item.published_at) %>
           </span>
         <% end %>
       </div>

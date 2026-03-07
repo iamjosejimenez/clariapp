@@ -26,7 +26,7 @@ export default class extends Controller {
       return
     }
 
-    const maxDate = this.parseIsoDate(this.maxDateValue)
+    const maxDate = this.effectiveMaxDate()
     const safeDate = maxDate && selectedDate > maxDate ? maxDate : selectedDate
 
     const formattedDate = this.formatIsoDate(safeDate)
@@ -63,6 +63,26 @@ export default class extends Controller {
     }
 
     return new Date(Number(year), Number(month) - 1, Number(day))
+  }
+
+  effectiveMaxDate() {
+    const serverMaxDate = this.parseIsoDate(this.maxDateValue)
+    const browserToday = this.browserToday()
+
+    if (!serverMaxDate) {
+      return browserToday
+    }
+
+    if (!browserToday) {
+      return serverMaxDate
+    }
+
+    return serverMaxDate < browserToday ? serverMaxDate : browserToday
+  }
+
+  browserToday() {
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate())
   }
 
   formatIsoDate(date) {
