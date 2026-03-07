@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GoalSnapshotDetailComponent < ViewComponent::Base
-  include ApplicationHelper
-
+class GoalSnapshotDetailComponent < ApplicationComponent
   def initialize(snapshot:)
     @snapshot = snapshot
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NewsItemComponent < ViewComponent::Base
+class NewsItemComponent < ApplicationComponent
   def initialize(item:)
     @item = item
   end
