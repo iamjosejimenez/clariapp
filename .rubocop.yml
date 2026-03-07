@@ -8,7 +8,8 @@ plugins:
   - rubocop-performance
 
 AllCops:
-  TargetRubyVersion: 3.3.10
+  TargetRubyVersion: 3.4
+  ParserEngine: parser_prism
   TargetRailsVersion: 8.0
   Exclude:
     - 'node_modules/**/*'
