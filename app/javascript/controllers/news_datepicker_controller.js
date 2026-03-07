@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ["input"]
   static values = {
     maxDate: String,
+    selectedDate: String,
     url: String
   }
 
@@ -13,6 +14,7 @@ export default class extends Controller {
     this.handleDateChange = this.handleDateChange.bind(this)
     this.inputTarget.addEventListener("changeDate", this.handleDateChange)
     this.inputTarget.addEventListener("change", this.handleDateChange)
+    this.navigateToBrowserToday()
   }
 
   disconnect() {
@@ -83,6 +85,28 @@ export default class extends Controller {
   browserToday() {
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  }
+
+  navigateToBrowserToday() {
+    const url = new URL(window.location.href)
+    if (url.searchParams.has("date")) {
+      return
+    }
+
+    const browserToday = this.effectiveMaxDate()
+    const selectedDate = this.parseIsoDate(this.selectedDateValue)
+    if (!browserToday || !selectedDate) {
+      return
+    }
+
+    const browserTodayIso = this.formatIsoDate(browserToday)
+    const selectedDateIso = this.formatIsoDate(selectedDate)
+    if (browserTodayIso === selectedDateIso) {
+      return
+    }
+
+    this.lastNavigatedDate = browserTodayIso
+    Turbo.visit(`${this.urlValue}?date=${browserTodayIso}`, { action: "replace" })
   }
 
   formatIsoDate(date) {

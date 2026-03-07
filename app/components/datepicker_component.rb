@@ -14,6 +14,7 @@ class DatepickerComponent < ApplicationComponent
   attr_reader :max_date
   attr_reader :controller_name
   attr_reader :target_name
+  attr_reader :selected_date
   attr_reader :input_classes
   attr_reader :container_classes
   attr_reader :datepicker_format
@@ -27,6 +28,7 @@ class DatepickerComponent < ApplicationComponent
     max_date:,
     controller_name:,
     target_name:,
+    selected_date: nil,
     input_classes: DEFAULT_INPUT_CLASSES,
     container_classes: DEFAULT_CONTAINER_CLASSES,
     datepicker_format: DEFAULT_DATEPICKER_FORMAT)
@@ -38,6 +40,7 @@ class DatepickerComponent < ApplicationComponent
     @max_date = max_date
     @controller_name = controller_name
     @target_name = target_name
+    @selected_date = selected_date
     @input_classes = input_classes
     @container_classes = container_classes
     @datepicker_format = datepicker_format
@@ -49,5 +52,9 @@ class DatepickerComponent < ApplicationComponent
 
   def max_date_for_picker
     max_date.strftime(DEFAULT_STRFTIME_FORMAT)
+  end
+
+  def selected_date_iso8601
+    selected_date&.iso8601
   end
 end
