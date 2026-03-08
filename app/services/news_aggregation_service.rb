@@ -2,10 +2,8 @@
 
 class NewsAggregationService
   class Error < StandardError; end
-  MAX_RESULTS_FOR_SUMMARY = 12
-  MAX_ARTICLES_WITH_CONTENT = 8
   NEWS_QUERY = "economía chile"
-  MAX_RESULTS = 5
+  MAX_RESULTS = 8
 
   def initialize
   end
@@ -97,16 +95,18 @@ class NewsAggregationService
     {
       role: "user",
       content: <<~PROMPT
-        A partir de los siguientes resultados de búsqueda de noticias relevantes, genera un análisis de la economía chilena de alta calidad en español.
+        A partir de los siguientes resultados de búsqueda de noticias relevantes, genera un resumen analítico de la economía chilena de alta calidad en español. Tu objetivo principal no es resumir noticias por separado, sino integrarlas en una lectura común, conectando sus hallazgos de forma natural y cercana.
 
         Formato requerido:
         - Primero, exactamente 3 párrafos de texto fluido.
-        - Lenguaje claro.
+        - Cada párrafo debe desarrollar bien las ideas, con suficiente detalle para que el resumen sea completo y no superficial.
+        - Lenguaje claro, cercano y natural.
         - Solo hechos confirmados por las fuentes.
         - Sin corchetes ni paréntesis de plantilla.
+        - Los 3 párrafos deben integrar las relaciones más relevantes entre las noticias, pero sin hablar explícitamente de "patrones", "señales", "planos" o "tendencias detectadas".
         - Después de los 3 párrafos, agrega una sección llamada "Puntos claves a seguir:".
         - En "Puntos claves a seguir:", incluye exactamente #{news_list.size} puntos numerados (uno por cada noticia incluida en las fuentes).
-        - Cada punto debe integrar en redacción natural el hecho principal, su impacto en la economía chilena y el motivo de inclusión en el análisis.
+        - Cada punto debe integrar en redacción natural el hecho principal, su impacto en la economía chilena, su conexión con el resto del panorama y el motivo de inclusión en el análisis.
         - No uses etiquetas internas como "Hecho principal:", "por qué afecta:" o "por qué se incluye:".
 
         Reglas:
@@ -114,11 +114,16 @@ class NewsAggregationService
         - No uses palabras en inglés, salvo nombres propios, siglas internacionales o citas textuales estrictamente necesarias.
         - Si aparece un término en inglés en las fuentes, escribe su equivalente en español cuando exista.
         - El contenido de la noticia es el campo "content"; pero también debes usar "snippet" y "title" para validar la información de "content" ya que fue extraído de la web.
-        - En los 3 párrafos prioriza interpretación económica y relaciones de causa-efecto; no hagas una lista de noticias.
-        - Redacta con enfoque analítico: conecta hechos con implicancias en crecimiento, inversión, productividad, empleo, comercio exterior, cuentas fiscales o riesgo país, según corresponda.
-        - Organiza el análisis en tres planos: macrofiscal, competitividad e infraestructura, y desempeño sectorial/exportador (solo si las fuentes disponibles lo permiten).
+        - En los 3 párrafos prioriza interpretación económica y relaciones de causa-efecto; no hagas una lista de noticias ni un resumen secuencial.
+        - Detecta relaciones como causas compartidas, efectos encadenados, tensiones entre sectores o cambios de expectativas, pero exprésalas como parte del relato y no como hallazgos explícitamente nombrados.
+        - Si dos o más noticias hablan del mismo actor, sector, riesgo, política pública o tendencia, intégralas explícitamente en una sola lectura analítica.
+        - Si encuentras contrastes, contradicciones o señales mixtas entre noticias, señálalos y explica su relevancia.
+        - Redacta con enfoque analítico: conecta esas relaciones con implicancias en crecimiento, inversión, productividad, empleo, comercio exterior, cuentas fiscales o riesgo país, según corresponda.
+        - No uses frases como "las noticias muestran", "el patrón central", "un segundo plano" o "en el plano sectorial"; la lectura debe sentirse más humana y menos estructurada.
+        - No sacrifiques información importante por brevedad: incluye matices, contexto y efectos relevantes cuando estén respaldados por las fuentes.
         - Evita formular preguntas explícitas o estructuras de cuestionario; redacta todo en estilo declarativo y analítico.
         - No agregues introducciones ni conclusiones fuera del formato solicitado.
+        - Si no hay evidencia suficiente para afirmar una relación, no la inventes; indica la cautela de forma breve y natural.
         - Si una noticia tiene información insuficiente o dudosa, no inventes datos; aclara esa limitación en su punto correspondiente.
 
         Fuentes disponibles:
