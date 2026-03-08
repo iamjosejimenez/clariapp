@@ -18,7 +18,8 @@
 #
 # Indexes
 #
-#  index_goals_on_external_account_id  (external_account_id)
+#  index_goals_on_external_account_id                  (external_account_id)
+#  index_goals_on_external_account_id_and_external_id  (external_account_id,external_id) UNIQUE
 #
 # Foreign Keys
 #

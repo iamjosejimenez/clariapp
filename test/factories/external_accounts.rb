@@ -17,6 +17,7 @@
 # Indexes
 #
 #  index_external_accounts_on_user_id                (user_id)
+#  index_external_accounts_on_user_id_and_provider   (user_id,provider) UNIQUE
 #  index_external_accounts_on_username_and_provider  (username,provider) UNIQUE
 #
 # Foreign Keys
