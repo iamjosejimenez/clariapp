@@ -1,7 +1,7 @@
 production:
   fetch_goal_snapshots_job:
     class: FetchGoalSnapshotsJob
-    schedule: every day at 11:00pm
+    schedule: every day at 02:00am
   fetch_daily_news_job:
     class: FetchDailyNewsJob
-    schedule: every day at 06:00am
+    schedule: every day at 03:00am
