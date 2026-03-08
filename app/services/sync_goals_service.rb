@@ -12,11 +12,11 @@ class SyncGoalsService
     extraction_date = Date.current
 
     goals.each do |goal_data|
-      goal = Goal.find_or_initialize_by(external_id: goal_data[:id]) do |g|
+      goal = external_account.goals.find_or_initialize_by(external_id: goal_data[:id]) do |g|
         g.name = goal_data[:name]
-        g.external_account = external_account
       end
 
+      goal.name = goal_data[:name]
       goal.nav = goal_data[:nav]
       goal.profit = goal_data[:profit]
       goal.not_net_deposited = goal_data[:not_net_deposited]

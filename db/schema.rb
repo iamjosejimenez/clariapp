@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_14_183000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_003000) do
   create_table "budget_periods", force: :cascade do |t|
     t.integer "budget_id", null: false
     t.datetime "created_at", null: false
@@ -51,6 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_14_183000) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.string "username"
+    t.index ["user_id", "provider"], name: "index_external_accounts_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_external_accounts_on_user_id"
     t.index ["username", "provider"], name: "index_external_accounts_on_username_and_provider", unique: true
   end
@@ -80,6 +81,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_14_183000) do
     t.text "profit", null: false
     t.datetime "updated_at", null: false
     t.text "withdrawn", null: false
+    t.index ["external_account_id", "external_id"], name: "index_goals_on_external_account_id_and_external_id", unique: true
     t.index ["external_account_id"], name: "index_goals_on_external_account_id"
   end
 

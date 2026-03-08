@@ -18,13 +18,15 @@ class FintualSessionsController < ApplicationController
       body = JSON.parse(response.body.to_s)
       token = body["data"]["attributes"]["token"]
 
-      external_account = ExternalAccount.find_or_initialize_by(username: email, provider: "fintual")
-      external_account.user = current_user
+      external_account = current_user.external_accounts.find_or_initialize_by(provider: "fintual")
+      external_account.username = email
       external_account.status = "active"
       external_account.access_token = token
-      external_account.save!
-
-      redirect_to dashboard_path
+      if external_account.save
+        redirect_to dashboard_path
+      else
+        redirect_to fintual_sessions_new_path, alert: fintual_account_error_message(external_account)
+      end
     else
       redirect_to fintual_sessions_new_path, alert: "Correo electrónico o contraseña incorrectos."
     end
@@ -33,5 +35,13 @@ class FintualSessionsController < ApplicationController
   def destroy
     reset_session
     redirect_to login_path, notice: "Sesión cerrada correctamente."
+  end
+
+  private
+
+  def fintual_account_error_message(external_account)
+    return "La cuenta de Fintual ya está vinculada a otro usuario." if external_account.errors[:username].present?
+
+    external_account.errors.full_messages.to_sentence
   end
 end

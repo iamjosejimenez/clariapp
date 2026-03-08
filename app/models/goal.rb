@@ -20,7 +20,8 @@
 #
 # Indexes
 #
-#  index_goals_on_external_account_id  (external_account_id)
+#  index_goals_on_external_account_id                  (external_account_id)
+#  index_goals_on_external_account_id_and_external_id  (external_account_id,external_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -32,4 +33,9 @@ class Goal < ApplicationRecord
   belongs_to :external_account
 
   encrypts :nav, :profit, :not_net_deposited, :deposited, :withdrawn
+
+  validates :external_id, presence: true, uniqueness: {
+    scope: :external_account_id,
+    message: "ya esta en uso para esta cuenta externa"
+  }
 end
