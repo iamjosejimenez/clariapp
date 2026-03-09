@@ -34,7 +34,7 @@
     "tailwindcss": "^4.2.1",
     "tippy.js": "^6.3.7",
     "webpack": "^5.105.4",
-    "webpack-assets-manifest": "^6.0.0",
+    "webpack-assets-manifest": "^6.5.1",
     "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^5.2.2",
     "webpack-merge": "^6.0.0",
