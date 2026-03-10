@@ -247,7 +247,7 @@ GEM
       connection_pool
     ostruct (0.6.3)
     package_json (0.2.0)
-    pagy (43.3.1)
+    pagy (43.3.2)
       json
       uri
       yaml
