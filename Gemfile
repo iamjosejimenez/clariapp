@@ -85,6 +85,6 @@ gem "rubocop", require: false
 gem "rubocop-rails", require: false
 gem "rubocop-performance", require: false
 
-gem "shakapacker", "9.6.1"
+gem "shakapacker", "9.7.0"
 gem "image_processing", "~> 1.2"
 gem "sqlite3"
