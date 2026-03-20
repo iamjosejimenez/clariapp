@@ -18,6 +18,11 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_pack_tag "application", "data-turbo-track": "reload", preload_links_header: false %>
     <%= javascript_pack_tag "application" %>
+    <% if Rails.env.production? %>
+      <meta name="sentry-dsn" content="<%= ENV["SENTRY_DSN"] %>">
+      <meta name="app-release" content="<%= ENV["APP_RELEASE"] %>">
+      <meta name="sentry-environment" content="<%= Rails.env %>">
+    <% end %>
   </head>
 
   <body class="min-h-screen flex flex-col bg-gray-50 text-gray-900 font-sans antialiased" data-controller="snapshot-modal">
