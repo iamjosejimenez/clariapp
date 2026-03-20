@@ -59,6 +59,8 @@ env:
     - PORT
     - OPENAI_API_KEY
     - SERPER_API_KEY
+    - SENTRY_DSN
+    - APP_RELEASE
   clear:
     PORT: 80
     SOLID_QUEUE_IN_PUMA: false
