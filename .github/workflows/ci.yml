@@ -40,7 +40,7 @@ jobs:
           bin/rubocop
           bin/erb_lint --lint-all .
 
-  deploy:
+  build_image:
     runs-on: ubuntu-24.04-arm
 
     steps:
@@ -61,24 +61,12 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
           chmod 600 claria-production.pem
-      - name: Build and Deploy
+      - name: Build image
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
-          ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY }}
-          ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT }}
-          ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY }}
-          CLARIA_DATABASE_HOST: ${{ secrets.CLARIA_DATABASE_HOST }}
-          CLARIA_DATABASE_PASSWORD: ${{ secrets.CLARIA_DATABASE_PASSWORD }}
-          CLARIA_DATABASE_USER: ${{ secrets.CLARIA_DATABASE_USER }}
-          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           APP_RELEASE: ${{ github.sha }}
         run: |
-          kamal deploy
-          kamal prune all -v
+          kamal build push
 
   # test:
   #   runs-on: ubuntu-latest
