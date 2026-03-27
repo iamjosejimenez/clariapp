@@ -3,6 +3,13 @@
   "private": true,
   "scripts": {},
   "packageManager": "yarn@1.22.22",
+  "resolutions": {
+    "**/jest-util/picomatch": "4.0.4",
+    "**/@rollup/pluginutils/picomatch": "4.0.4",
+    "**/anymatch/picomatch": "2.3.2",
+    "**/readdirp/picomatch": "2.3.2",
+    "**/micromatch/picomatch": "2.3.2"
+  },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@hotwired/stimulus": "^3.2.2",
