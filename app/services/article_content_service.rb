@@ -2,7 +2,7 @@
 
 class ArticleContentService
   class Error < StandardError; end
-  DEFAULT_MODEL = "gpt-5-nano-2025-08-07"
+  DEFAULT_MODEL = "gpt-5.4-nano-2026-03-17"
   EXTRACTION_FAILURE_MESSAGE = "No pude extraer la noticia"
   MAX_HTML_CHARS = 45_000
 

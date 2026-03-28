@@ -3,7 +3,7 @@
 class NewsAggregationService
   class Error < StandardError; end
   NEWS_QUERY = "economía chile"
-  MAX_RESULTS = 8
+  MAX_RESULTS = 10
 
   def initialize
   end
@@ -17,7 +17,7 @@ class NewsAggregationService
     openai_client = OpenAI::Client.new
 
     response = openai_client.responses.create(
-      model: "gpt-5-nano-2025-08-07",
+      model: "gpt-5.4-nano-2026-03-17",
       input: [
         { role: :system, content: "Eres un experto en economía de Chile" },
         {
@@ -35,7 +35,7 @@ class NewsAggregationService
       ],
     )
 
-    ordered_indexes = response.output.flat_map { _1.content }.second.text.split(",")
+    ordered_indexes = response.output.first.content.first.text.split(",")
     selected_news = []
 
     ordered_indexes.each do |selected_index|
@@ -51,14 +51,14 @@ class NewsAggregationService
     end
 
     response = openai_client.responses.create(
-      model: "gpt-5-nano-2025-08-07",
+      model: "gpt-5.4-nano-2026-03-17",
       input: [
         { role: :system, content: "Eres un asistente experto en economía de Chile" },
         summary_request_message(selected_news)
       ],
     )
 
-    summary_content = response.output.flat_map { _1.content }.second.text
+    summary_content = response.output.first.content.first.text
 
     create_news_summary(summary_content, selected_news)
   end
