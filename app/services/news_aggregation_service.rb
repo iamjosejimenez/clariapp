@@ -3,7 +3,7 @@
 class NewsAggregationService
   class Error < StandardError; end
   NEWS_QUERY = "economía chile"
-  MAX_RESULTS = 8
+  MAX_RESULTS = 10
 
   def initialize
   end
@@ -17,7 +17,7 @@ class NewsAggregationService
     openai_client = OpenAI::Client.new
 
     response = openai_client.responses.create(
-      model: "gpt-5-nano-2025-08-07",
+      model: "gpt-5.4-nano-2026-03-17",
       input: [
         { role: :system, content: "Eres un experto en economía de Chile" },
         {
@@ -35,13 +35,18 @@ class NewsAggregationService
       ],
     )
 
-    ordered_indexes = response.output.flat_map { _1.content }.second.text.split(",")
+    ordered_indexes = extract_response_text(response).split(",")
     selected_news = []
 
     ordered_indexes.each do |selected_index|
       next if selected_news.size == MAX_RESULTS
 
-      news = news_list[selected_index.to_i]
+      parsed_index = Integer(selected_index, exception: false)
+      next if parsed_index.nil?
+
+      news = news_list[parsed_index]
+      next if news.nil?
+
       url = news["link"]
       content = ArticleContentService.new(url: url).call
       next if content.blank? || content == ArticleContentService::EXTRACTION_FAILURE_MESSAGE
@@ -51,14 +56,14 @@ class NewsAggregationService
     end
 
     response = openai_client.responses.create(
-      model: "gpt-5-nano-2025-08-07",
+      model: "gpt-5.4-nano-2026-03-17",
       input: [
         { role: :system, content: "Eres un asistente experto en economía de Chile" },
         summary_request_message(selected_news)
       ],
     )
 
-    summary_content = response.output.flat_map { _1.content }.second.text
+    summary_content = extract_response_text(response)
 
     create_news_summary(summary_content, selected_news)
   end
@@ -89,6 +94,24 @@ class NewsAggregationService
 
   def today
     Time.zone.today
+  end
+
+  def extract_response_text(response)
+    text = response.output_text.to_s.strip
+    return text if text.present?
+
+    Array(response.output).each do |item|
+      next unless item.type == "message"
+
+      Array(item.content).each do |content|
+        next unless content.type == "output_text"
+
+        extracted_text = content.text.to_s.strip
+        return extracted_text if extracted_text.present?
+      end
+    end
+
+    raise Error, "OpenAI response did not include any output text"
   end
 
   def summary_request_message(news_list)
