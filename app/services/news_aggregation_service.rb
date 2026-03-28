@@ -44,10 +44,10 @@ class NewsAggregationService
       news = news_list[selected_index.to_i]
       url = news["link"]
       content = ArticleContentService.new(url: url).call
-      if content.present?
-        news["content"] = content
-        selected_news << news
-      end
+      next if content.blank? || content == ArticleContentService::EXTRACTION_FAILURE_MESSAGE
+
+      news["content"] = content
+      selected_news << news
     end
 
     response = openai_client.responses.create(
