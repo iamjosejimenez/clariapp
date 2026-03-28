@@ -41,7 +41,12 @@ class NewsAggregationService
     ordered_indexes.each do |selected_index|
       next if selected_news.size == MAX_RESULTS
 
-      news = news_list[selected_index.to_i]
+      parsed_index = Integer(selected_index, exception: false)
+      next if parsed_index.nil?
+
+      news = news_list[parsed_index]
+      next if news.nil?
+
       url = news["link"]
       content = ArticleContentService.new(url: url).call
       next if content.blank? || content == ArticleContentService::EXTRACTION_FAILURE_MESSAGE
