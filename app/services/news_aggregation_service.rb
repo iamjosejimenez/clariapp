@@ -35,7 +35,7 @@ class NewsAggregationService
       ],
     )
 
-    ordered_indexes = response.output.first.content.first.text.split(",")
+    ordered_indexes = extract_response_text(response).split(",")
     selected_news = []
 
     ordered_indexes.each do |selected_index|
@@ -58,7 +58,7 @@ class NewsAggregationService
       ],
     )
 
-    summary_content = response.output.first.content.first.text
+    summary_content = extract_response_text(response)
 
     create_news_summary(summary_content, selected_news)
   end
@@ -89,6 +89,24 @@ class NewsAggregationService
 
   def today
     Time.zone.today
+  end
+
+  def extract_response_text(response)
+    text = response.output_text.to_s.strip
+    return text if text.present?
+
+    Array(response.output).each do |item|
+      next unless item.type == "message"
+
+      Array(item.content).each do |content|
+        next unless content.type == "output_text"
+
+        extracted_text = content.text.to_s.strip
+        return extracted_text if extracted_text.present?
+      end
+    end
+
+    raise Error, "OpenAI response did not include any output text"
   end
 
   def summary_request_message(news_list)
