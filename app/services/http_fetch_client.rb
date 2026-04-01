@@ -33,7 +33,7 @@ class HttpFetchClient
       open_timeout: OPEN_TIMEOUT_SECONDS,
       read_timeout: READ_TIMEOUT_SECONDS
     )
-  rescue HTTParty::Error, Timeout::Error, SocketError, URI::InvalidURIError => e
+  rescue StandardError => e
     raise Error, "HTTP fetch failed: #{e.message}"
   end
 end
