@@ -3,7 +3,7 @@
 class NewsAggregationService
   class Error < StandardError; end
   NEWS_QUERY = "economía chile"
-  MAX_RESULTS = 10
+  MAX_RESULTS = 8
 
   def initialize
   end
