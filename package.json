@@ -27,7 +27,7 @@
     "postcss-preset-env": "^11.2.1",
     "shakapacker": "10.0.0",
     "swc-loader": "^0.2.0",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.3",
     "tippy.js": "^6.3.7",
     "webpack": "^5.106.2",
     "webpack-assets-manifest": "^6.5.1",
