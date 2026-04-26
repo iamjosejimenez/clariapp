@@ -13,17 +13,22 @@
           </p>
         <% end %>
       </div>
-      <%= render DatepickerComponent.new(
-        id: "news-date-input",
-        label: "Selecciona una fecha",
-        value: chile_date(@selected_date),
-        placeholder: "Selecciona una fecha",
-        url: news_index_path,
-        max_date: @today,
-        controller_name: "news-datepicker",
-        target_name: "input",
-        selected_date: @selected_date
-      ) %>
+      <div class="flex items-center gap-3">
+        <% if @selected_date != @today %>
+          <%= link_to "Ir a hoy", news_index_path, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors" %>
+        <% end %>
+        <%= render DatepickerComponent.new(
+          id: "news-date-input",
+          label: "Selecciona una fecha",
+          value: chile_date(@selected_date),
+          placeholder: "Selecciona una fecha",
+          url: news_index_path,
+          max_date: @today,
+          controller_name: "news-datepicker",
+          target_name: "input",
+          selected_date: @selected_date
+        ) %>
+      </div>
     </div>
 
     <% if @summary %>
