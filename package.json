@@ -14,7 +14,7 @@
     "@fontsource/inter": "^5.2.8",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
-    "@sentry/browser": "^10.50.0",
+    "@sentry/browser": "^10.51.0",
     "@swc/core": "^1.15.32",
     "@tailwindcss/postcss": "^4.2.4",
     "compression-webpack-plugin": "^12.0.0",
