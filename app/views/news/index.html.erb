@@ -6,32 +6,45 @@
   <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 mb-10 border border-slate-200 min-h-[calc(100vh-16rem)]">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3">
-        <h2 class="text-2xl font-semibold text-slate-900">Resumen - <%= chile_date(@selected_date) %></h2>
+        <h2 class="text-2xl font-semibold text-slate-900">
+          <% if @selected_date.present? %>
+            Resumen - <%= chile_date(@selected_date) %>
+          <% else %>
+            Resumen de noticias
+          <% end %>
+        </h2>
         <% if @summary %>
           <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
             <%= @summary.sources_count %> fuentes consultadas
           </p>
         <% end %>
       </div>
-      <div class="flex items-center gap-3">
-        <% if @selected_date != @today %>
-          <%= link_to "Ir a hoy", news_index_path, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors" %>
-        <% end %>
+      <div
+        class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-end"
+        data-controller="news-datepicker"
+        data-news-datepicker-url-value="<%= news_index_path %>"
+        <% if @selected_date.present? %> data-news-datepicker-selected-date-value="<%= @selected_date.iso8601 %>"<% end %>>
+        <%= link_to "Ir a hoy", news_index_path(date: @today_fallback_date.iso8601), class: "inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-violet-600 px-4 text-sm font-medium text-white transition-colors hover:bg-violet-700 cursor-pointer", data: { action: "click->news-datepicker#goToToday" } %>
         <%= render DatepickerComponent.new(
           id: "news-date-input",
           label: "Selecciona una fecha",
-          value: chile_date(@selected_date),
+          value: @selected_date.present? ? chile_date(@selected_date) : nil,
           placeholder: "Selecciona una fecha",
           url: news_index_path,
-          max_date: @today,
           controller_name: "news-datepicker",
           target_name: "input",
-          selected_date: @selected_date
+          selected_date: @selected_date,
+          attach_controller: false,
+          container_classes: "relative w-full sm:w-72"
         ) %>
       </div>
     </div>
 
-    <% if @summary %>
+    <% if @selected_date.blank? %>
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-700">
+        Selecciona una fecha para ver el resumen de noticias.
+      </div>
+    <% elsif @summary %>
 
       <div class="space-y-5 leading-relaxed text-slate-700">
         <% @summary.summary.to_s.split("\n").each do |line| %>
@@ -52,7 +65,7 @@
       </div>
     <% else %>
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-700">
-        No hay resumen disponible para el <%= chile_date(@selected_date) %>. Puedes navegar a otra fecha o actualizar las noticias.
+        No hay resumen disponible para el <%= chile_date(@selected_date) %>. Puedes navegar a otra fecha.
       </div>
     <% end %>
   </section>

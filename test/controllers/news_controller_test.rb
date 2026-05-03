@@ -7,15 +7,16 @@ class NewsControllerTest < ActionDispatch::IntegrationTest
     sign_in
   end
 
-  test "GET /news sin fecha usa hoy" do
+  test "GET /news sin fecha muestra estado inicial" do
     today = Date.current
     create_news_summary!(date: today, summary_text: "Resumen de hoy")
 
     get news_index_url
 
     assert_response :success
-    assert_match("Resumen - #{today.strftime('%d/%m/%Y')}", response.body)
-    assert_match("Resumen de hoy", response.body)
+    assert_match("Resumen de noticias", response.body)
+    assert_match("Selecciona una fecha para ver el resumen de noticias.", response.body)
+    refute_match("Resumen de hoy", response.body)
   end
 
   test "GET /news con fecha valida carga el resumen de esa fecha" do
@@ -31,32 +32,32 @@ class NewsControllerTest < ActionDispatch::IntegrationTest
     refute_match("Resumen de hoy", response.body)
   end
 
-  test "GET /news con fecha futura la ajusta a hoy" do
+  test "GET /news con fecha futura no se ajusta a hoy" do
     today = Date.current
     future_date = today + 3.days
     create_news_summary!(date: today, summary_text: "Resumen actual")
-    create_news_summary!(date: future_date, summary_text: "Resumen futuro")
 
     get news_index_url(date: future_date.iso8601)
 
     assert_response :success
-    assert_match("Resumen - #{today.strftime('%d/%m/%Y')}", response.body)
-    assert_match("Resumen actual", response.body)
-    refute_match("Resumen futuro", response.body)
+    assert_match("Resumen - #{future_date.strftime('%d/%m/%Y')}", response.body)
+    assert_match("No hay resumen disponible para el #{future_date.strftime('%d/%m/%Y')}", response.body)
+    refute_match("Resumen actual", response.body)
   end
 
-  test "GET /news con fecha invalida usa hoy" do
+  test "GET /news con fecha invalida muestra estado inicial" do
     today = Date.current
     create_news_summary!(date: today, summary_text: "Resumen vigente")
 
     get news_index_url(date: "fecha-invalida")
 
     assert_response :success
-    assert_match("Resumen - #{today.strftime('%d/%m/%Y')}", response.body)
-    assert_match("Resumen vigente", response.body)
+    assert_match("Resumen de noticias", response.body)
+    assert_match("Selecciona una fecha para ver el resumen de noticias.", response.body)
+    refute_match("Resumen vigente", response.body)
   end
 
-  test "renderiza datepicker y elimina links de navegacion anterior/siguiente" do
+  test "renderiza datepicker y boton para ir a hoy" do
     get news_index_url
 
     assert_response :success
@@ -64,10 +65,11 @@ class NewsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a", text: /D\u00eda siguiente/, count: 0
     assert_select "div[data-controller='news-datepicker']", count: 1
     assert_select "div[data-news-datepicker-url-value='#{news_index_path}']", count: 1
-    assert_select "div[data-news-datepicker-max-date-value='#{Date.current.iso8601}']", count: 1
-    assert_select "div[data-news-datepicker-selected-date-value='#{Date.current.iso8601}']", count: 1
+    assert_select "div[data-news-datepicker-selected-date-value]", count: 0
+    assert_select "a[data-action='click->news-datepicker#goToToday']", text: "Ir a hoy", count: 1
+    assert_select "a[href='#{news_index_path(date: Date.current.iso8601)}']", text: "Ir a hoy", count: 1
     assert_select "input[data-news-datepicker-target='input']", count: 1
-    assert_select "input[data-news-datepicker-target='input'][datepicker-max-date='#{Date.current.strftime('%d/%m/%Y')}']", count: 1
+    assert_select "input[data-news-datepicker-target='input'][datepicker-max-date]", count: 0
     assert_select "input[data-news-datepicker-target='input'][readonly]", count: 1
   end
 

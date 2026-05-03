@@ -4,7 +4,6 @@ import { Turbo } from "@hotwired/turbo-rails"
 export default class extends Controller {
   static targets = ["input"]
   static values = {
-    maxDate: String,
     selectedDate: String,
     url: String
   }
@@ -14,7 +13,7 @@ export default class extends Controller {
     this.handleDateChange = this.handleDateChange.bind(this)
     this.inputTarget.addEventListener("changeDate", this.handleDateChange)
     this.inputTarget.addEventListener("change", this.handleDateChange)
-    this.navigateToBrowserToday()
+    this.setBrowserMaxDate()
   }
 
   disconnect() {
@@ -28,16 +27,24 @@ export default class extends Controller {
       return
     }
 
-    const maxDate = this.effectiveMaxDate()
-    const safeDate = maxDate && selectedDate > maxDate ? maxDate : selectedDate
+    const browserToday = this.browserToday()
+    const safeDate = selectedDate > browserToday ? browserToday : selectedDate
+    this.visitDate(safeDate)
+  }
 
-    const formattedDate = this.formatIsoDate(safeDate)
+  goToToday(event) {
+    event.preventDefault()
+    this.visitDate(this.browserToday())
+  }
+
+  visitDate(date, options = {}) {
+    const formattedDate = this.formatIsoDate(date)
     if (formattedDate === this.lastNavigatedDate) {
       return
     }
 
     this.lastNavigatedDate = formattedDate
-    Turbo.visit(`${this.urlValue}?date=${formattedDate}`)
+    Turbo.visit(`${this.urlValue}?date=${formattedDate}`, options)
   }
 
   parseDateFromInput() {
@@ -67,46 +74,9 @@ export default class extends Controller {
     return new Date(Number(year), Number(month) - 1, Number(day))
   }
 
-  effectiveMaxDate() {
-    const serverMaxDate = this.parseIsoDate(this.maxDateValue)
-    const browserToday = this.browserToday()
-
-    if (!serverMaxDate) {
-      return browserToday
-    }
-
-    if (!browserToday) {
-      return serverMaxDate
-    }
-
-    return serverMaxDate < browserToday ? serverMaxDate : browserToday
-  }
-
   browserToday() {
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  }
-
-  navigateToBrowserToday() {
-    const url = new URL(window.location.href)
-    if (url.searchParams.has("date")) {
-      return
-    }
-
-    const browserToday = this.effectiveMaxDate()
-    const selectedDate = this.parseIsoDate(this.selectedDateValue)
-    if (!browserToday || !selectedDate) {
-      return
-    }
-
-    const browserTodayIso = this.formatIsoDate(browserToday)
-    const selectedDateIso = this.formatIsoDate(selectedDate)
-    if (browserTodayIso === selectedDateIso) {
-      return
-    }
-
-    this.lastNavigatedDate = browserTodayIso
-    Turbo.visit(`${this.urlValue}?date=${browserTodayIso}`, { action: "replace" })
   }
 
   formatIsoDate(date) {
@@ -114,5 +84,16 @@ export default class extends Controller {
     const month = String(date.getMonth() + 1).padStart(2, "0")
     const day = String(date.getDate()).padStart(2, "0")
     return `${year}-${month}-${day}`
+  }
+
+  formatPickerDate(date) {
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+    return `${day}/${month}/${year}`
+  }
+
+  setBrowserMaxDate() {
+    this.inputTarget.setAttribute("datepicker-max-date", this.formatPickerDate(this.browserToday()))
   }
 }
