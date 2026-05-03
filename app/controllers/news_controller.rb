@@ -2,6 +2,7 @@
 
 class NewsController < ApplicationController
   def index
+    @today_fallback_date = Date.current
     @selected_date = parse_date(params[:date])
 
     @summary = NewsSummary.find_by(generation_date: @selected_date) if @selected_date.present?
