@@ -18,6 +18,7 @@ class DatepickerComponent < ApplicationComponent
   attr_reader :input_classes
   attr_reader :container_classes
   attr_reader :datepicker_format
+  attr_reader :attach_controller
 
   def initialize(
     id:,
@@ -25,13 +26,14 @@ class DatepickerComponent < ApplicationComponent
     value:,
     placeholder:,
     url:,
-    max_date:,
     controller_name:,
     target_name:,
+    max_date: nil,
     selected_date: nil,
     input_classes: DEFAULT_INPUT_CLASSES,
     container_classes: DEFAULT_CONTAINER_CLASSES,
-    datepicker_format: DEFAULT_DATEPICKER_FORMAT)
+    datepicker_format: DEFAULT_DATEPICKER_FORMAT,
+    attach_controller: true)
     @id = id
     @label = label
     @value = value
@@ -44,17 +46,22 @@ class DatepickerComponent < ApplicationComponent
     @input_classes = input_classes
     @container_classes = container_classes
     @datepicker_format = datepicker_format
+    @attach_controller = attach_controller
   end
 
   def max_date_iso8601
-    max_date.iso8601
+    max_date&.iso8601
   end
 
   def max_date_for_picker
-    max_date.strftime(DEFAULT_STRFTIME_FORMAT)
+    max_date&.strftime(DEFAULT_STRFTIME_FORMAT)
   end
 
   def selected_date_iso8601
     selected_date&.iso8601
+  end
+
+  def attach_controller?
+    attach_controller
   end
 end

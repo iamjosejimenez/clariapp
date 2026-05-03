@@ -2,11 +2,9 @@
 
 class NewsController < ApplicationController
   def index
-    @today = Date.current
-    @selected_date = parse_date(params[:date]) || @today
-    @selected_date = @today if @selected_date > @today
+    @selected_date = parse_date(params[:date])
 
-    @summary = NewsSummary.find_by(generation_date: @selected_date)
+    @summary = NewsSummary.find_by(generation_date: @selected_date) if @selected_date.present?
     @news_items = @summary&.news_items&.order(published_at: :desc, relevance_score: :asc) || []
   end
 

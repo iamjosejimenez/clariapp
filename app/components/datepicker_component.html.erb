@@ -1,9 +1,11 @@
 <div
   class="<%= container_classes %>"
-  data-controller="<%= controller_name %>"
-  data-<%= controller_name %>-url-value="<%= url %>"
-  data-<%= controller_name %>-max-date-value="<%= max_date_iso8601 %>"
-  <% if selected_date_iso8601.present? %> data-<%= controller_name %>-selected-date-value="<%= selected_date_iso8601 %>"<% end %>>
+  <% if attach_controller? %>
+    data-controller="<%= controller_name %>"
+    data-<%= controller_name %>-url-value="<%= url %>"
+    <% if max_date_iso8601.present? %> data-<%= controller_name %>-max-date-value="<%= max_date_iso8601 %>"<% end %>
+    <% if selected_date_iso8601.present? %> data-<%= controller_name %>-selected-date-value="<%= selected_date_iso8601 %>"<% end %>
+  <% end %>>
   <label for="<%= id %>" class="block text-sm font-medium text-slate-700 mb-1"><%= label %></label>
   <div class="relative">
     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -15,10 +17,10 @@
       datepicker
       datepicker-autohide
       datepicker-format="<%= datepicker_format %>"
-      datepicker-max-date="<%= max_date_for_picker %>"
+      <% if max_date_for_picker.present? %> datepicker-max-date="<%= max_date_for_picker %>"<% end %>
       id="<%= id %>"
       type="text"
-      data-<%= controller_name %>-target="<%= target_name %>"
+      <% if controller_name.present? && target_name.present? %> data-<%= controller_name %>-target="<%= target_name %>"<% end %>
       value="<%= value %>"
       class="<%= input_classes %>"
       placeholder="<%= placeholder %>"
