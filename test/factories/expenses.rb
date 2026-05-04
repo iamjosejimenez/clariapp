@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: expenses
-# Database name: primary
 #
-#  id               :integer          not null, primary key
+#  id               :bigint           not null, primary key
 #  amount           :decimal(, )
 #  description      :string
 #  created_at       :datetime         not null
@@ -18,7 +17,7 @@
 #
 # Foreign Keys
 #
-#  budget_period_id  (budget_period_id => budget_periods.id)
+#  fk_rails_...  (budget_period_id => budget_periods.id)
 #
 FactoryBot.define do
   factory :expense do

@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: goals
-# Database name: primary
 #
-#  id                  :integer          not null, primary key
+#  id                  :bigint           not null, primary key
 #  deposited           :text             not null
 #  external_created_at :string
 #  name                :string
@@ -25,7 +24,7 @@
 #
 # Foreign Keys
 #
-#  external_account_id  (external_account_id => external_accounts.id)
+#  fk_rails_...  (external_account_id => external_accounts.id)
 #
 
 require "test_helper"

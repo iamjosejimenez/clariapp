@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: budget_periods
-# Database name: primary
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  period     :integer
 #  total      :decimal(10, 2)   default(0.0), not null
 #  year       :integer
@@ -20,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  budget_id  (budget_id => budgets.id)
+#  fk_rails_...  (budget_id => budgets.id)
 #
 
 class BudgetPeriod < ApplicationRecord

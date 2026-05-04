@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: news_summaries
-# Database name: primary
 #
-#  id              :integer          not null, primary key
+#  id              :bigint           not null, primary key
 #  generation_date :date             not null
 #  sources_count   :integer          default(0), not null
 #  summary         :text             not null

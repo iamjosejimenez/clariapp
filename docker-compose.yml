@@ -5,15 +5,3 @@ services:
       - "10000:10000"
     env_file:
       - .env.production
-  db:
-    image: postgres:17.5
-    ports:
-      - "5431:5432"
-    environment:
-      POSTGRES_USER: claria
-      POSTGRES_PASSWORD: claria
-      POSTGRES_DB: claria_development
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data
-volumes:
-  postgresql_data:

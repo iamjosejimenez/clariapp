@@ -52,6 +52,7 @@ jobs:
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           APP_RELEASE: ${{ steps.target.outputs.sha }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           kamal deploy --skip-push --version "${{ steps.target.outputs.sha }}"
           kamal prune all -v
