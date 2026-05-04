@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: budgets
-# Database name: primary
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  amount      :decimal(10, 2)
 #  category    :string
 #  description :text
@@ -20,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id)
 #
 
 require "test_helper"

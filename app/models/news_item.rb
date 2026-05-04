@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: news_items
-# Database name: primary
 #
-#  id              :integer          not null, primary key
+#  id              :bigint           not null, primary key
 #  category        :string           not null
 #  published_at    :datetime         not null
 #  relevance_score :decimal(, )      not null
@@ -22,7 +21,7 @@
 #
 # Foreign Keys
 #
-#  news_summary_id  (news_summary_id => news_summaries.id)
+#  fk_rails_...  (news_summary_id => news_summaries.id)
 #
 
 class NewsItem < ApplicationRecord

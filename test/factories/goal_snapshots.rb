@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: goal_snapshots
-# Database name: primary
 #
-#  id                :integer          not null, primary key
+#  id                :bigint           not null, primary key
 #  deposited         :text             not null
 #  extraction_date   :date             not null
 #  nav               :text             not null
@@ -22,7 +21,7 @@
 #
 # Foreign Keys
 #
-#  goal_id  (goal_id => goals.id)
+#  fk_rails_...  (goal_id => goals.id)
 #
 FactoryBot.define do
   factory :goal_snapshot do

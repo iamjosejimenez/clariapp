@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: external_accounts
-# Database name: primary
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
 #  access_token :string
 #  provider     :string
 #  status       :string
@@ -22,7 +21,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id)
 #
 require "test_helper"
 

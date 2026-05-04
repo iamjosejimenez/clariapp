@@ -3,9 +3,8 @@
 # == Schema Information
 #
 # Table name: sessions
-# Database name: primary
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  ip_address :string
 #  user_agent :string
 #  created_at :datetime         not null
@@ -18,7 +17,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id)
 #
 
 class Session < ApplicationRecord
