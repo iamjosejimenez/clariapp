@@ -34,7 +34,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_08_000003) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_budgets_on_user_id"
-    t.check_constraint "category::text = ANY (ARRAY['mensual'::character varying, 'quincenal'::character varying, 'semanal'::character varying]::text[])", name: "budget_category_check"
+    t.check_constraint "category::text = ANY (ARRAY['mensual'::character varying::text, 'quincenal'::character varying::text, 'semanal'::character varying::text])", name: "budget_category_check"
   end
 
   create_table "expenses", force: :cascade do |t|

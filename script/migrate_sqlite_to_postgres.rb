@@ -8,12 +8,16 @@
 #
 # Pre-requisitos:
 #   - Schema de Postgres ya creado (correr `bin/rails db:migrate` apuntando al destino antes).
-#   - DATABASE_URL apuntando al destino Postgres.
+#   - DATABASE_URL apuntando al destino Postgres (preferentemente la URL directa, no pooled).
 #   - Argumento: ruta absoluta al archivo SQLite origen.
 #
 # Comportamiento:
-#   - Trunca cada tabla destino antes de insertar (idempotente).
-#   - Migra tablas de la app en orden de FK. NO migra solid_queue/cache/cable.
+#   - Trunca cada tabla destino antes de insertar (idempotente). Las tablas se vacían
+#     en orden inverso de FK para no requerir CASCADE.
+#   - Inserta en orden directo de FK (padres antes que hijos), respetando los constraints
+#     existentes sin necesidad de desactivarlos. Esto funciona con un rol estándar de Neon
+#     (neondb_owner) que no es superuser real.
+#   - Toda la carga corre dentro de una transacción única — si algo falla, rollback total.
 #   - Resetea las secuencias auto-increment de Postgres al MAX(id).
 #   - Verifica conteos de filas al final.
 
@@ -67,40 +71,47 @@ puts "Origen: #{SQLITE_PATH}"
 puts "Destino: #{URI.parse(DATABASE_URL).host}/#{URI.parse(DATABASE_URL).path[1..]}"
 puts
 
-pg.exec("SET session_replication_role = 'replica'") # desactiva FK temporalmente
+pg.exec("BEGIN")
 
-TABLES.each do |table|
-  rows = sqlite.execute("SELECT * FROM #{table}")
-  puts "[#{table}] #{rows.size} filas en SQLite"
+begin
+  # Truncar todas las tablas en una sola sentencia evita necesitar CASCADE:
+  # Postgres acepta truncar tablas con FKs entre sí si todas se truncan a la vez.
+  pg.exec("TRUNCATE TABLE #{TABLES.join(', ')} RESTART IDENTITY")
 
-  pg.exec("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE")
-  next if rows.empty?
+  TABLES.each do |table|
+    rows = sqlite.execute("SELECT * FROM #{table}")
+    puts "[#{table}] #{rows.size} filas en SQLite"
 
-  columns = rows.first.keys.reject { |k| k.is_a?(Integer) }
-  placeholders = columns.each_with_index.map { |_, i| "$#{i + 1}" }.join(", ")
-  sql = "INSERT INTO #{table} (#{columns.join(', ')}) VALUES (#{placeholders})"
+    next if rows.empty?
 
-  pg.prepare("ins_#{table}", sql)
-  rows.each do |row|
-    values = columns.map { |c| row[c] }
-    pg.exec_prepared("ins_#{table}", values)
+    columns = rows.first.keys.reject { |k| k.is_a?(Integer) }
+    placeholders = columns.each_with_index.map { |_, i| "$#{i + 1}" }.join(", ")
+    sql = "INSERT INTO #{table} (#{columns.join(', ')}) VALUES (#{placeholders})"
+
+    pg.prepare("ins_#{table}", sql)
+    rows.each do |row|
+      values = columns.map { |c| row[c] }
+      pg.exec_prepared("ins_#{table}", values)
+    end
+
+    if columns.include?("id")
+      pg.exec(<<~SQL)
+        SELECT setval(
+          pg_get_serial_sequence('#{table}', 'id'),
+          COALESCE((SELECT MAX(id) FROM #{table}), 1),
+          (SELECT MAX(id) IS NOT NULL FROM #{table})
+        )
+      SQL
+    end
+
+    puts "  -> OK"
   end
 
-  # Resetea la secuencia al MAX(id) si existe columna id
-  if columns.include?("id")
-    pg.exec(<<~SQL)
-      SELECT setval(
-        pg_get_serial_sequence('#{table}', 'id'),
-        COALESCE((SELECT MAX(id) FROM #{table}), 1),
-        (SELECT MAX(id) IS NOT NULL FROM #{table})
-      )
-    SQL
-  end
-
-  puts "  -> OK"
+  pg.exec("COMMIT")
+rescue => e
+  pg.exec("ROLLBACK")
+  raise e
 end
-
-pg.exec("SET session_replication_role = 'origin'")
 
 puts "\nVerificación de conteos:"
 TABLES.each do |table|
