@@ -29,8 +29,6 @@ gemfile do
   gem "pg"
 end
 
-require "uri"
-
 SQLITE_PATH = ARGV[0] or abort("Uso: ruby #{$0} <ruta_sqlite>")
 abort("No existe el archivo: #{SQLITE_PATH}") unless File.exist?(SQLITE_PATH)
 
@@ -50,25 +48,15 @@ TABLES = %w[
   news_items
 ].freeze
 
-def connect_pg(url)
-  uri = URI.parse(url)
-  PG.connect(
-    host: uri.host,
-    port: uri.port || 5432,
-    user: uri.user,
-    password: uri.password,
-    dbname: uri.path[1..],
-    sslmode: URI.decode_www_form(uri.query.to_s).to_h["sslmode"] || "prefer"
-  )
-end
-
 sqlite = SQLite3::Database.new(SQLITE_PATH)
 sqlite.results_as_hash = true
 
-pg = connect_pg(DATABASE_URL)
+# PG.connect acepta una URL conninfo y preserva todos sus parámetros
+# (sslmode, channel_binding, options, connect_timeout, etc.).
+pg = PG.connect(DATABASE_URL)
 
 puts "Origen: #{SQLITE_PATH}"
-puts "Destino: #{URI.parse(DATABASE_URL).host}/#{URI.parse(DATABASE_URL).path[1..]}"
+puts "Destino: #{pg.host}/#{pg.db}"
 puts
 
 pg.exec("BEGIN")
