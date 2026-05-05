@@ -228,7 +228,7 @@ GEM
     nokogiri (1.19.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    openai (0.60.0)
+    openai (0.61.0)
       base64
       cgi
       connection_pool
@@ -445,7 +445,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   jbuilder
   kamal
-  openai (~> 0.60.0)
+  openai (~> 0.61.0)
   pagy (~> 43.5)
   pg (~> 1.6)
   propshaft
