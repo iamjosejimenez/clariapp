@@ -21,3 +21,6 @@ application.register("news-datepicker", NewsDatepickerController)
 
 import SnapshotModalController from "./snapshot_modal_controller"
 application.register("snapshot-modal", SnapshotModalController)
+
+import TodayNewsLinkController from "./today_news_link_controller"
+application.register("today-news-link", TodayNewsLinkController)
