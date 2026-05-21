@@ -86,6 +86,6 @@ gem "rubocop-rails", require: false
 gem "rubocop-performance", require: false
 
 gem "shakapacker", "10.0.0"
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
 gem "sentry-ruby"
 gem "sentry-rails"
