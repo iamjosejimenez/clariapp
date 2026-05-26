@@ -1,10 +1,8 @@
 name: Deploy Production
 
 on:
-  # Nightly cron paused during the Neon -> self-hosted Postgres migration.
-  # Re-enable once the new accessories are live and verified.
-  # schedule:
-  #   - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
