@@ -17,4 +17,8 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  database: <%= ENV.fetch("DB_NAME", "claria_production") %>
+  username: <%= ENV.fetch("DB_USER", "claria") %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV.fetch("DB_HOST", "claria-db") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
