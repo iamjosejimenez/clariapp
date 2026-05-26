@@ -22,13 +22,12 @@ dow="$(date -u +%u)"   # 1..7, where 7 = Sunday
 filename="claria_${timestamp}.dump"
 local_path="${backup_dir}/${filename}"
 
-# Sundays get tagged as weekly so the S3 lifecycle policy keeps them longer.
+# Sundays go under weekly/, the rest under daily/. The S3 lifecycle policy
+# expires each prefix on its own schedule (no per-object tagging needed).
 if [ "$dow" = "7" ]; then
   s3_prefix="weekly"
-  s3_tagging="kind=weekly"
 else
   s3_prefix="daily"
-  s3_tagging="kind=daily"
 fi
 
 s3_key="${s3_prefix}/${filename}"
@@ -50,7 +49,6 @@ size="$(stat -c %s "$local_path")"
 echo "[$(date -u +%FT%TZ)] dump complete (${size} bytes), uploading to s3://${S3_BUCKET}/${s3_key}"
 
 aws s3 cp "$local_path" "s3://${S3_BUCKET}/${s3_key}" \
-  --tagging "$s3_tagging" \
   --only-show-errors
 
 echo "[$(date -u +%FT%TZ)] uploaded ${s3_key}"
