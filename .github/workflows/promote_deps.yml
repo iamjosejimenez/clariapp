@@ -52,11 +52,29 @@ jobs:
         run: |
           DEPS_SHA="$(git rev-parse origin/deps)"
           echo "Checking CI status for deps @ $DEPS_SHA"
-          # Latest CI workflow run for that exact commit.
-          CONCLUSION="$(gh run list --workflow=CI --branch deps \
+
+          CI_RUN="$(gh run list --workflow=ci.yml --branch deps --limit 100 \
             --json headSha,conclusion,status \
-            --jq "[.[] | select(.headSha==\"$DEPS_SHA\")][0].conclusion")"
+            --jq 'map(select(.headSha=="'"$DEPS_SHA"'")) | .[0]')"
+
+          echo "CI run payload: ${CI_RUN:-<none>}"
+
+          if [ -z "$CI_RUN" ] || [ "$CI_RUN" = "null" ]; then
+            echo "::error::No CI workflow run found for deps @ $DEPS_SHA. Aborting promotion."
+            exit 1
+          fi
+
+          CONCLUSION="$(printf '%s' "$CI_RUN" | jq -r '.conclusion // empty')"
+          STATUS="$(printf '%s' "$CI_RUN" | jq -r '.status // empty')"
+
+          echo "CI status on deps: ${STATUS:-<none>}"
           echo "CI conclusion on deps: ${CONCLUSION:-<none>}"
+
+          if [ "$STATUS" != "completed" ]; then
+            echo "::error::CI run for deps is not completed (status='${STATUS:-none}'). Aborting promotion."
+            exit 1
+          fi
+
           if [ "$CONCLUSION" != "success" ]; then
             echo "::error::CI on deps is not green (got '${CONCLUSION:-none}'). Aborting promotion."
             exit 1
