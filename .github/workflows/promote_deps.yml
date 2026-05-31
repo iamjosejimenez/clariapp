@@ -53,14 +53,22 @@ jobs:
           DEPS_SHA="$(git rev-parse origin/deps)"
           echo "Checking CI status for deps @ $DEPS_SHA"
 
-          CI_RUN="$(gh run list --workflow=ci.yml --branch deps --limit 100 \
-            --json headSha,conclusion,status \
-            --jq 'map(select(.headSha=="'"$DEPS_SHA"'")) | .[0]')"
+          CI_RUN=""
+          for attempt in $(seq 1 8); do
+            CI_RUN="$(gh run list --workflow=CI --branch deps --limit 200 \
+              --json headSha,conclusion,status \
+              --jq 'map(select(.headSha=="'"$DEPS_SHA"'")) | .[0]')"
+            if [ -n "$CI_RUN" ] && [ "$CI_RUN" != "null" ]; then
+              break
+            fi
+            echo "No CI workflow run found yet for deps @$DEPS_SHA (attempt $attempt/8). Retrying in 10s..."
+            sleep 10
+          done
 
           echo "CI run payload: ${CI_RUN:-<none>}"
 
           if [ -z "$CI_RUN" ] || [ "$CI_RUN" = "null" ]; then
-            echo "::error::No CI workflow run found for deps @ $DEPS_SHA. Aborting promotion."
+            echo "::error::No CI workflow run found for deps @ $DEPS_SHA after retries. Aborting promotion."
             exit 1
           fi
 
