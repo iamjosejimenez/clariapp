@@ -1,6 +1,16 @@
 name: Deploy Production
 
 on:
+  # Auto-deploy after CI passes on main. workflow_run fires only when the whole
+  # CI workflow (lint + scan_ruby + build_image) concludes, and we gate on
+  # success below, so a failed build never deploys. main only receives your own
+  # code (Dependabot targets `deps`) plus the batched promote_deps merges, so
+  # every push to main is an intentional, deployable change.
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # Daily fallback and manual trigger.
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -11,15 +21,38 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-24.04-arm
+    # For workflow_run only deploy when CI succeeded. For schedule/dispatch the
+    # event has no workflow_run context, so this is always true.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+      - name: Resolve target ref
+        id: target
+        run: |
+          if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "ref=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ steps.target.outputs.ref }}
+          fetch-depth: 0
 
-      - name: Capture target image version
-        id: target
+      - name: Validate workflow_run commit is still current main
+        if: ${{ github.event_name == 'workflow_run' }}
+        run: |
+          git fetch origin main --depth=1
+          CURRENT_MAIN_SHA=$(git rev-parse origin/main)
+          if [ "$CURRENT_MAIN_SHA" != "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "::error::The workflow_run head_sha '${{ github.event.workflow_run.head_sha }}' is not the current tip of origin/main ('$CURRENT_MAIN_SHA'). Aborting deploy."
+            exit 1
+          fi
+
+      - name: Resolve deploy SHA
+        id: deploy_sha
         run: |
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
@@ -51,10 +84,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          APP_RELEASE: ${{ steps.target.outputs.sha }}
+          APP_RELEASE: ${{ steps.deploy_sha.outputs.sha }}
           GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
           GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
           GOOGLE_OAUTH_REDIRECT_URI: ${{ secrets.GOOGLE_OAUTH_REDIRECT_URI }}
         run: |
-          kamal deploy --skip-push --version "${{ steps.target.outputs.sha }}"
+          kamal deploy --skip-push --version "${{ steps.deploy_sha.outputs.sha }}"
           kamal prune all -v
