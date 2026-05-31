@@ -42,7 +42,6 @@ jobs:
           bin/erb_lint --lint-all .
 
   build_image:
-    if: github.event_name == 'push'
     runs-on: ubuntu-24.04-arm
 
     steps:
@@ -63,12 +62,20 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
           chmod 600 claria-production.pem
+      # En push (a main/deps) publica la imagen al registry. En pull_request
+      # solo construye para validar que las dependencias compilan, sin publicar
+      # la imagen final. La cache registry-backed (build-cache-arm64) se lee y
+      # escribe en ambos casos, calentando el build posterior.
       - name: Build image
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
           APP_RELEASE: ${{ github.sha }}
         run: |
-          kamal build push
+          if [ "${{ github.event_name }}" = "push" ]; then
+            kamal build push
+          else
+            kamal build
+          fi
 
   # test:
   #   runs-on: ubuntu-latest
