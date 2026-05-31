@@ -11,6 +11,10 @@ class SyncBankEmailsService
     @api = api
   end
 
+  # Returns true on success, false when the account's Gmail authorization failed
+  # (token revoked/expired). The failure is swallowed so the hourly job keeps
+  # going with other accounts, but the boolean lets callers (e.g. the manual
+  # sync action) surface the error to the user.
   def call
     api.fetch_bank_message_ids.each do |message_id|
       # Cheap pre-check to skip the extra fetch_message API call in the common
@@ -21,8 +25,10 @@ class SyncBankEmailsService
       data = api.fetch_message(message_id)
       import_message(message_id, data)
     end
+    true
   rescue GmailApi::AuthError => e
     Rails.logger.warn("SyncBankEmailsService skipped account #{gmail_account.id}: #{e.message}")
+    false
   end
 
   private

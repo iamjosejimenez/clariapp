@@ -31,11 +31,14 @@ class GmailSessionsController < ApplicationController
   end
 
   def sync
-    if current_user.gmail_account.present?
-      SyncBankEmailsService.new(current_user.gmail_account).call
+    gmail_account = current_user.gmail_account
+    return redirect_to gmail_sessions_new_path, alert: "Primero conecta tu cuenta de Gmail." if gmail_account.blank?
+
+    if SyncBankEmailsService.new(gmail_account).call
       redirect_to bank_emails_path, notice: "Sincronización completada."
     else
-      redirect_to gmail_sessions_new_path, alert: "Primero conecta tu cuenta de Gmail."
+      redirect_to gmail_sessions_new_path,
+        alert: "No se pudo sincronizar: la conexión con Gmail expiró o fue revocada. Vuelve a conectar tu cuenta."
     end
   end
 
