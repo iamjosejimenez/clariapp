@@ -27,6 +27,6 @@ class SyncBankEmailsService
   attr_reader :gmail_account, :api
 
   def already_imported?(message_id)
-    BankEmail.exists?(gmail_message_id: message_id)
+    gmail_account.bank_emails.exists?(gmail_message_id: message_id)
   end
 end

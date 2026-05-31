@@ -19,8 +19,8 @@
 #
 # Indexes
 #
-#  index_bank_emails_on_gmail_account_id  (gmail_account_id)
-#  index_bank_emails_on_gmail_message_id  (gmail_message_id) UNIQUE
+#  index_bank_emails_on_gmail_account_id                       (gmail_account_id)
+#  index_bank_emails_on_gmail_account_id_and_gmail_message_id  (gmail_account_id,gmail_message_id) UNIQUE
 #
 # Foreign Keys
 #

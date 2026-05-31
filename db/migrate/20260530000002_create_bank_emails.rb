@@ -16,6 +16,8 @@ class CreateBankEmails < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :bank_emails, :gmail_message_id, unique: true
+    # Uniqueness is per Gmail account: the same Gmail message id only makes sense
+    # within a single connected mailbox.
+    add_index :bank_emails, [ :gmail_account_id, :gmail_message_id ], unique: true
   end
 end

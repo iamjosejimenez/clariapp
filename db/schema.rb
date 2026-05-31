@@ -26,8 +26,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_000002) do
     t.string "snippet"
     t.string "subject"
     t.datetime "updated_at", null: false
+    t.index ["gmail_account_id", "gmail_message_id"], name: "index_bank_emails_on_gmail_account_id_and_gmail_message_id", unique: true
     t.index ["gmail_account_id"], name: "index_bank_emails_on_gmail_account_id"
-    t.index ["gmail_message_id"], name: "index_bank_emails_on_gmail_message_id", unique: true
   end
 
   create_table "budget_periods", force: :cascade do |t|
@@ -85,6 +85,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_000002) do
     t.datetime "token_expires_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["email"], name: "index_gmail_accounts_on_email", unique: true
     t.index ["user_id"], name: "index_gmail_accounts_on_user_id", unique: true
   end
 

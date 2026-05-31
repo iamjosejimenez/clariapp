@@ -17,6 +17,7 @@
 #
 # Indexes
 #
+#  index_gmail_accounts_on_email    (email) UNIQUE
 #  index_gmail_accounts_on_user_id  (user_id) UNIQUE
 #
 # Foreign Keys

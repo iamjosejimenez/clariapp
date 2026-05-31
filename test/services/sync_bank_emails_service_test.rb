@@ -53,9 +53,23 @@ class SyncBankEmailsServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "no duplica un message_id ya importado por otra cuenta" do
-    create(:bank_email, gmail_message_id: "msg-1")
+  test "deduplica por cuenta: importa un message_id que ya existe en OTRA cuenta" do
+    # La deduplicación es por cuenta, no global: dos casillas distintas pueden
+    # tener el mismo gmail_message_id y cada usuario debe ver sus propios correos.
+    other_account = create(:gmail_account)
+    create(:bank_email, gmail_account: other_account, gmail_message_id: "msg-1")
+
     account = create(:gmail_account)
+    api = FakeGmailApi.new("msg-1" => message_payload("msg-1"))
+
+    assert_difference -> { account.bank_emails.count }, 1 do
+      SyncBankEmailsService.new(account, api: api).call
+    end
+  end
+
+  test "no re-importa un message_id que ya existe en la MISMA cuenta" do
+    account = create(:gmail_account)
+    create(:bank_email, gmail_account: account, gmail_message_id: "msg-1")
     api = FakeGmailApi.new("msg-1" => message_payload("msg-1"))
 
     assert_no_difference -> { BankEmail.count } do

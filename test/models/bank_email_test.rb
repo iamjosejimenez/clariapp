@@ -19,8 +19,8 @@
 #
 # Indexes
 #
-#  index_bank_emails_on_gmail_account_id  (gmail_account_id)
-#  index_bank_emails_on_gmail_message_id  (gmail_message_id) UNIQUE
+#  index_bank_emails_on_gmail_account_id                       (gmail_account_id)
+#  index_bank_emails_on_gmail_account_id_and_gmail_message_id  (gmail_account_id,gmail_message_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -35,11 +35,17 @@ class BankEmailTest < ActiveSupport::TestCase
     assert bank_email.errors.of_kind?(:gmail_message_id, :blank)
   end
 
-  test "gmail_message_id es único" do
+  test "gmail_message_id es único dentro de la misma cuenta" do
     existing = create(:bank_email)
-    duplicate = build(:bank_email, gmail_message_id: existing.gmail_message_id)
+    duplicate = build(:bank_email, gmail_account: existing.gmail_account, gmail_message_id: existing.gmail_message_id)
     assert_not duplicate.valid?
     assert duplicate.errors.of_kind?(:gmail_message_id, :taken)
+  end
+
+  test "el mismo gmail_message_id se permite en cuentas distintas" do
+    existing = create(:bank_email)
+    other = build(:bank_email, gmail_message_id: existing.gmail_message_id)
+    assert other.valid?
   end
 
   test "scope unprocessed solo devuelve correos sin procesar" do

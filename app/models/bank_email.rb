@@ -19,8 +19,8 @@
 #
 # Indexes
 #
-#  index_bank_emails_on_gmail_account_id  (gmail_account_id)
-#  index_bank_emails_on_gmail_message_id  (gmail_message_id) UNIQUE
+#  index_bank_emails_on_gmail_account_id                       (gmail_account_id)
+#  index_bank_emails_on_gmail_account_id_and_gmail_message_id  (gmail_account_id,gmail_message_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -29,7 +29,7 @@
 class BankEmail < ApplicationRecord
   belongs_to :gmail_account
 
-  validates :gmail_message_id, presence: true, uniqueness: true
+  validates :gmail_message_id, presence: true, uniqueness: { scope: :gmail_account_id }
 
   scope :unprocessed, -> { where(processed_at: nil) }
 end

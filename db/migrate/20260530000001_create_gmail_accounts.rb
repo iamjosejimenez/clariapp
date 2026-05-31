@@ -13,5 +13,8 @@ class CreateGmailAccounts < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
+
+    # A Gmail mailbox can be linked to a single user.
+    add_index :gmail_accounts, :email, unique: true
   end
 end

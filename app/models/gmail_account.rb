@@ -17,6 +17,7 @@
 #
 # Indexes
 #
+#  index_gmail_accounts_on_email    (email) UNIQUE
 #  index_gmail_accounts_on_user_id  (user_id) UNIQUE
 #
 # Foreign Keys
@@ -35,6 +36,9 @@ class GmailAccount < ApplicationRecord
   enum :status, STATUSES.index_by(&:to_sym), prefix: true
 
   validates :email, presence: true
+  validates :email, uniqueness: {
+    message: "ya está vinculado a otro usuario"
+  }
   validates :user_id, uniqueness: true
 
   def token_expired?
