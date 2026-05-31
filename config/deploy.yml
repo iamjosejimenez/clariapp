@@ -1,8 +1,9 @@
 # Name of your application. Used to uniquely configure containers.
 service: claria
 
-# Name of the container image.
-image: ghcr.io/iamjosejimenez/claria
+# Name of the container image. The registry server (ghcr.io) is prepended by
+# Kamal from `registry.server`, so it must not be repeated here.
+image: iamjosejimenez/claria
 
 servers:
   web:
@@ -108,9 +109,14 @@ asset_path: /rails/public/assets
 # Configure the image builder.
 builder:
   arch: arm64
+  # Cache against a dedicated tag in the registry instead of GHA. The GHA cache
+  # is capped at 10 GB and gets evicted between runs (so most builds missed it),
+  # and mode=max exported every intermediate layer on each run (~16s overhead).
+  # Registry-backed cache lives next to the pushed image, with no 10 GB cap.
   cache:
-    type: gha
-    options: mode=max,scope=claria-build-arm64,version=2
+    type: registry
+    image: iamjosejimenez/claria:build-cache-arm64
+    options: mode=max
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
