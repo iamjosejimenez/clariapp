@@ -1,5 +1,31 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gmail_accounts
+#
+#  id               :bigint           not null, primary key
+#  access_token     :text
+#  email            :string           not null
+#  last_synced_at   :datetime
+#  refresh_token    :text
+#  status           :string           default("active"), not null
+#  sync_status      :string           default("idle"), not null
+#  token_expires_at :datetime
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  last_history_id  :string
+#  user_id          :bigint           not null
+#
+# Indexes
+#
+#  index_gmail_accounts_on_email    (email) UNIQUE
+#  index_gmail_accounts_on_user_id  (user_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
+#
 require "test_helper"
 
 class GmailAccountTest < ActiveSupport::TestCase

@@ -7,8 +7,10 @@
 #  id               :bigint           not null, primary key
 #  access_token     :text
 #  email            :string           not null
+#  last_synced_at   :datetime
 #  refresh_token    :text
 #  status           :string           default("active"), not null
+#  sync_status      :string           default("idle"), not null
 #  token_expires_at :datetime
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

@@ -34,12 +34,12 @@ class GmailSessionsController < ApplicationController
     gmail_account = current_user.gmail_account
     return redirect_to gmail_sessions_new_path, alert: "Primero conecta tu cuenta de Gmail." if gmail_account.blank?
 
-    if SyncBankEmailsService.new(gmail_account).call
-      redirect_to bank_emails_path, notice: "Sincronización completada."
-    else
-      redirect_to gmail_sessions_new_path,
-        alert: "No se pudo sincronizar: la conexión con Gmail expiró o fue revocada. Vuelve a conectar tu cuenta."
-    end
+    # Flip to "syncing" synchronously so the card reflects it on the redirect,
+    # then let the background job do the actual work and broadcast the result.
+    gmail_account.update!(sync_status: "syncing")
+    SyncBankEmailsJob.perform_later(gmail_account)
+
+    redirect_to gmail_sessions_new_path, notice: "Sincronización en curso. Te avisaremos cuando termine."
   end
 
   def destroy

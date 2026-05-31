@@ -3,23 +3,13 @@
 require "test_helper"
 
 class FetchBankEmailsJobTest < ActiveJob::TestCase
-  test "ejecuta el sync para cada cuenta activa y omite las que están en error" do
+  test "encola un sync job por cada cuenta activa y omite las que están en error" do
     active = create(:gmail_account, status: "active")
     create(:gmail_account, status: "error")
 
-    synced_ids = []
-    original_new = SyncBankEmailsService.method(:new)
-    SyncBankEmailsService.singleton_class.send(:define_method, :new) do |account, **_kwargs|
-      synced_ids << account.id
-      Struct.new(:noop) { def call; end }.new
+    assert_enqueued_with(job: SyncBankEmailsJob, args: [ active ]) do
+      FetchBankEmailsJob.new.perform
     end
-
-    FetchBankEmailsJob.new.perform
-
-    assert_equal [ active.id ], synced_ids
-  ensure
-    SyncBankEmailsService.singleton_class.send(:define_method, :new) do |*args, **kwargs, &block|
-      original_new.call(*args, **kwargs, &block)
-    end
+    assert_enqueued_jobs 1, only: SyncBankEmailsJob
   end
 end

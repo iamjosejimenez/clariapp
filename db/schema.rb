@@ -80,8 +80,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_000002) do
     t.datetime "created_at", null: false
     t.string "email", null: false
     t.string "last_history_id"
+    t.datetime "last_synced_at"
     t.text "refresh_token"
     t.string "status", default: "active", null: false
+    t.string "sync_status", default: "idle", null: false
     t.datetime "token_expires_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
