@@ -50,6 +50,19 @@
         <% table.with_column(name: "Resumen", classes: "text-left text-gray-500") do |bank_email| %>
           <span class="line-clamp-1"><%= bank_email.snippet %></span>
         <% end %>
+
+        <% table.with_column(name: "Acciones", classes: "text-right") do |bank_email| %>
+          <button
+            data-action="click->snapshot-modal#open"
+            data-url="<%= detail_bank_email_path(bank_email) %>"
+            class="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-violet-700 cursor-pointer"
+            title="Ver detalle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.641 0-8.573-3.007-9.964-7.178Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </button>
+        <% end %>
       <% end %>
     <% else %>
       <p class="text-gray-500">

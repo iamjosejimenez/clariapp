@@ -16,7 +16,11 @@ Rails.application.routes.draw do
   post "gmail_sessions/sync"
   delete "gmail_sessions", to: "gmail_sessions#destroy"
 
-  resources :bank_emails, only: [ :index ]
+  resources :bank_emails, only: [ :index ] do
+    member do
+      get :detail
+    end
+  end
   get "goals/show"
   get "dashboard/show"
 
