@@ -1,5 +1,3 @@
-# Codex Rules
-
 These rules apply to every question in this repository.
 
 1. Always provide the direct answer first, then include only the minimum necessary implementation details.
@@ -9,3 +7,4 @@ These rules apply to every question in this repository.
 5. All user-facing text in the solution must be written in Spanish.
 6. All atributes of a model should be mandatory unless business rules allow for optional values.
 7. All the buttons with text or icons of the application must have the cursor: pointer directive.
+8. Always create pull requests using the `gh` CLI (`gh pr create`), never the web UI or GitHub Desktop.

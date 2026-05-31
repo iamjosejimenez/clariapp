@@ -39,7 +39,7 @@ class GmailSessionsController < ApplicationController
     gmail_account.update!(sync_status: "syncing")
     SyncBankEmailsJob.perform_later(gmail_account)
 
-    redirect_to gmail_sessions_new_path, notice: "Sincronización en curso. Te avisaremos cuando termine."
+    redirect_to bank_emails_path, notice: "Sincronización en curso. Te avisaremos cuando termine."
   end
 
   def destroy
