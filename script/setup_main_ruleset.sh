@@ -56,7 +56,6 @@ gh api -X PUT "repos/$REPO/rulesets/$RULESET_ID" --input - <<JSON
         "require_code_owner_review": false,
         "require_last_push_approval": false,
         "required_review_thread_resolution": false,
-        "automatic_copilot_code_review_enabled": false,
         "allowed_merge_methods": ["merge", "squash", "rebase"]
       }
     },
