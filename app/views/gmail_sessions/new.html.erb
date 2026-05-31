@@ -34,10 +34,17 @@
       <% end %>
 
       <div class="mt-6 flex items-center gap-3">
-        <%= button_to "Sincronizar ahora", gmail_sessions_sync_path, method: :post,
-              class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
+        <% if @gmail_account.status_error? %>
+          <%# Reconectar reutiliza la gmail_account existente (build_account hace
+              find_or_initialize), así que se conservan los bank_emails ya importados. %>
+          <%= button_to "Reconectar Gmail", gmail_sessions_authorize_path, method: :post,
+                class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
+        <% else %>
+          <%= button_to "Sincronizar ahora", gmail_sessions_sync_path, method: :post,
+                class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
+        <% end %>
         <%= button_to "Desconectar", gmail_sessions_path, method: :delete,
-              data: { turbo_confirm: "¿Seguro que quieres desconectar tu cuenta de Gmail?" },
+              data: { turbo_confirm: "¿Seguro que quieres desconectar tu cuenta de Gmail? Se eliminarán también los correos importados." },
               class: "text-sm font-medium text-gray-500 hover:text-red-600 cursor-pointer" %>
       </div>
     </div>
