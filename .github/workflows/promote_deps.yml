@@ -1,7 +1,7 @@
 name: Promote deps to main
 
-# Mantiene `deps` al día con `main` (rebase + force-push) y abre una PR
-# `deps -> main` con auto-merge. Cuando CI pase en la PR, GitHub la fusiona
+# Mantiene `deps` al día con `main` (merge --no-ff, sin force-push) y abre una
+# PR `deps -> main` con auto-merge. Cuando CI pase en la PR, GitHub la fusiona
 # sola, lo que dispara el deploy de producción.
 #
 # Corre como la promote GitHub App, único actor non-admin que puede saltarse
@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
-      - name: Rebase deps onto main and force-push
+      - name: Merge main into deps to keep it up to date
         run: |
           git config user.name "promote-bot"
           git config user.email "promote-bot@users.noreply.github.com"
@@ -52,13 +52,15 @@ jobs:
             exit 0
           fi
 
-          if ! git rebase origin/main; then
-            echo "::error::Conflicto al rebasar deps sobre main. Resuelve manualmente."
-            git rebase --abort || true
+          # Trae los últimos cambios de main a deps sin reescribir historial
+          # (sin force-push). Si main no aporta nada nuevo, el merge es no-op.
+          if ! git merge --no-ff origin/main -m "chore: merge main into deps"; then
+            echo "::error::Conflicto al fusionar main en deps. Resuelve manualmente."
+            git merge --abort || true
             exit 1
           fi
 
-          git push --force-with-lease origin deps
+          git push origin deps
 
       - name: Open PR deps -> main with auto-merge
         if: env.nothing_to_promote != 'true'
