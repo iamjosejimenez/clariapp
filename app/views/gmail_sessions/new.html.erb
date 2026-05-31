@@ -38,6 +38,7 @@
           <%# Reconectar reutiliza la gmail_account existente (build_account hace
               find_or_initialize), así que se conservan los bank_emails ya importados. %>
           <%= button_to "Reconectar Gmail", gmail_sessions_authorize_path, method: :post,
+                data: { turbo: false },
                 class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
         <% else %>
           <%= button_to "Sincronizar ahora", gmail_sessions_sync_path, method: :post,
@@ -55,6 +56,7 @@
     </p>
 
     <%= button_to "Conectar Gmail", gmail_sessions_authorize_path, method: :post,
+          data: { turbo: false },
           class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
   <% end %>
 </div>
