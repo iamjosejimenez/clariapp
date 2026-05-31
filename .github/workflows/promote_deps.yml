@@ -1,24 +1,25 @@
 name: Promote deps to main
 
-# Batches the dependency updates accumulated on `deps` into `main` in a single
-# merge, which then triggers CI and (on green) the production deploy. This is
-# the ONLY automated writer to `main` besides you, so it must run as the
-# promote GitHub App, which is the sole non-admin bypass actor on the `main`
-# ruleset.
+# Mantiene `deps` al día con `main` (rebase + force-push) y abre una PR
+# `deps -> main` con auto-merge. Cuando CI pase en la PR, GitHub la fusiona
+# sola, lo que dispara el deploy de producción.
 #
-# Required repo secrets:
-#   PROMOTE_APP_ID           - the promote GitHub App's App ID
-#   PROMOTE_APP_PRIVATE_KEY  - the promote GitHub App's private key (PEM)
+# Corre como la promote GitHub App, único actor non-admin que puede saltarse
+# el ruleset de `main`.
+#
+# Secrets requeridos:
+#   PROMOTE_APP_ID           - App ID de la promote GitHub App
+#   PROMOTE_APP_PRIVATE_KEY  - clave privada (PEM) de la promote GitHub App
 
 on:
   schedule:
-    # Weekly, Mondays 12:00 UTC. Adjust to taste.
+    # Semanal, lunes 12:00 UTC. Ajusta a gusto.
     - cron: '0 12 * * 1'
   workflow_dispatch:
 
 permissions:
-  contents: read
-  actions: read
+  contents: write
+  pull-requests: write
 
 jobs:
   promote:
@@ -34,72 +35,44 @@ jobs:
       - name: Checkout full history
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: deps
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
-      - name: Abort if deps == main (nothing to promote)
-        run: |
-          git fetch origin deps main
-          if [ "$(git rev-list --count origin/main..origin/deps)" = "0" ]; then
-            echo "deps has no commits beyond main; nothing to promote."
-            exit 0
-          fi
-
-      - name: Require green CI on deps
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          DEPS_SHA="$(git rev-parse origin/deps)"
-          echo "Checking CI status for deps @ $DEPS_SHA"
-
-          CI_RUN=""
-          for attempt in $(seq 1 8); do
-            CI_RUN="$(gh run list --workflow=CI --branch deps --limit 200 \
-              --json headSha,conclusion,status \
-              --jq 'map(select(.headSha=="'"$DEPS_SHA"'")) | .[0]')"
-            if [ -n "$CI_RUN" ] && [ "$CI_RUN" != "null" ]; then
-              break
-            fi
-            echo "No CI workflow run found yet for deps @$DEPS_SHA (attempt $attempt/8). Retrying in 10s..."
-            sleep 10
-          done
-
-          echo "CI run payload: ${CI_RUN:-<none>}"
-
-          if [ -z "$CI_RUN" ] || [ "$CI_RUN" = "null" ]; then
-            echo "::error::No CI workflow run found for deps @ $DEPS_SHA after retries. Aborting promotion."
-            exit 1
-          fi
-
-          CONCLUSION="$(printf '%s' "$CI_RUN" | jq -r '.conclusion // empty')"
-          STATUS="$(printf '%s' "$CI_RUN" | jq -r '.status // empty')"
-
-          echo "CI status on deps: ${STATUS:-<none>}"
-          echo "CI conclusion on deps: ${CONCLUSION:-<none>}"
-
-          if [ "$STATUS" != "completed" ]; then
-            echo "::error::CI run for deps is not completed (status='${STATUS:-none}'). Aborting promotion."
-            exit 1
-          fi
-
-          if [ "$CONCLUSION" != "success" ]; then
-            echo "::error::CI on deps is not green (got '${CONCLUSION:-none}'). Aborting promotion."
-            exit 1
-          fi
-
-      - name: Merge deps into main (abort on conflict)
+      - name: Rebase deps onto main and force-push
         run: |
           git config user.name "promote-bot"
           git config user.email "promote-bot@users.noreply.github.com"
-          git checkout main
-          # --no-ff keeps a clear promotion merge commit. Any conflict makes
-          # `git merge` exit non-zero, failing the job without auto-resolving.
-          if ! git merge --no-ff origin/deps -m "chore(deps): promote deps to main"; then
-            echo "::error::Conflict merging deps into main. Resolve manually."
-            git merge --abort || true
+          git fetch origin deps main
+          git checkout deps
+
+          if [ "$(git rev-list --count origin/main..origin/deps)" = "0" ]; then
+            echo "deps no tiene commits por encima de main; nada que promover."
+            echo "nothing_to_promote=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          if ! git rebase origin/main; then
+            echo "::error::Conflicto al rebasar deps sobre main. Resuelve manualmente."
+            git rebase --abort || true
             exit 1
           fi
 
-      - name: Push to main
-        run: git push origin main
+          git push --force-with-lease origin deps
+
+      - name: Open PR deps -> main with auto-merge
+        if: env.nothing_to_promote != 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          PR_URL="$(gh pr list --base main --head deps --state open --json url --jq '.[0].url')"
+          if [ -z "$PR_URL" ]; then
+            PR_URL="$(gh pr create \
+              --base main \
+              --head deps \
+              --title "chore(deps): promote deps to main" \
+              --body "Promoción automática de las actualizaciones de dependencias acumuladas en \`deps\`.")"
+          fi
+          echo "PR: $PR_URL"
+
+          gh pr merge "$PR_URL" --auto --merge
