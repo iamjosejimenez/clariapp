@@ -80,6 +80,10 @@ gem "good_migrations"
 gem "simple_form", "~> 5.4"
 gem "openai", "~> 0.64.0"
 
+# Gmail API client + OAuth for importing bank notification emails
+gem "google-apis-gmail_v1"
+gem "googleauth"
+
 gem "erb_lint", require: false
 gem "rubocop", require: false
 gem "rubocop-rails", require: false

@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :external_accounts, dependent: :destroy
   has_many :expenses, through: :budgets
   has_many :goals, through: :external_accounts
+  has_one :gmail_account, dependent: :destroy
+  has_many :bank_emails, through: :gmail_account
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

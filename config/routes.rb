@@ -9,6 +9,14 @@ Rails.application.routes.draw do
 
   get "fintual_sessions/new"
   post "fintual_sessions/create"
+
+  get "gmail_sessions/new"
+  post "gmail_sessions/authorize"
+  get "gmail_sessions/callback"
+  post "gmail_sessions/sync"
+  delete "gmail_sessions", to: "gmail_sessions#destroy"
+
+  resources :bank_emails, only: [ :index ]
   get "goals/show"
   get "dashboard/show"
 

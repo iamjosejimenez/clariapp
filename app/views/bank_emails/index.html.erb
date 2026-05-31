@@ -1,0 +1,45 @@
+<%= render ModuleHeaderComponent.new(
+    title: "Correos del banco",
+    description: "Correos de notificación importados desde tu cuenta de Gmail. Aquí se almacenan tal como llegan, listos para procesar."
+  ) do %>
+
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[calc(100vh-16rem)]">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-semibold text-slate-900">Correos recibidos</h2>
+      <% if current_user.gmail_account.blank? %>
+        <%= link_to gmail_sessions_new_path, class: "inline-flex items-center px-3 py-1.5 bg-violet-700 text-white text-sm font-medium rounded-xl shadow hover:bg-violet-800" do %>
+          Conectar Gmail
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if @bank_emails.any? %>
+      <%= render TableComponent.new(rows: @bank_emails) do |table| %>
+        <% table.with_column(name: "Recibido", classes: "text-left text-gray-700") do |bank_email| %>
+          <%= chile_datetime(bank_email.received_at) %>
+        <% end %>
+
+        <% table.with_column(name: "Remitente", classes: "text-left text-gray-700") do |bank_email| %>
+          <%= bank_email.from_address %>
+        <% end %>
+
+        <% table.with_column(name: "Asunto", classes: "text-left font-medium text-gray-900") do |bank_email| %>
+          <%= bank_email.subject %>
+        <% end %>
+
+        <% table.with_column(name: "Resumen", classes: "text-left text-gray-500") do |bank_email| %>
+          <span class="line-clamp-1"><%= bank_email.snippet %></span>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500">
+        Aún no hay correos importados.
+        <% if current_user.gmail_account.present? %>
+          Se importarán automáticamente desde <%= current_user.gmail_account.email %>.
+        <% else %>
+          Conecta tu cuenta de Gmail para empezar.
+        <% end %>
+      </p>
+    <% end %>
+  </section>
+<% end %>
