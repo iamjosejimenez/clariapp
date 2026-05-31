@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
-  # pull_request:
+    branches: [ main, deps ]
+  pull_request:
+    branches: [ main, deps ]
 
 jobs:
   scan_ruby:
@@ -41,6 +42,7 @@ jobs:
           bin/erb_lint --lint-all .
 
   build_image:
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04-arm
 
     steps:

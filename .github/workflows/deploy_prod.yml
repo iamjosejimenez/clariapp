@@ -26,23 +26,35 @@ jobs:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Resolve target SHA
+      - name: Resolve target ref
         id: target
-        env:
-          # On workflow_run, deploy the exact commit CI built. Otherwise the
-          # tip of main.
-          WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          if [ -n "$WORKFLOW_RUN_SHA" ]; then
-            echo "sha=$WORKFLOW_RUN_SHA" >> "$GITHUB_OUTPUT"
+          if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "ref=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
           else
-            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+            echo "ref=main" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          ref: ${{ steps.target.outputs.sha }}
+          ref: ${{ steps.target.outputs.ref }}
+          fetch-depth: 0
+
+      - name: Validate workflow_run commit is still current main
+        if: ${{ github.event_name == 'workflow_run' }}
+        run: |
+          git fetch origin main --depth=1
+          CURRENT_MAIN_SHA=$(git rev-parse origin/main)
+          if [ "$CURRENT_MAIN_SHA" != "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "::error::The workflow_run head_sha '${{ github.event.workflow_run.head_sha }}' is not the current tip of origin/main ('$CURRENT_MAIN_SHA'). Aborting deploy."
+            exit 1
+          fi
+
+      - name: Resolve deploy SHA
+        id: deploy_sha
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -72,10 +84,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          APP_RELEASE: ${{ steps.target.outputs.sha }}
+          APP_RELEASE: ${{ steps.deploy_sha.outputs.sha }}
           GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
           GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
           GOOGLE_OAUTH_REDIRECT_URI: ${{ secrets.GOOGLE_OAUTH_REDIRECT_URI }}
         run: |
-          kamal deploy --skip-push --version "${{ steps.target.outputs.sha }}"
+          kamal deploy --skip-push --version "${{ steps.deploy_sha.outputs.sha }}"
           kamal prune all -v
