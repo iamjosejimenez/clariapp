@@ -52,6 +52,9 @@ jobs:
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           APP_RELEASE: ${{ steps.target.outputs.sha }}
+          GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          GOOGLE_OAUTH_REDIRECT_URI: ${{ secrets.GOOGLE_OAUTH_REDIRECT_URI }}
         run: |
           kamal deploy --skip-push --version "${{ steps.target.outputs.sha }}"
           kamal prune all -v
