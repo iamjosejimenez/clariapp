@@ -42,14 +42,6 @@
           <%= bank_email.from_address %>
         <% end %>
 
-        <% table.with_column(name: "Asunto", classes: "text-left font-medium text-gray-900") do |bank_email| %>
-          <%= bank_email.subject %>
-        <% end %>
-
-        <% table.with_column(name: "Resumen", classes: "text-left text-gray-500") do |bank_email| %>
-          <span class="line-clamp-1"><%= bank_email.snippet %></span>
-        <% end %>
-
         <% table.with_column(name: "Acciones", classes: "text-right") do |bank_email| %>
           <button
             data-action="click->snapshot-modal#open"
