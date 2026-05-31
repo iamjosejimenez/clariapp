@@ -132,9 +132,17 @@ class GmailApi
     nil
   end
 
+  # Returns the part's body as valid UTF-8 text.
+  #
+  # The Google client base64url-decodes MessagePartBody#data automatically when
+  # it parses an API response (the `data` property is mapped with base64 => true),
+  # so what reaches us are the real bytes — but tagged ASCII-8BIT. Reinterpreting
+  # them as UTF-8 with force_encoding is correct for Gmail bodies (HTML/plain text
+  # are UTF-8); scrub drops any stray invalid byte so we always persist valid
+  # UTF-8 instead of raising downstream.
   def decode(body)
     return nil if body.nil? || body.data.blank?
 
-    body.data.force_encoding("UTF-8")
+    body.data.dup.force_encoding("UTF-8").scrub
   end
 end

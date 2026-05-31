@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "base64"
 
 class GmailApiTest < ActiveSupport::TestCase
   # Fake Gmail service whose live calls raise a 401 the way the real client does
@@ -17,11 +18,42 @@ class GmailApiTest < ActiveSupport::TestCase
     end
   end
 
-  def build_api(gmail_account)
+  # Fake service returning a single prebuilt message, regardless of arguments.
+  class StubGmailService
+    attr_accessor :authorization
+
+    def initialize(message)
+      @message = message
+    end
+
+    def get_user_message(*)
+      @message
+    end
+  end
+
+  def build_api(gmail_account, service: UnauthorizedGmailService.new)
     api = GmailApi.new(gmail_account)
-    # Inject a service whose live API calls raise a 401, bypassing real auth.
-    api.instance_variable_set(:@service, UnauthorizedGmailService.new)
+    # Inject the service directly, bypassing real auth/token refresh.
+    api.instance_variable_set(:@service, service)
     api
+  end
+
+  # Builds a Gmail message via from_json so #data is base64url-decoded exactly
+  # like a real API response (raw bytes tagged ASCII-8BIT).
+  def message_with_html_body(html, mime_type: "text/html")
+    json = {
+      "id" => "msg-1",
+      "internalDate" => "1700000000000",
+      "payload" => {
+        "mimeType" => mime_type,
+        "headers" => [
+          { "name" => "From", "value" => "contacto@bci.cl" },
+          { "name" => "Subject", "value" => "Aviso de cargo" }
+        ],
+        "body" => { "data" => Base64.urlsafe_encode64(html), "size" => html.bytesize }
+      }
+    }.to_json
+    Google::Apis::GmailV1::Message.from_json(json)
   end
 
   test "traduce un 401 de list_user_messages a AuthError y marca la cuenta en error" do
@@ -42,5 +74,18 @@ class GmailApiTest < ActiveSupport::TestCase
       api.fetch_message("msg-1")
     end
     assert account.reload.status_error?
+  end
+
+  test "fetch_message devuelve el HTML decodificado en UTF-8, no el base64" do
+    account = create(:gmail_account, token_expires_at: 1.hour.from_now)
+    html = "<html><body>Compra por $10.000 áéí</body></html>"
+    api = build_api(account, service: StubGmailService.new(message_with_html_body(html)))
+
+    data = api.fetch_message("msg-1")
+
+    assert_equal html, data[:raw_body]
+    assert_equal Encoding::UTF_8, data[:raw_body].encoding
+    assert data[:raw_body].valid_encoding?
+    assert_equal "contacto@bci.cl", data[:from_address]
   end
 end
