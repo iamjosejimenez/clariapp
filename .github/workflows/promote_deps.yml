@@ -1,0 +1,80 @@
+name: Promote deps to main
+
+# Mantiene `deps` al día con `main` (merge --no-ff, sin force-push) y abre una
+# PR `deps -> main` con auto-merge. Cuando CI pase en la PR, GitHub la fusiona
+# sola, lo que dispara el deploy de producción.
+#
+# Corre como la promote GitHub App, único actor non-admin que puede saltarse
+# el ruleset de `main`.
+#
+# Secrets requeridos:
+#   PROMOTE_APP_ID           - App ID de la promote GitHub App
+#   PROMOTE_APP_PRIVATE_KEY  - clave privada (PEM) de la promote GitHub App
+
+on:
+  schedule:
+    # Semanal, lunes 12:00 UTC. Ajusta a gusto.
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.PROMOTE_APP_ID }}
+          private-key: ${{ secrets.PROMOTE_APP_PRIVATE_KEY }}
+
+      - name: Checkout full history
+        uses: actions/checkout@v6
+        with:
+          ref: deps
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Merge main into deps to keep it up to date
+        run: |
+          git config user.name "promote-bot"
+          git config user.email "promote-bot@users.noreply.github.com"
+          git fetch origin deps main
+          git checkout deps
+
+          if [ "$(git rev-list --count origin/main..origin/deps)" = "0" ]; then
+            echo "deps no tiene commits por encima de main; nada que promover."
+            echo "nothing_to_promote=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          # Trae los últimos cambios de main a deps sin reescribir historial
+          # (sin force-push). Si main no aporta nada nuevo, el merge es no-op.
+          if ! git merge --no-ff origin/main -m "chore: merge main into deps"; then
+            echo "::error::Conflicto al fusionar main en deps. Resuelve manualmente."
+            git merge --abort || true
+            exit 1
+          fi
+
+          git push origin deps
+
+      - name: Open PR deps -> main with auto-merge
+        if: env.nothing_to_promote != 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          PR_URL="$(gh pr list --base main --head deps --state open --json url --jq '.[0].url')"
+          if [ -z "$PR_URL" ]; then
+            PR_URL="$(gh pr create \
+              --base main \
+              --head deps \
+              --title "chore(deps): promote deps to main" \
+              --body "Promoción automática de las actualizaciones de dependencias acumuladas en \`deps\`.")"
+          fi
+          echo "PR: $PR_URL"
+
+          gh pr merge "$PR_URL" --auto --merge

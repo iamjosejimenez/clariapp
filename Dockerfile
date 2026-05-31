@@ -58,15 +58,10 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Remove any existing assets if present
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:clobber
-
-# Build assets via Webpack
-# RUN npm run build
-
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY.
+# (assets:clobber is unnecessary here: the build stage starts from a clean
+# checkout with no precompiled assets, so there is nothing to clobber.)
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
 
 RUN rm -rf node_modules
 
@@ -74,14 +69,20 @@ RUN rm -rf node_modules
 # Final stage for app image
 FROM base
 
-# Copy built artifacts: gems, application
+# Create the runtime user in a stable layer BEFORE the COPYs that change on
+# every commit. This way the user-creation layer stays cached across builds.
+RUN groupadd --system --gid 1000 rails && \
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
+
+# Copy built artifacts: gems, application. Keep the bulk of the image root-owned to
+# preserve least privilege for code and dependencies at runtime.
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+# Only make runtime-writable paths owned by the rails user.
+RUN mkdir -p /rails/db /rails/log /rails/storage /rails/tmp && \
+    chown -R 1000:1000 /rails/db /rails/log /rails/storage /rails/tmp
+
 USER 1000:1000
 
 # Entrypoint prepares the database.
