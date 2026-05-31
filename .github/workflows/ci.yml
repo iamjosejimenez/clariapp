@@ -1,8 +1,11 @@
 name: CI
 
 on:
+  # `deps` se valida vía la PR deps->main (pull_request). Dispararlo también en
+  # push duplicaría los checks (push + pull_request) en cada cambio de deps, por
+  # eso push solo cubre main (validación post-merge + deploy).
   push:
-    branches: [ main, deps ]
+    branches: [ main ]
   pull_request:
     branches: [ main, deps ]
 
