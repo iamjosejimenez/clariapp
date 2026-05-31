@@ -27,11 +27,13 @@ class GmailApi
     ids = []
     page_token = nil
 
-    loop do
-      result = service.list_user_messages("me", q: query, page_token: page_token)
-      ids.concat(Array(result.messages).map(&:id))
-      page_token = result.next_page_token
-      break if page_token.blank?
+    with_auth_error_handling do
+      loop do
+        result = service.list_user_messages("me", q: query, page_token: page_token)
+        ids.concat(Array(result.messages).map(&:id))
+        page_token = result.next_page_token
+        break if page_token.blank?
+      end
     end
 
     ids
@@ -39,7 +41,9 @@ class GmailApi
 
   # Fetches one message and returns a plain hash of the fields we persist.
   def fetch_message(message_id)
-    message = service.get_user_message("me", message_id, format: "full")
+    message = with_auth_error_handling do
+      service.get_user_message("me", message_id, format: "full")
+    end
     headers = header_map(message.payload)
 
     {
@@ -67,15 +71,26 @@ class GmailApi
   # Builds a Signet client from the stored credentials and refreshes the access
   # token if it has expired, persisting the new token back to the account.
   def authorization
-    client = GoogleOauthConfig.build_client(
-      access_token: gmail_account.access_token,
-      refresh_token: gmail_account.refresh_token,
-      expires_at: gmail_account.token_expires_at
-    )
+    with_auth_error_handling do
+      client = GoogleOauthConfig.build_client(
+        access_token: gmail_account.access_token,
+        refresh_token: gmail_account.refresh_token,
+        expires_at: gmail_account.token_expires_at
+      )
 
-    refresh_access_token!(client) if gmail_account.token_expired?
-    client
-  rescue Signet::AuthorizationError => e
+      refresh_access_token!(client) if gmail_account.token_expired?
+      client
+    end
+  end
+
+  # Translates Gmail/OAuth authorization failures into a single AuthError and
+  # marks the account so FetchBankEmailsJob can skip it and keep going. Catches
+  # both Signet::AuthorizationError (raised while refreshing the token) and
+  # Google::Apis::AuthorizationError (a 401 returned by a live API call, e.g.
+  # when the user revoked access before token_expires_at).
+  def with_auth_error_handling
+    yield
+  rescue Signet::AuthorizationError, Google::Apis::AuthorizationError => e
     gmail_account.update(status: "error")
     raise AuthError, "Gmail authorization failed: #{e.message}"
   end

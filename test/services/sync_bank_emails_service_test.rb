@@ -62,4 +62,16 @@ class SyncBankEmailsServiceTest < ActiveSupport::TestCase
       SyncBankEmailsService.new(account, api: api).call
     end
   end
+
+  test "no propaga AuthError: la deja pasar para que el job siga con otras cuentas" do
+    account = create(:gmail_account)
+    api = Object.new
+    def api.fetch_bank_message_ids(bank: "bci")
+      raise GmailApi::AuthError, "Gmail authorization failed"
+    end
+
+    assert_nothing_raised do
+      SyncBankEmailsService.new(account, api: api).call
+    end
+  end
 end
