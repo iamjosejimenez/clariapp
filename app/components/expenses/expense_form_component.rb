@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Expenses::ExpenseFormComponent < ViewComponent::Base
+class Expenses::ExpenseFormComponent < ApplicationComponent
   include SimpleForm::ActionViewExtensions::FormHelper
 
   def initialize(budget:, budget_period:, expense:)

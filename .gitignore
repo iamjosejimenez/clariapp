@@ -39,9 +39,15 @@
 /node_modules
 claria-production.pem
 
+# Database dumps must never be committed (may contain user data).
+*.dump
+*.sql.gz
+/db/backups/
+
 /public/packs
 /public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+TAGS

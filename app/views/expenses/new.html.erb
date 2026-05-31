@@ -1,6 +1,8 @@
-<div class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow space-y-6 mt-6">
-  <h1 class="text-2xl font-semibold text-gray-800">Agregar gasto a "<%= @budget.name %>"</h1>
-  <div>
+<%= render ModuleHeaderComponent.new(
+  title: "Agregar gasto",
+  description: "Registra un nuevo gasto en \"#{@budget.name}\" para el periodo #{@budget_period.human_label}."
+) do %>
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[calc(100vh-16rem)]">
     <%= render Expenses::ExpenseFormComponent.new(budget: @budget, budget_period: @budget_period, expense: @expense) %>
-  </div>
-</div>
+  </section>
+<% end %>

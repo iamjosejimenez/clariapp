@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeFieldsToDecimalInGoalSnapshots < ActiveRecord::Migration[8.0]
   def change
     change_column :goal_snapshots, :nav, :decimal, precision: 15, scale: 2

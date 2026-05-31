@@ -1,4 +1,6 @@
-class TableComponent < ViewComponent::Base
+# frozen_string_literal: true
+
+class TableComponent < ApplicationComponent
   include Pagy::Method
 
   renders_many :columns, ->(name:, classes:, &block) do
@@ -13,12 +15,12 @@ class TableComponent < ViewComponent::Base
   end
 
   def before_render
-    pager, records = pagy(:countish, @rows, limit: 10)
+    pager, records = pagy(:countless, @rows, limit: 10)
     @pager = pager
     @records = records
   end
 
-  class ColumnComponent < ViewComponent::Base
+  class ColumnComponent < ApplicationComponent
     attr_reader :name
     attr_reader :classes
     attr_reader :block

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUserToFintualUser < ActiveRecord::Migration[8.0]
   def change
     add_reference :fintual_users, :user, null: true, foreign_key: true

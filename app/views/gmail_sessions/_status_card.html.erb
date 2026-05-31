@@ -1,0 +1,80 @@
+<%# Rendered standalone and re-broadcast over Turbo Streams on sync_status changes.
+    The dom_id must match GmailAccount#broadcast_sync_status. %>
+<div id="<%= dom_id(gmail_account, :status_card) %>" class="bg-white shadow rounded-xl border border-gray-200 p-6">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-sm font-medium text-gray-600">Conexión</span>
+    <% if gmail_account.status_active? %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Activo</span>
+    <% else %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Con error</span>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-sm font-medium text-gray-600">Sincronización</span>
+    <% case gmail_account.sync_status %>
+    <% when "syncing" %>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+        <svg class="animate-spin h-3 w-3 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        Sincronizando…
+      </span>
+    <% when "synced" %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Al día</span>
+    <% when "failed" %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Falló</span>
+    <% else %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Sin sincronizar</span>
+    <% end %>
+  </div>
+
+  <dl class="space-y-3 text-sm">
+    <div class="flex justify-between">
+      <dt class="text-gray-500">Cuenta conectada</dt>
+      <dd class="text-gray-900 font-medium"><%= gmail_account.email %></dd>
+    </div>
+    <div class="flex justify-between">
+      <dt class="text-gray-500">Conectada desde</dt>
+      <dd class="text-gray-900"><%= chile_datetime(gmail_account.created_at) %></dd>
+    </div>
+    <div class="flex justify-between">
+      <dt class="text-gray-500">Última sincronización</dt>
+      <dd class="text-gray-900">
+        <%= gmail_account.last_synced_at ? chile_datetime(gmail_account.last_synced_at) : "—" %>
+      </dd>
+    </div>
+    <div class="flex justify-between">
+      <dt class="text-gray-500">Correos importados</dt>
+      <dd class="text-gray-900"><%= gmail_account.bank_emails.count %></dd>
+    </div>
+  </dl>
+
+  <% if gmail_account.status_error? %>
+    <p class="mt-4 text-sm text-red-600">
+      La conexión expiró o fue revocada. Vuelve a conectar tu cuenta para reanudar la sincronización.
+    </p>
+  <% elsif gmail_account.sync_failed? %>
+    <p class="mt-4 text-sm text-red-600">
+      La última sincronización no pudo completarse. Intenta nuevamente en unos minutos.
+    </p>
+  <% end %>
+
+  <div class="mt-6 flex items-center gap-3">
+    <% if gmail_account.status_error? %>
+      <%# Reconectar reutiliza la gmail_account existente (build_account hace
+          find_or_initialize), así que se conservan los bank_emails ya importados. %>
+      <%= button_to "Reconectar Gmail", gmail_sessions_authorize_path, method: :post,
+            data: { turbo: false },
+            class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
+    <% else %>
+      <%= button_to "Sincronizar ahora", gmail_sessions_sync_path, method: :post,
+            disabled: gmail_account.sync_syncing?,
+            class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" %>
+    <% end %>
+    <%= button_to "Desconectar", gmail_sessions_path, method: :delete,
+          data: { turbo_confirm: "¿Seguro que quieres desconectar tu cuenta de Gmail? Se eliminarán también los correos importados." },
+          class: "text-sm font-medium text-gray-500 hover:text-red-600 cursor-pointer" %>
+  </div>
+</div>

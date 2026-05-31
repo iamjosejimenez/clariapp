@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -21,14 +23,16 @@ class User < ApplicationRecord
   has_many :external_accounts, dependent: :destroy
   has_many :expenses, through: :budgets
   has_many :goals, through: :external_accounts
+  has_one :gmail_account, dependent: :destroy
+  has_many :bank_emails, through: :gmail_account
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   def fintual_user
-    external_accounts.find_by(provider: "fintual")
+    @fintual_user ||= external_accounts.find_by(provider: "fintual")
   end
 
   def tests_user
-    external_accounts.find_by(provider: "tests")
+    @tests_user ||= external_accounts.find_by(provider: "tests")
   end
 end

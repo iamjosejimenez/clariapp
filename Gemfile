@@ -1,7 +1,8 @@
 source "https://rubygems.org"
+ruby "3.4.9"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.2"
+gem "rails", "~> 8.1.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -16,7 +17,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-gem "bcrypt", "~> 3.1.21"
+gem "bcrypt", "~> 3.1.22"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -71,16 +72,24 @@ end
 gem "http"
 gem "view_component"
 gem "httparty"
-gem "pagy", "~> 43.2"
+gem "pagy", "~> 43.5"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.6"
 gem "good_migrations"
 
 gem "simple_form", "~> 5.4"
+gem "openai", "~> 0.64.0"
+
+# Gmail API client + OAuth for importing bank notification emails
+gem "google-apis-gmail_v1"
+gem "googleauth"
 
 gem "erb_lint", require: false
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
 gem "rubocop-performance", require: false
 
-gem "shakapacker", "= 9.5"
+gem "shakapacker", "10.1.0"
+gem "image_processing", "~> 2.0"
+gem "sentry-ruby"
+gem "sentry-rails"

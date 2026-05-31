@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: goal_snapshots
 #
 #  id                :bigint           not null, primary key
 #  deposited         :text             not null
-#  extraction_date   :date
+#  extraction_date   :date             not null
 #  nav               :text             not null
 #  not_net_deposited :text             not null
 #  profit            :text             not null
 #  withdrawn         :text             not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  goal_id           :bigint           not null
+#  goal_id           :integer          not null
 #
 # Indexes
 #
@@ -24,6 +26,8 @@
 
 class GoalSnapshot < ApplicationRecord
   belongs_to :goal
+
+  validates :extraction_date, presence: true
 
   encrypts :nav, :profit, :not_net_deposited, :deposited, :withdrawn
 end

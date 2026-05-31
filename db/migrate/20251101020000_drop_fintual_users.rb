@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropFintualUsers < ActiveRecord::Migration[8.1]
   def up
     remove_foreign_key :fintual_users, :users if foreign_key_exists?(:fintual_users, :users)

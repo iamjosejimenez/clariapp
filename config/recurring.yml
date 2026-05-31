@@ -1,4 +1,7 @@
 production:
-  fetch_goal_snapshots_job:
-    class: FetchGoalSnapshotsJob
+  fetch_daily_news_job:
+    class: FetchDailyNewsJob
+    schedule: every day at 03:00am
+  fetch_bank_emails_job:
+    class: FetchBankEmailsJob
     schedule: every hour

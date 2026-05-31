@@ -1,0 +1,3 @@
+# Daily Postgres backup at 03:17 UTC.
+# Stdout/stderr are appended to /var/log/backup/backup.log (followed by crond -L).
+17 3 * * * /usr/local/bin/backup.sh >> /var/log/backup/backup.log 2>&1

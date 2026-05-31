@@ -1,32 +1,48 @@
-<div class="max-w-3xl mx-auto mt-10 px-4">
-  <h1 class="text-2xl font-bold mb-6 block"><%= @goal.name %></h1>
+<%= render ModuleHeaderComponent.new(
+  title: @goal.name,
+  description: "Revisa el historial de snapshots de esta inversion y consulta el detalle de cada registro."
+) do %>
+  <section class="bg-white shadow-sm rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[calc(100vh-16rem)]">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4 sm:gap-3 mb-6">
+      <h2 class="text-2xl font-semibold text-slate-900">Resumen actual</h2>
+      <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+        Disponible: <%= clp(@snapshot.nav) %>
+      </p>
+      <p class="inline-flex items-center px-3 py-1 bg-white border border-violet-700 text-violet-700 text-sm font-medium rounded-xl whitespace-nowrap">
+        Ganancia: <%= clp(@snapshot.profit) %>
+      </p>
+    </div>
 
-  <div class="bg-white shadow rounded p-2 flex place-content-around">
-    <p class="text-lg">
-      <strong>Disponible:</strong>
-      <span><%= clp(@snapshot.nav) %></span>
-    </p>
+    <div id="snapshots-table">
+      <%= render TableComponent.new(rows: @snapshots) do |table| %>
+        <% table.with_column(name: "Fecha", classes: "text-left text-gray-700") do |snapshot| %>
+          <%= chile_date(snapshot.created_at) %>
+        <% end %>
 
-    <p class="text-lg">
-      <strong>Ganancia:</strong>
-      <%= clp(@snapshot.profit) %>
-    </p>
-  </div>
-  <div id="snapshots-table" class="mt-6">
-    <%= render TableComponent.new(rows: @snapshots) do |table| %>
-      <% table.with_column(name: "Fecha", classes: "text-left text-gray-700") do |snapshot| %>
-        <%= snapshot.created_at.strftime("%d/%m/%Y") %>
+        <% table.with_column(name: "Total", classes: "text-left text-green-600") do |snapshot| %>
+          <%= clp(snapshot.nav.to_i) %>
+        <% end %>
+
+        <% table.with_column(name: "Ganancia", classes: "text-left") do |snapshot| %>
+          <span class="<%= snapshot.profit.to_i < 0 ? "text-red-600" : "text-green-600" %>">
+            <%= clp(snapshot.profit.to_i) %>
+          </span>
+        <% end %>
+
+        <% table.with_column(name: "Acciones", classes: "text-center w-8") do |snapshot| %>
+          <div class="flex items-center justify-center">
+            <button
+              data-action="click->snapshot-modal#open"
+              data-url="<%= snapshot_detail_goal_path(@goal, snapshot_id: snapshot.id) %>"
+              class="inline-flex items-center justify-center rounded-full text-violet-700 hover:bg-violet-100 hover:text-violet-900 transition-colors duration-200 cursor-pointer"
+              data-tippy-content="Ver detalles del snapshot">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 6.05 6.05a7.5 7.5 0 0 0 10.6 10.6Z" />
+              </svg>
+            </button>
+          </div>
+        <% end %>
       <% end %>
-
-      <% table.with_column(name: "Total", classes: "text-left text-green-600") do |snapshot| %>
-        $<%= number_with_delimiter(snapshot.nav.to_i, delimiter: ".") %>
-      <% end %>
-
-      <% table.with_column(name: "Ganancia", classes: "text-left") do |snapshot| %>
-        <span class="<%= snapshot.profit.to_i < 0 ? "text-red-600" : "text-green-600" %>">
-          $<%= number_with_delimiter(snapshot.profit.to_i, delimiter: ".") %>
-        </span>
-      <% end %>
-    <% end %>
-  </div>
-</div>
+    </div>
+  </section>
+<% end %>

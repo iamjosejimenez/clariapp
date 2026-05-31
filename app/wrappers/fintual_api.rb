@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FintualApi
   def initialize(external_account)
     @email = external_account.username

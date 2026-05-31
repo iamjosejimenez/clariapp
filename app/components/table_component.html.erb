@@ -1,6 +1,6 @@
-<div class="overflow-hidden bg-white shadow rounded-xl">
+<div class="overflow-hidden bg-white shadow rounded-xl border border-gray-200">
   <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-100">
+    <thead class="bg-white border-b border-gray-200">
       <tr>
         <% columns.each do |column| %>
           <th scope="col" class="px-4 py-3 text-xs font-medium text-gray-600 uppercase tracking-wider <%= column.classes %>">
@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       <% records.each do |row| %>
-        <tr>
+        <tr class="odd:bg-gray-100 even:bg-white">
           <% columns.each do |column| %>
             <%= column.call(row) %>
           <% end %>

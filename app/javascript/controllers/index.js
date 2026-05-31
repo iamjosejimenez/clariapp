@@ -10,5 +10,17 @@ application.register("currency", CurrencyController)
 import FlashController from "./flash_controller"
 application.register("flash", FlashController)
 
+import HistoryBackController from "./history_back_controller"
+application.register("history-back", HistoryBackController)
+
 import InvoicePreviewController from "./invoice_preview_controller"
 application.register("invoice-preview", InvoicePreviewController)
+
+import NewsDatepickerController from "./news_datepicker_controller"
+application.register("news-datepicker", NewsDatepickerController)
+
+import SnapshotModalController from "./snapshot_modal_controller"
+application.register("snapshot-modal", SnapshotModalController)
+
+import TodayNewsLinkController from "./today_news_link_controller"
+application.register("today-news-link", TodayNewsLinkController)

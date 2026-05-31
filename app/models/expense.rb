@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: expenses
@@ -7,7 +9,7 @@
 #  description      :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  budget_period_id :bigint           not null
+#  budget_period_id :integer          not null
 #
 # Indexes
 #

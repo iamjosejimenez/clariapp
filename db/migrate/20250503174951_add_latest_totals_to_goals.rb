@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLatestTotalsToGoals < ActiveRecord::Migration[8.0]
   def change
     add_column :goals, :nav, :decimal, precision: 15, scale: 2

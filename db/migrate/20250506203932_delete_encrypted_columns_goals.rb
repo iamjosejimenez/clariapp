@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeleteEncryptedColumnsGoals < ActiveRecord::Migration[8.0]
   def change
     rename_column :goal_snapshots, :nav_encrypted, :nav

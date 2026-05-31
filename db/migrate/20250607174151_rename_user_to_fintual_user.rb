@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameUserToFintualUser < ActiveRecord::Migration[8.0]
   def change
     # Rename the 'users' table to 'fintual_users'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateExternalAccounts < ActiveRecord::Migration[8.1]
   def change
     create_table :external_accounts do |t|

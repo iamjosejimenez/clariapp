@@ -1,0 +1,114 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Migra los datos de un archivo SQLite (storage/production.sqlite3) a Postgres (Neon).
+#
+# Uso:
+#   DATABASE_URL=postgresql://user:pass@host/db ruby script/migrate_sqlite_to_postgres.rb /tmp/storage/production.sqlite3
+#
+# Pre-requisitos:
+#   - Schema de Postgres ya creado (correr `bin/rails db:migrate` apuntando al destino antes).
+#   - DATABASE_URL apuntando al destino Postgres (preferentemente la URL directa, no pooled).
+#   - Argumento: ruta absoluta al archivo SQLite origen.
+#
+# Comportamiento:
+#   - Trunca cada tabla destino antes de insertar (idempotente). Las tablas se vacían
+#     en orden inverso de FK para no requerir CASCADE.
+#   - Inserta en orden directo de FK (padres antes que hijos), respetando los constraints
+#     existentes sin necesidad de desactivarlos. Esto funciona con un rol estándar de Neon
+#     (neondb_owner) que no es superuser real.
+#   - Toda la carga corre dentro de una transacción única — si algo falla, rollback total.
+#   - Resetea las secuencias auto-increment de Postgres al MAX(id).
+#   - Verifica conteos de filas al final.
+
+require "bundler/inline"
+
+gemfile do
+  source "https://rubygems.org"
+  gem "sqlite3"
+  gem "pg"
+end
+
+SQLITE_PATH = ARGV[0] or abort("Uso: ruby #{$0} <ruta_sqlite>")
+abort("No existe el archivo: #{SQLITE_PATH}") unless File.exist?(SQLITE_PATH)
+
+DATABASE_URL = ENV["DATABASE_URL"] or abort("Falta DATABASE_URL")
+
+# Orden de FK: padres antes que hijos.
+TABLES = %w[
+  users
+  sessions
+  external_accounts
+  goals
+  goal_snapshots
+  budgets
+  budget_periods
+  expenses
+  news_summaries
+  news_items
+].freeze
+
+sqlite = SQLite3::Database.new(SQLITE_PATH)
+sqlite.results_as_hash = true
+
+# PG.connect acepta una URL conninfo y preserva todos sus parámetros
+# (sslmode, channel_binding, options, connect_timeout, etc.).
+pg = PG.connect(DATABASE_URL)
+
+puts "Origen: #{SQLITE_PATH}"
+puts "Destino: #{pg.host}/#{pg.db}"
+puts
+
+pg.exec("BEGIN")
+
+begin
+  # Truncar todas las tablas en una sola sentencia evita necesitar CASCADE:
+  # Postgres acepta truncar tablas con FKs entre sí si todas se truncan a la vez.
+  pg.exec("TRUNCATE TABLE #{TABLES.join(', ')} RESTART IDENTITY")
+
+  TABLES.each do |table|
+    rows = sqlite.execute("SELECT * FROM #{table}")
+    puts "[#{table}] #{rows.size} filas en SQLite"
+
+    next if rows.empty?
+
+    columns = rows.first.keys.reject { |k| k.is_a?(Integer) }
+    placeholders = columns.each_with_index.map { |_, i| "$#{i + 1}" }.join(", ")
+    sql = "INSERT INTO #{table} (#{columns.join(', ')}) VALUES (#{placeholders})"
+
+    pg.prepare("ins_#{table}", sql)
+    rows.each do |row|
+      values = columns.map { |c| row[c] }
+      pg.exec_prepared("ins_#{table}", values)
+    end
+
+    if columns.include?("id")
+      pg.exec(<<~SQL)
+        SELECT setval(
+          pg_get_serial_sequence('#{table}', 'id'),
+          COALESCE((SELECT MAX(id) FROM #{table}), 1),
+          (SELECT MAX(id) IS NOT NULL FROM #{table})
+        )
+      SQL
+    end
+
+    puts "  -> OK"
+  end
+
+  pg.exec("COMMIT")
+rescue => e
+  pg.exec("ROLLBACK")
+  raise e
+end
+
+puts "\nVerificación de conteos:"
+TABLES.each do |table|
+  src = sqlite.execute("SELECT COUNT(*) FROM #{table}").first.values.first
+  dst = pg.exec("SELECT COUNT(*) FROM #{table}").first["count"].to_i
+  status = src == dst ? "OK" : "MISMATCH"
+  puts "  [#{status}] #{table}: SQLite=#{src} Postgres=#{dst}"
+end
+
+sqlite.close
+pg.close
+puts "\nMigración completada."

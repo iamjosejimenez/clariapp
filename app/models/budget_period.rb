@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: budget_periods
@@ -8,7 +10,7 @@
 #  year       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  budget_id  :bigint           not null
+#  budget_id  :integer          not null
 #
 # Indexes
 #
@@ -72,6 +74,7 @@ class BudgetPeriod < ApplicationRecord
   end
 
   def current?
-    year == Date.today.year && period == budget.current_period_number
+    today = Date.today
+    year == budget.current_year(today) && period == budget.current_period_number(today)
   end
 end
