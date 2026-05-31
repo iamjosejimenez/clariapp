@@ -1,20 +1,24 @@
 version: 2
 updates:
+# Dependabot opens its PRs against `deps`, not `main`. Updates accumulate on
+# `deps` (where you review/merge them one by one) and are promoted to `main`
+# in batch by the promote_deps workflow, so each dependency merge does NOT
+# trigger a production deploy on its own.
 - package-ecosystem: bundler
   directory: "/"
-  target-branch: main
+  target-branch: deps
   schedule:
     interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"
-  target-branch: main
+  target-branch: deps
   schedule:
     interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/"
-  target-branch: main
+  target-branch: deps
   schedule:
     interval: daily
   open-pull-requests-limit: 10

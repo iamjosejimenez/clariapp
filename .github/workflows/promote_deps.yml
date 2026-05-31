@@ -1,0 +1,78 @@
+name: Promote deps to main
+
+# Batches the dependency updates accumulated on `deps` into `main` in a single
+# merge, which then triggers CI and (on green) the production deploy. This is
+# the ONLY automated writer to `main` besides you, so it must run as the
+# promote GitHub App, which is the sole non-admin bypass actor on the `main`
+# ruleset.
+#
+# Required repo secrets:
+#   PROMOTE_APP_ID           - the promote GitHub App's App ID
+#   PROMOTE_APP_PRIVATE_KEY  - the promote GitHub App's private key (PEM)
+
+on:
+  schedule:
+    # Weekly, Mondays 12:00 UTC. Adjust to taste.
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.PROMOTE_APP_ID }}
+          private-key: ${{ secrets.PROMOTE_APP_PRIVATE_KEY }}
+
+      - name: Checkout full history
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Abort if deps == main (nothing to promote)
+        run: |
+          git fetch origin deps main
+          if [ "$(git rev-list --count origin/main..origin/deps)" = "0" ]; then
+            echo "deps has no commits beyond main; nothing to promote."
+            exit 0
+          fi
+
+      - name: Require green CI on deps
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          DEPS_SHA="$(git rev-parse origin/deps)"
+          echo "Checking CI status for deps @ $DEPS_SHA"
+          # Latest CI workflow run for that exact commit.
+          CONCLUSION="$(gh run list --workflow=CI --branch deps \
+            --json headSha,conclusion,status \
+            --jq "[.[] | select(.headSha==\"$DEPS_SHA\")][0].conclusion")"
+          echo "CI conclusion on deps: ${CONCLUSION:-<none>}"
+          if [ "$CONCLUSION" != "success" ]; then
+            echo "::error::CI on deps is not green (got '${CONCLUSION:-none}'). Aborting promotion."
+            exit 1
+          fi
+
+      - name: Merge deps into main (abort on conflict)
+        run: |
+          git config user.name "promote-bot"
+          git config user.email "promote-bot@users.noreply.github.com"
+          git checkout main
+          # --no-ff keeps a clear promotion merge commit. Any conflict makes
+          # `git merge` exit non-zero, failing the job without auto-resolving.
+          if ! git merge --no-ff origin/deps -m "chore(deps): promote deps to main"; then
+            echo "::error::Conflict merging deps into main. Resolve manually."
+            git merge --abort || true
+            exit 1
+          fi
+
+      - name: Push to main
+        run: git push origin main
