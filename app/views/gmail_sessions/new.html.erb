@@ -2,53 +2,8 @@
   <h1 class="text-2xl font-semibold mb-6">Sincronización con Gmail</h1>
 
   <% if @gmail_account.present? %>
-    <div class="bg-white shadow rounded-xl border border-gray-200 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <span class="text-sm font-medium text-gray-600">Estado</span>
-        <% if @gmail_account.status_active? %>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Activo</span>
-        <% else %>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Con error</span>
-        <% end %>
-      </div>
-
-      <dl class="space-y-3 text-sm">
-        <div class="flex justify-between">
-          <dt class="text-gray-500">Cuenta conectada</dt>
-          <dd class="text-gray-900 font-medium"><%= @gmail_account.email %></dd>
-        </div>
-        <div class="flex justify-between">
-          <dt class="text-gray-500">Conectada desde</dt>
-          <dd class="text-gray-900"><%= chile_datetime(@gmail_account.created_at) %></dd>
-        </div>
-        <div class="flex justify-between">
-          <dt class="text-gray-500">Correos importados</dt>
-          <dd class="text-gray-900"><%= @gmail_account.bank_emails.count %></dd>
-        </div>
-      </dl>
-
-      <% if @gmail_account.status_error? %>
-        <p class="mt-4 text-sm text-red-600">
-          La conexión expiró o fue revocada. Vuelve a conectar tu cuenta para reanudar la sincronización.
-        </p>
-      <% end %>
-
-      <div class="mt-6 flex items-center gap-3">
-        <% if @gmail_account.status_error? %>
-          <%# Reconectar reutiliza la gmail_account existente (build_account hace
-              find_or_initialize), así que se conservan los bank_emails ya importados. %>
-          <%= button_to "Reconectar Gmail", gmail_sessions_authorize_path, method: :post,
-                data: { turbo: false },
-                class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
-        <% else %>
-          <%= button_to "Sincronizar ahora", gmail_sessions_sync_path, method: :post,
-                class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
-        <% end %>
-        <%= button_to "Desconectar", gmail_sessions_path, method: :delete,
-              data: { turbo_confirm: "¿Seguro que quieres desconectar tu cuenta de Gmail? Se eliminarán también los correos importados." },
-              class: "text-sm font-medium text-gray-500 hover:text-red-600 cursor-pointer" %>
-      </div>
-    </div>
+    <%= turbo_stream_from @gmail_account %>
+    <%= render "gmail_sessions/status_card", gmail_account: @gmail_account %>
   <% else %>
     <p class="mb-6 text-gray-600">
       Conecta tu cuenta de Gmail para importar automáticamente las notificaciones de cargos y

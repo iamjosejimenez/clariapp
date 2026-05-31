@@ -5,8 +5,8 @@ class FetchBankEmailsJob < ApplicationJob
 
   def perform
     GmailAccount.status_active.find_each do |gmail_account|
-      logger.info "Fetching bank emails for gmail account #{gmail_account.id}"
-      SyncBankEmailsService.new(gmail_account).call
+      logger.info "Enqueuing bank email sync for gmail account #{gmail_account.id}"
+      SyncBankEmailsJob.perform_later(gmail_account)
     end
   end
 end

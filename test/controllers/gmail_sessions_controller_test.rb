@@ -26,25 +26,16 @@ class GmailSessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Primero conecta tu cuenta de Gmail.", flash[:alert]
   end
 
-  test "sync exitoso redirige a la tabla con aviso de éxito" do
-    create(:gmail_account, user: @user)
-    stub_sync(result: true) do
-      post gmail_sessions_sync_path
-    end
+  test "sync encola el job, marca la cuenta como syncing y avisa en curso" do
+    account = create(:gmail_account, user: @user)
 
-    assert_redirected_to bank_emails_path
-    assert_equal "Sincronización completada.", flash[:notice]
-  end
-
-  test "sync fallido por auth muestra alert y no dice que se completó" do
-    create(:gmail_account, user: @user)
-    stub_sync(result: false) do
+    assert_enqueued_with(job: SyncBankEmailsJob, args: [ account ]) do
       post gmail_sessions_sync_path
     end
 
     assert_redirected_to gmail_sessions_new_path
-    assert_nil flash[:notice]
-    assert_match(/no se pudo sincronizar/i, flash[:alert])
+    assert_equal "Sincronización en curso. Te avisaremos cuando termine.", flash[:notice]
+    assert account.reload.sync_syncing?
   end
 
   test "la pantalla en estado error ofrece reconectar, no solo sincronizar" do
@@ -72,15 +63,6 @@ class GmailSessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
-
-  # Stubs SyncBankEmailsService#call to return the given result for the block.
-  def stub_sync(result:)
-    original = SyncBankEmailsService.instance_method(:call)
-    SyncBankEmailsService.define_method(:call) { result }
-    yield
-  ensure
-    SyncBankEmailsService.define_method(:call, original)
-  end
 
   # Primes the OAuth state in the session by starting the authorize flow, and
   # returns it so the callback's CSRF check passes.
