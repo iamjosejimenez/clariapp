@@ -18,9 +18,4 @@
     <p class="text-sm text-gray-600">Resumen</p>
     <p class="text-gray-700"><%= @bank_email.snippet %></p>
   </div>
-
-  <div>
-    <p class="text-sm text-gray-600">Contenido</p>
-    <div class="mt-1 text-sm text-gray-800 bg-slate-50 rounded-lg p-3 max-h-64 overflow-y-auto whitespace-pre-wrap"><%= @bank_email.raw_body.presence || "Sin contenido disponible." %></div>
-  </div>
 </div>
