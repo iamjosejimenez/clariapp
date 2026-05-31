@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_08_000003) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_30_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bank_emails", force: :cascade do |t|
+    t.string "bank", default: "bci", null: false
+    t.datetime "created_at", null: false
+    t.string "from_address"
+    t.bigint "gmail_account_id", null: false
+    t.string "gmail_message_id", null: false
+    t.datetime "processed_at"
+    t.text "raw_body"
+    t.datetime "received_at"
+    t.string "snippet"
+    t.string "subject"
+    t.datetime "updated_at", null: false
+    t.index ["gmail_account_id", "gmail_message_id"], name: "index_bank_emails_on_gmail_account_id_and_gmail_message_id", unique: true
+    t.index ["gmail_account_id"], name: "index_bank_emails_on_gmail_account_id"
+  end
 
   create_table "budget_periods", force: :cascade do |t|
     t.integer "budget_id", null: false
@@ -57,6 +73,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_08_000003) do
     t.index ["user_id", "provider"], name: "index_external_accounts_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_external_accounts_on_user_id"
     t.index ["username", "provider"], name: "index_external_accounts_on_username_and_provider", unique: true
+  end
+
+  create_table "gmail_accounts", force: :cascade do |t|
+    t.text "access_token"
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "last_history_id"
+    t.text "refresh_token"
+    t.string "status", default: "active", null: false
+    t.datetime "token_expires_at"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["email"], name: "index_gmail_accounts_on_email", unique: true
+    t.index ["user_id"], name: "index_gmail_accounts_on_user_id", unique: true
   end
 
   create_table "goal_snapshots", force: :cascade do |t|
@@ -270,10 +300,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_08_000003) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "bank_emails", "gmail_accounts"
   add_foreign_key "budget_periods", "budgets"
   add_foreign_key "budgets", "users"
   add_foreign_key "expenses", "budget_periods"
   add_foreign_key "external_accounts", "users"
+  add_foreign_key "gmail_accounts", "users"
   add_foreign_key "goal_snapshots", "goals"
   add_foreign_key "goals", "external_accounts"
   add_foreign_key "news_items", "news_summaries"
