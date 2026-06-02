@@ -259,7 +259,7 @@ GEM
     nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    openai (0.64.0)
+    openai (0.65.0)
       base64
       cgi
       connection_pool
@@ -283,7 +283,7 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    psych (5.3.1)
+    psych (5.4.0)
       date
       stringio
     public_suffix (7.0.5)
@@ -384,10 +384,10 @@ GEM
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
     semantic_range (3.1.1)
-    sentry-rails (6.5.0)
+    sentry-rails (6.6.0)
       railties (>= 5.2.0)
-      sentry-ruby (~> 6.5.0)
-    sentry-ruby (6.5.0)
+      sentry-ruby (~> 6.6.0)
+    sentry-ruby (6.6.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
@@ -488,7 +488,7 @@ DEPENDENCIES
   image_processing (~> 2.0)
   jbuilder
   kamal
-  openai (~> 0.64.0)
+  openai (~> 0.65.0)
   pagy (~> 43.5)
   pg (~> 1.6)
   propshaft
