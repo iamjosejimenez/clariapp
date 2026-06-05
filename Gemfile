@@ -78,7 +78,7 @@ gem "pg", "~> 1.6"
 gem "good_migrations"
 
 gem "simple_form", "~> 5.4"
-gem "openai", "~> 0.66.0"
+gem "openai", "~> 0.66.1"
 
 # Gmail API client + OAuth for importing bank notification emails
 gem "google-apis-gmail_v1"
