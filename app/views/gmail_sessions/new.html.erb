@@ -1,18 +1,12 @@
 <%= render ModuleHeaderComponent.new(
     title: "Sincronización con Gmail",
+    description: "Conecta tu cuenta de Gmail para importar automáticamente las notificaciones de cargos y transferencias de BCI. Solo solicitamos permiso de lectura de tus correos.",
   ) do %>
   <div class="max-w-md mx-auto mt-10">
-    <h1 class="text-2xl font-semibold mb-6">Sincronización con Gmail</h1>
-
     <% if @gmail_account.present? %>
       <%= turbo_stream_from @gmail_account %>
       <%= render "gmail_sessions/status_card", gmail_account: @gmail_account %>
     <% else %>
-      <p class="mb-6 text-gray-600">
-        Conecta tu cuenta de Gmail para importar automáticamente las notificaciones de cargos y
-        transferencias de BCI. Solo solicitamos permiso de lectura de tus correos.
-      </p>
-
       <%= button_to "Conectar Gmail", gmail_sessions_authorize_path, method: :post,
             data: { turbo: false },
             class: "bg-violet-700 text-white px-4 py-2 rounded hover:bg-violet-800 cursor-pointer" %>
