@@ -4,6 +4,11 @@ on:
   # `deps` se valida vía la PR deps->main (pull_request). Dispararlo también en
   # push duplicaría los checks (push + pull_request) en cada cambio de deps, por
   # eso push solo cubre main (validación post-merge + deploy).
+  #
+  # En push a main el build publica la imagen y actualiza la cache (lectura +
+  # escritura). En pull_request el build solo valida que compila usando la cache
+  # en modo solo lectura, sin publicar imagen ni escribir la cache. Ver el job
+  # build_image más abajo.
   push:
     branches: [ main ]
   pull_request:
@@ -47,11 +52,23 @@ jobs:
   build_image:
     runs-on: ubuntu-24.04-arm
 
+    # packages: read permite que GITHUB_TOKEN lea la cache desde GHCR. Este token
+    # está disponible en TODAS las PRs (internas, forks y Dependabot), así que el
+    # login de lectura es idéntico en todos los casos. contents: read es el
+    # default explícito.
+    permissions:
+      contents: read
+      packages: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Set up Docker Buildx for cache
         uses: docker/setup-buildx-action@v4
+        with:
+          name: kamal-local-docker-container
+          driver: docker-container
+          use: true
       - name: Expose GitHub Runtime for cache
         uses: crazy-max/ghaction-github-runtime@v4
       - name: Set up Ruby
@@ -61,24 +78,69 @@ jobs:
           bundler-cache: true
       - name: Install Kamal
         run: gem install kamal
+      # Solo en push: la llave SSH es para el deploy/registro de Kamal. En
+      # pull_request no se escribe para que la llave de producción nunca entre al
+      # build context (el Dockerfile hace `COPY . .`).
       - name: Set up SSH
+        if: github.event_name == 'push'
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > claria-production.pem
           chmod 600 claria-production.pem
-      # En push (a main/deps) publica la imagen al registry. En pull_request
-      # solo construye para validar que las dependencias compilan, sin publicar
-      # la imagen final. La cache registry-backed (build-cache-arm64) se lee y
-      # escribe en ambos casos, calentando el build posterior.
-      - name: Build image
+      # En pull_request usamos GITHUB_TOKEN (disponible en toda PR, incluidas
+      # Dependabot y forks) para leer la cache de GHCR. Así todas las PRs siguen
+      # el mismo proceso: leen la cache pero no la escriben.
+      - name: Log in to GitHub Container Registry (PR, read-only)
+        if: github.event_name == 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # En push usamos la credencial de Kamal, que también permite escribir y
+      # publicar la imagen al registry.
+      - name: Log in to GitHub Container Registry (push)
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: iamjosejimenez
+          password: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+      # En push (a main/deps) `kamal build push` construye, publica la imagen al
+      # registry y actualiza la cache registry-backed (lee y escribe). Esta es la
+      # ruta que produce la imagen de producción, intacta y 100% Kamal.
+      #
+      # En pull_request solo validamos que el build compila, sin publicar la
+      # imagen ni escribir la cache: usamos `docker buildx build` con
+      # --cache-from (lectura de la cache que dejó main) pero SIN --cache-to, y
+      # --output=type=cacheonly para no exportar ninguna imagen. Los flags
+      # replican lo que genera Kamal (platform linux/arm64, label service,
+      # Dockerfile y contexto por defecto); mantener alineado con config/deploy.yml
+      # (builder.cache.image y registry.server) si cambian.
+      - name: Build and push image
+        if: github.event_name == 'push'
         env:
+          # Kamal lee este secret del entorno vía .kamal/secrets para autenticar
+          # contra el registry; el login de docker/login-action no lo cubre.
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
           APP_RELEASE: ${{ github.sha }}
+        run: kamal build push
+      # Valida que el build compila sin publicar imagen ni escribir la cache.
+      # Lee la cache que dejó main con --cache-from pero SIN --cache-to, y usa
+      # --output=type=cacheonly para no exportar ninguna imagen. Igual para todas
+      # las PRs gracias al login con GITHUB_TOKEN.
+      - name: Build image for PR validation (read-only cache)
+        if: github.event_name == 'pull_request'
+        env:
+          APP_RELEASE: ${{ github.sha }}
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            kamal build push
-          else
-            kamal build
-          fi
+          docker buildx build \
+            --platform linux/arm64 \
+            --builder kamal-local-docker-container \
+            --label service=claria \
+            --cache-from type=registry,ref=ghcr.io/iamjosejimenez/claria:build-cache-arm64 \
+            --output=type=cacheonly \
+            --file Dockerfile \
+            .
 
   # test:
   #   runs-on: ubuntu-latest
