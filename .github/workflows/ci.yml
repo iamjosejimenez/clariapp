@@ -91,7 +91,7 @@ jobs:
       # el mismo proceso: leen la cache pero no la escriben.
       - name: Log in to GitHub Container Registry (PR, read-only)
         if: github.event_name == 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -100,7 +100,7 @@ jobs:
       # publicar la imagen al registry.
       - name: Log in to GitHub Container Registry (push)
         if: github.event_name == 'push'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: iamjosejimenez
