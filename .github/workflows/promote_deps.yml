@@ -33,7 +33,7 @@ jobs:
           private-key: ${{ secrets.PROMOTE_APP_PRIVATE_KEY }}
 
       - name: Checkout full history
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: deps
           fetch-depth: 0
