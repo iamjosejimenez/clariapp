@@ -1,5 +1,7 @@
 // Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
+import htmx from "htmx.org"
+window.htmx = htmx
 import "flowbite/dist/flowbite.turbo.js";
 import "../controllers/index.js"
 import tippy from "tippy.js"

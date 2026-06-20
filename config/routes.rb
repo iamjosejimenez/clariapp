@@ -56,5 +56,8 @@ Rails.application.routes.draw do
   resources :expenses, only: [ :edit, :update, :destroy ]
   resources :invoices, only: [ :new, :create ]
 
+  get "pruebas", to: "pruebas#index"
+  get "pruebas/mensaje", to: "pruebas#mensaje", as: :pruebas_mensaje
+
   get "up" => "rails/health#show", as: :rails_health_check
 end
