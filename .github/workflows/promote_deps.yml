@@ -12,9 +12,6 @@ name: Promote deps to main
 #   PROMOTE_APP_PRIVATE_KEY  - clave privada (PEM) de la promote GitHub App
 
 on:
-  schedule:
-    # Semanal, lunes 12:00 UTC. Ajusta a gusto.
-    - cron: '0 12 * * 1'
   workflow_dispatch:
 
 permissions:

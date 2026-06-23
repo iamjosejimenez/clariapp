@@ -1,11 +1,6 @@
 name: Build db-backup image
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'db-backup/**'
-      - '.github/workflows/build_db_backup.yml'
   workflow_dispatch:
 
 permissions:
