@@ -1,18 +1,7 @@
 name: CI
 
 on:
-  # `deps` se valida vía la PR deps->main (pull_request). Dispararlo también en
-  # push duplicaría los checks (push + pull_request) en cada cambio de deps, por
-  # eso push solo cubre main (validación post-merge + deploy).
-  #
-  # En push a main el build publica la imagen y actualiza la cache (lectura +
-  # escritura). En pull_request el build solo valida que compila usando la cache
-  # en modo solo lectura, sin publicar imagen ni escribir la cache. Ver el job
-  # build_image más abajo.
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main, deps ]
+  workflow_dispatch:
 
 jobs:
   scan_ruby:
